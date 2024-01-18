@@ -1,15 +1,203 @@
+.loginContainerPool {
+    height: 100vh;
+    width: 100%;
+    background-color: #ECEEFE;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.animationWindow {
+    background-color: #5C62ED;
+    width: 100%;
+    height: 100vh;
+    animation: effect 2s 3.7s both;
+    z-index: 1;
+    position: absolute;
+}
+
+@keyframes effect {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+        display: none;
+    }
+}
+
 .text {
     font-family: 'Roboto', sans-serif;
     font-weight: bold;
     font-size: 40px;
     margin-left: 15px;
+    position: absolute;
+    color: white;
+    z-index: 1;
+
+    animation-direction: normal;
+    animation-delay: 250ms;
+    animation: textLogo 2s 0.7s both, textColor 2s 3.7s both;
+}
+
+@keyframes textColor {
+    0% {
+        color: white;
+
+    }
+
+
+    100% {
+        color: black;
+
+    }
+}
+
+@keyframes textLogo {
+    0% {
+        right: 10px;
+
+    }
+
+    100% {
+
+        right: -100px;
+        background-color: unset;
+        color: black;
+
+    }
 }
 
 .daBubbleLogo {
-    width: 80px;
+    position: absolute;
+
+    animation-direction: normal;
+    animation-delay: 250ms;
+    animation: daBubbleLogo 1s 0.7s both, eraseBackground 2s 1.5s both;
+    background-color: #5C62ED;
+    z-index: 2;
+}
+
+@keyframes eraseBackground {
+    0% {}
+
+    100% {
+        background-color: unset;
+    }
+}
+
+@keyframes daBubbleLogo {
+    0% {
+        right: 0px;
+
+    }
+
+    100% {
+        right: 100px;
+    }
 }
 
 .logoContainer {
     display: flex;
     align-items: center;
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    left: 10%;
+    top: 10%;
+
+    animation-direction: normal;
+    animation-delay: 250ms;
+    animation: logoMoving 3s 2.7s both;
+
+}
+
+
+
+/*.joinLogo {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    left: 10%;
+    top: 10%;
+    animation-direction: normal;
+    animation-delay: 250ms;
+    animation: logoMoving 2s 0.7s both;
+    z-index: 2;
+}*/
+
+@keyframes logoMoving {
+    0% {
+        width: 200px;
+        height: 200px;
+        left: 40%;
+        top: 40%;
+    }
+
+    100% {
+        left: 17%;
+        top: 10%;
+    }
+}
+
+.loginHeaderContainer {}
+
+.createAccountContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}
+
+.createAccountText {
+    cursor: pointer;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    width: 129px;
+    justify-content: center;
+    color: #797EF3;
+    margin-top: 20px;
+    font-size: 17px;
+
+    &:hover {
+        border-radius: 15px;
+        border: solid 1px #797EF3;
+    }
+}
+
+.newMemberHeadline {
+    font-size: 19px;
+}
+
+.loginContainer {
+    width: 510px;
+    height: 616px;
+    background-color: white;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.4);
+    border-radius: 15px;
+    position: relative;
+    top: 60px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.loginContainerHeadline {
+    font-size: 41px;
+    font-weight: bold;
+    color: #444DF2;
+    font-family: 'Nunito', sans-serif;
+    padding-top: 50px;
+}
+
+.LoginIntroduction {
+    font-size: 17px;
 }

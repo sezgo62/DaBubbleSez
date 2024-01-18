@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "dabubblesez-8c9ea": {
+      "hosting": {
+        "DaBubbleSez": [
+          "dabubblesez-8c9ea"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "dabubblesez-8c9ea"
+  }
+}
