@@ -1,0 +1,121 @@
+<div class="registerContainerPool">
+
+    <div class="header">
+        <div class="logoContainer">
+            <img class="daBubbleLogo" src="assets\img\logos\daBubble-logo.png">
+            <span class="text">DABubble</span>
+        </div>
+    </div>
+
+
+    <div class="registerContainer">
+
+        <h1 class="registerContainerHeadline">Konto erstellen</h1>
+
+        <span class="registerIntroduction">Mit deinem Namen und deiner E-Mail-Adresse hast<br>
+            du dein neues DABubble-Konto.</span>
+
+        <form class="formContainer" [formGroup]="userDetailsForm" (ngSubmit)="onSubmitUserDetails()"><!--Hier setzen wir unseren form Container
+            mit der Funktion onSubmitUserDetails() die alle inputs innerhalt des formGroup bearbeitet-->
+
+            <div class="emailInputContainer">
+                <img class="mail" src="assets/img/person_filled.png">
+                <input class="firstLastNameInput" matInput placeholder="Name und Nachname"
+                    formControlName="firstLastName" required>
+            </div>
+
+
+            <mat-error *ngFor="let validation of validation_messages.email">
+                <!--Mit der for-Schleife iterieren wir durch das Object "validation_messages" dass wir in unserem script.service finden können um nach dem Wert zu suchen,
+           in diesem Fall "fullname", um die richtige Fehlermeldung anzuzeigen.-->
+
+                <mat-error class="error-message"
+                    *ngIf="userDetailsForm.get('foreAfterName')?.hasError(validation.type) && (userDetailsForm.get('foreAfterName')?.dirty || userDetailsForm.get('foreAfterName')?.touched)">
+                    {{validation.message}}
+                </mat-error>
+                <!--fs.userDetailsForm.get('fullname'): Dieser Ausdruck ruft das Formularelement mit dem Namen "fullname" aus dem FormGroup "userDetailsForm" ab.
+                 Es gibt das FormControl-Objekt für das entsprechende Eingabefeld zurück.-->
+                <!-- in diesem Fall bezieht sich validation.type auf den Validierungstyp minlength-->
+
+            </mat-error>
+
+
+            <div class="emailInputContainer">
+                <img class="mail" src="assets/img/mail.png">
+                <input class="emailInput" matInput placeholder="E-Mail" formControlName="email" required>
+            </div>
+
+
+
+            <mat-error *ngFor="let validation of validation_messages.email">
+                <!--Mit der for-Schleife iterieren wir durch das Object "validation_messages" dass wir in unserem script.service finden können um nach dem Wert zu suchen,
+           in diesem Fall "fullname", um die richtige Fehlermeldung anzuzeigen.-->
+
+                <mat-error class="error-message"
+                    *ngIf="userDetailsForm.get('email')?.hasError(validation.type) && (userDetailsForm.get('email')?.dirty || userDetailsForm.get('email')?.touched)">
+                    {{validation.message}}
+                </mat-error>
+                <!--fs.userDetailsForm.get('fullname'): Dieser Ausdruck ruft das Formularelement mit dem Namen "fullname" aus dem FormGroup "userDetailsForm" ab.
+                 Es gibt das FormControl-Objekt für das entsprechende Eingabefeld zurück.-->
+                <!-- in diesem Fall bezieht sich validation.type auf den Validierungstyp minlength-->
+
+            </mat-error>
+
+            <div class="emailInputContainer">
+                <img class="lockIcon" src="assets/img/lockIcon.png">
+                <input class="passwordInput" matInput placeholder="Passwort" formControlName="password" required>
+            </div>
+
+            <mat-error *ngFor="let validation of validation_messages.password">
+                <!--Mit der for-Schleife iterieren wir durch das Object "validation_messages" dass wir in unserem script.service finden können um nach dem Wert zu suchen,
+           in diesem Fall "fullname", um die richtige Fehlermeldung anzuzeigen.-->
+
+                <mat-error class="error-message"
+                    *ngIf="userDetailsForm.get('password')?.hasError(validation.type) && (userDetailsForm.get('password')?.dirty || userDetailsForm.get('password')?.touched)">
+                    {{validation.message}}
+                </mat-error>
+                <!--fs.userDetailsForm.get('fullname'): Dieser Ausdruck ruft das Formularelement mit dem Namen "fullname" aus dem FormGroup "userDetailsForm" ab.
+                 Es gibt das FormControl-Objekt für das entsprechende Eingabefeld zurück.-->
+                <!-- in diesem Fall bezieht sich validation.type auf den Validierungstyp minlength-->
+
+            </mat-error>
+
+            <div class="checkboxContainer">
+                <input class="checkBox" type="checkbox" formControlName="acceptTerms" id="acceptTerms"/>
+                <span>Ich stimme der <span class="dataText">Datenschutzerklären</span> zu.</span>
+            </div>
+
+            <mat-error *ngFor="let validation of validation_messages.password">
+                <!--Mit der for-Schleife iterieren wir durch das Object "validation_messages" dass wir in unserem script.service finden können um nach dem Wert zu suchen,
+           in diesem Fall "fullname", um die richtige Fehlermeldung anzuzeigen.-->
+
+                <mat-error class="error-message"
+                    *ngIf="userDetailsForm.get('password')?.hasError(validation.type) && (userDetailsForm.get('password')?.dirty || userDetailsForm.get('password')?.touched)">
+                    {{validation.message}}
+                </mat-error>
+                <!--fs.userDetailsForm.get('fullname'): Dieser Ausdruck ruft das Formularelement mit dem Namen "fullname" aus dem FormGroup "userDetailsForm" ab.
+                 Es gibt das FormControl-Objekt für das entsprechende Eingabefeld zurück.-->
+                <!-- in diesem Fall bezieht sich validation.type auf den Validierungstyp minlength-->
+
+            </mat-error>
+
+
+            <div class="buttonsContainer">
+
+                <button routerLink="/uploadImage" class="nextButton">Weiter</button>
+
+            </div>
+
+
+
+        </form>
+
+
+    </div>
+
+    <div class="footer">
+        <span class="impressum">Impressum</span>
+        <span class="datenschutz">Datenschutz</span>
+    </div>
+
+</div>

@@ -1,0 +1,44 @@
+<div class="uploadImageContainerPool">
+
+    <div class="header">
+        <div class="logoContainer">
+            <img class="daBubbleLogo" src="assets\img\logos\daBubble-logo.png">
+            <span class="text">DABubble</span>
+        </div>
+    </div>
+
+    <div class="uploadImageContainer">
+
+        <div class="headLineContainer">
+            <img class="arrowBack" src="assets\img\arrow_back.png">
+            <h1 class="uploadImageContainerHeadline">Wähle deinen Avatar</h1>
+        </div>
+
+        <div class="personCircle">
+            <!---<img class="person" src="assets\img\person.png">-->
+            <img class="person" [src]="selectedAvatar ? 'assets/img/avatars/avatar{{selectedAvatar}}.png' : 'assets/img/person.png'">
+
+        </div>
+
+        <span class="newUserName">Freddy Krüger</span>
+
+        <div class="avatarsContainer">
+            <span class="avatarsText">Aus der Liste wählen</span> 
+
+            <div class="avatarsImages">
+                <img (click)="selectImage(i)" *ngFor="let avatar of allAvatars; let i = index" src="assets/img/avatars/avatar{{i + 1}}.png">
+                <!---Wir setzen den Zähler durch den Regler der im Typescript ist hoch und haben dadurch alle 5 Avatare abgebildet.-->
+            </div>
+        </div>
+
+        <div class="uploadContainer">
+            <span class="uploadText">Eigenes Bild verwenden</span>
+            <button class="uploadButton">Datei hochladen</button>
+        </div>
+
+        <button routerLink="/uploadImage" class="nextButton">Weiter</button>
+
+
+    </div>
+
+</div>

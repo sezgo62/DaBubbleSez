@@ -11,8 +11,8 @@
         </div>
 
         <div class="createAccountContainer">
-            <span class="newMemberHeadline">Neu bei DaBubble!</span>
-            <span class="createAccountText">Konto erstellen</span>
+            <span  class="newMemberHeadline">Neu bei DaBubble!</span>
+            <span routerLink="/register" class="createAccountText">Konto erstellen</span>
         </div>
 
     </div>
@@ -23,13 +23,88 @@
 
         <h1 class="loginContainerHeadline">Anmelden</h1>
 
-        <span class="LoginIntroduction">Wiir empfehlen dir, die E-Mail-Adresse zu nutzen, die<br>
+        <span class="LoginIntroduction">Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die<br>
             du bei der Arbeit verwendest.</span>
 
-            <!--<form [formGroup]="fs.userDetailsForm" (ngSubmit)="fs.onSubmitUserDetails(fs.userDetailsForm.value)"><!--Hier setzen wir unseren form Container
+        <form class="formContainer" [formGroup]="userDetailsForm" (ngSubmit)="onSubmitUserDetails()"><!--Hier setzen wir unseren form Container
             mit der Funktion onSubmitUserDetails() die alle inputs innerhalt des formGroup bearbeitet-->
 
-        <!--</form>-->
+
+                <div class="emailInputContainer">
+                    <img class="mail" src="assets/img/mail.png">
+                    <input class="emailInput" matInput placeholder="E-Mail" formControlName="email" required>
+                </div>
+
+
+
+                <mat-error *ngFor="let validation of validation_messages.email">
+                    <!--Mit der for-Schleife iterieren wir durch das Object "validation_messages" dass wir in unserem script.service finden können um nach dem Wert zu suchen,
+           in diesem Fall "fullname", um die richtige Fehlermeldung anzuzeigen.-->
+
+                    <mat-error class="error-message"
+                        *ngIf="userDetailsForm.get('email')?.hasError(validation.type) && (userDetailsForm.get('email')?.dirty || userDetailsForm.get('email')?.touched)">
+                        {{validation.message}}
+                    </mat-error>
+                    <!--fs.userDetailsForm.get('fullname'): Dieser Ausdruck ruft das Formularelement mit dem Namen "fullname" aus dem FormGroup "userDetailsForm" ab.
+                 Es gibt das FormControl-Objekt für das entsprechende Eingabefeld zurück.-->
+                    <!-- in diesem Fall bezieht sich validation.type auf den Validierungstyp minlength-->
+
+                </mat-error>
+
+                <div class="emailInputContainer">
+                    <img class="lockIcon" src="assets/img/lockIcon.png">
+                    <input class="passwordInput" matInput placeholder="Passwort" formControlName="password" required>
+                </div>
+
+                <mat-error *ngFor="let validation of validation_messages.password">
+                    <!--Mit der for-Schleife iterieren wir durch das Object "validation_messages" dass wir in unserem script.service finden können um nach dem Wert zu suchen,
+           in diesem Fall "fullname", um die richtige Fehlermeldung anzuzeigen.-->
+
+                    <mat-error class="error-message"
+                        *ngIf="userDetailsForm.get('password')?.hasError(validation.type) && (userDetailsForm.get('password')?.dirty || userDetailsForm.get('password')?.touched)">
+                        {{validation.message}}
+                    </mat-error>
+                    <!--fs.userDetailsForm.get('fullname'): Dieser Ausdruck ruft das Formularelement mit dem Namen "fullname" aus dem FormGroup "userDetailsForm" ab.
+                 Es gibt das FormControl-Objekt für das entsprechende Eingabefeld zurück.-->
+                    <!-- in diesem Fall bezieht sich validation.type auf den Validierungstyp minlength-->
+
+                </mat-error>
+
+
+            <span class="forgotPasswordText">Passwort vergessen?</span>
+
+
+            <div class="lineContainer">
+                <img class="line1" src="assets/img/line.png">
+                <span> Oder </span>
+                <img class="line2" src="assets/img/line.png">
+            </div>
+
+            <div class="googleContainer">
+                <img class="googleIcon" src="assets/img/logos/google.png">
+                <span class="googleText">Anmelden mit Google</span>
+            </div>
+
+
+            <div class="buttonsContainer">
+
+                <button class="loginButton">Anmelden</button>
+                <button class="guestButton">Gäste-Login</button>
+
+            </div>
+
+
+
+        </form>
+
+
+
+
+    </div>
+
+    <div class="createAccountContainerResponsive">
+        <span routerLink="/register" class="newMemberHeadline">Neu bei DaBubble!</span>
+        <span class="createAccountText">Konto erstellen</span>
     </div>
 
 </div>
