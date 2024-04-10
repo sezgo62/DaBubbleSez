@@ -23,7 +23,7 @@
 .text {
     font-family: "Roboto", sans-serif;
     font-weight: bold;
-    font-size: 30px;
+    font-size: 40px;
     margin-left: 15px;
     color: black;
     z-index: 1;
@@ -45,12 +45,20 @@
     background-color: white;
     box-shadow: 0 3px 10px rgb(0 0 0 / 0.4);
     border-radius: 15px;
-    //position: relative;
-    //top: 60px;
-
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.arrow_back {
+    position: absolute;
+    left: 45px;
+    top: 60px;
+
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 .footer {
@@ -181,6 +189,10 @@
    color: #8389fd;
 }
 
+.checkText {
+    font-size: 12px;
+}
+
 .checkBox {
 
 
@@ -191,22 +203,168 @@
 
 .footer {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     width: 17%;
 }
 
 .impressum {
     font-size: 16px;
     color: #8389fd;
+    padding-right: 30px;
 }
 
 .datenschutz {
     font-size: 16px;
     color: #8389fd;
+    padding-left: 30px;
+
 }
 
-@media(max-width: 350px) {
+////////////////Responsive CSS Area////////////////////
+
+@media(max-width: 1100px) {
+
+    .daBubbleLogo {
+        position: absolute;
+
+        width: 80px;
+        animation-direction: normal;
+        animation-delay: 250ms;
+        z-index: 2;
+    }
+
+    .text {
+        font-size: 30px;
+        position: relative;
+        left: 91px;
+    }
+}
+
+@media(max-width: 555px) {
+
+    .registerContainerPool {
+        justify-content: center;
+    }
+
+.logoContainer {
+    position: relative;
+    left: 18%;
+    top: 4%;
+}
+
+    .registerContainer {
+        width: 430px;
+    }
+
+.registerIntroduction {
+    font-size: 16px;
+}
+
+.checkboxContainer {
+    right: 20px;
+}  
+
+.arrow_back {
+    left: 32px;
+}
+
+}
+
+@media(max-width: 470px) {
+
+    .logoContainer {
+        left: 14%;
+    }
+
+    .registerContainer {
+        width: 378px;
+    }
+
+    .registerIntroduction {
+        font-size: 13px;
+    }
+
+    .checkboxContainer {
+        right: -6px;
+    }
+
+    .nextButton {
+        left: 106px;
+    }
+
+.arrow_back {
+    width: 17px;
+    position: absolute;
+    left: 25px;
+    top: 57px;
+}
+
+.registerContainerHeadline {
+    font-size: 34px;
+}
+
+.registerIntroduction {
+    padding-top: 14px;
+}
+}
+
+@media(max-width: 410px) {
+    .registerContainer {
+        width: 331px;
+        height: 549px;
+    }
+
+    .checkText {
+        font-size: 13px;
+    }
+
+    .dataText {
+        font-size: 13px;
+    }
+
+    .nextButton {
+        width: 119px;
+        height: 47px;
+        left: 87px;
+    }
+
+    .registerContainerHeadline {
+        font-size: 28px;
+    }
+
+    .arrow_back {
+        width: 14px;
+        top: 60px;
+    }
+
+    .logoContainer {
+        left: 6%;
+    }
+}
 
 
+@media(max-width: 360px) {
+
+    .registerContainer {
+        width: 310px;
+        height: 549px;
+    }
+
+    .registerIntroduction {
+        font-size: 11.5px;
+    }
+
+    .registerContainerHeadline {
+        font-size: 26px;
+    }
+
+    .nextButton {
+        width: 110px;
+        height: 44px;
+    }
+
+    .logoContainer {
+        left: 3%;
+    }
 
 }

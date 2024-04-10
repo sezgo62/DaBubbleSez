@@ -85,6 +85,7 @@
 }
 
 
+
 .newUserName {
     margin-top: 40px;
     font-size: 35px;
@@ -101,6 +102,8 @@
 .avatarsText {
     font-size: 18px;
 }
+
+
 
 .uploadButton {
     width: 164px;
@@ -165,4 +168,188 @@
         cursor: pointer;
         background-color: #8389fd;
     }
+}
+
+.footer {
+    margin-top: 60px;
+}
+
+.impressum {
+    font-size: 16px;
+    color: #8389fd;
+    padding-right: 30px;
+
+}
+
+.datenschutz {
+    font-size: 16px;
+    color: #8389fd;
+    padding-right: 30px;
+
+}
+
+
+@media(max-width: 600px) {
+
+    .uploadImageContainerPool {
+        justify-content: center;
+    }
+
+    .header {
+        display: flex;
+        justify-content: center;
+    }
+
+    .logoContainer {
+        width: 239px;
+    }
+
+    .uploadImageContainer {
+        width: 450px;
+    }
+
+    .uploadImageContainerHeadline {
+        font-size: 32px;
+    }
+
+    .personCircle {
+        width: 130px;
+        height: 130px;
+    }
+
+    .person {
+        width: 100px;
+    }
+
+    .nextButton {
+        left: 128px;
+    }
+
+    .uploadImageContainer {
+        height: 615px;
+    }
+
+    .nextButton {
+        top: 34px;
+    }
+
+}
+
+
+@media(max-width: 500px) {
+
+    .uploadImageContainer {
+        width: 400px;
+    }
+
+    .uploadImageContainerHeadline {
+        font-size: 27px;
+    }
+
+    .avatar {
+        width: 53px;
+    }
+
+    .uploadText {
+        font-size: 17px;
+    }
+
+    .uploadButton {
+        width: 147px;
+        height: 47px;
+        font-size: 15px;
+    }
+
+    .uploadImageContainer {
+        height: 604px;
+    }
+
+    .personCircle {
+        width: 120px;
+        height: 120px;
+    }
+
+}
+
+@media(max-width: 430px) {
+
+    .uploadImageContainer {
+        width: 350px;
+        height: 577px;
+    }
+
+    .uploadImageContainerHeadline {
+        font-size: 23px;
+    }
+
+    .avatar {
+        width: 43px;
+    }
+
+    .uploadText {
+        font-size: 14px;
+    }
+
+    .uploadButton {
+        width: 125px;
+        height: 43px;
+        font-size: 13px;
+    }
+
+    .nextButton {
+        width: 125px;
+        height: 43px;
+        left: 98px;
+    }
+
+    .daBubbleLogo {
+        width: 67px;
+        }
+
+    .text {
+        font-size: 28px;
+    }
+
+}
+
+@media(max-width: 375px) {
+
+    .uploadImageContainer {
+        width: 305px;
+        height: 551px;
+    }
+
+    .uploadImageContainerHeadline {
+        font-size: 18px;
+    }
+
+    .avatar {
+        width: 37px;
+    }
+
+    .uploadButton {
+        width: 111px;
+        height: 38px;
+        font-size: 12px;
+    }
+
+    .uploadText {
+        font-size: 13.5px;
+    }
+    
+    .nextButton {
+        width: 111px;
+        height: 38px;
+        left: 89px;
+    }
+
+    .person {
+        width: 75px;
+    }
+
+    .personCircle {
+        width: 102px;
+        height: 102px;
+    }
+
 }

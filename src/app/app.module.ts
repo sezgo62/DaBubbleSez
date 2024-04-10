@@ -19,6 +19,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { RegisterComponent } from './register/register.component';
 import { UploadImageComponent } from './upload-image/upload-image.component';
+import { MainscreenComponent } from './mainscreen/mainscreen.component';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { UploadImageComponent } from './upload-image/upload-image.component';
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    UploadImageComponent
+    UploadImageComponent,
+    MainscreenComponent
   ],
   imports: [
     BrowserModule,

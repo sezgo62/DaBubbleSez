@@ -1,18 +1,26 @@
 export class User {
-firstName: string;
-lastName: string;
+firstLastName: string;
 email: string;
-online: boolean;
+online: boolean = false;
+image: string;
 id: string;
 
 constructor(obj?: any ) {
-this.firstName = obj ? obj.firstName : '';
-this.lastName = obj ? obj.lastName : '';
+this.firstLastName = obj ? obj.firstLastName : '';
 this.email = obj ? obj.email : '';
 this.online = obj ? obj.online : '';
+this.image = obj ? obj.image : '';
 this.id = obj ? obj.id : '';
-
 }
 
+toJson() {
+    return {
+        firstLastName: this.firstLastName,
+        email: this.email,
+        online: this.online,
+        image: this.image,
+        id: this.id,
+    }
+}
 
 }

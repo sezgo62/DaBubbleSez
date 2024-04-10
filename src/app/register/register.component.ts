@@ -1,6 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { userFirebaseService } from 'src/app/userFirebase.service';
+import { User } from 'src/models/user.class';
+import { Router } from '@angular/router';
+import { UserDataService } from '../user-data.service';
+
+
 
 //import { Router } from '@angular/router';
 
@@ -10,14 +15,18 @@ import { userFirebaseService } from 'src/app/userFirebase.service';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
-  
-  constructor(public userFirebaseService: userFirebaseService, private fb: FormBuilder) {
+
+
+  newUser = new User;
+
+  constructor(public userFirebaseService: userFirebaseService, private fb: FormBuilder, private userDataService: UserDataService,
+    private router: Router) {
     //this.onSubmitUserDetails(input);
   }
 
   userDetailsForm!: FormGroup;
   email: string = '';
-  accountDetailsForm: any;
+  //accountDetailsForm: any;
   submitted = false;
 
 
@@ -41,25 +50,30 @@ export class RegisterComponent {
   };
 
 
-ngOnInit(): void {
-  this.userDetailsForm = this.fb.group({
+  ngOnInit(): void {
+    this.userDetailsForm = this.fb.group({
       email: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       firstLastName: ['', [Validators.required, Validators.minLength(6)]],
       acceptTerms: [false, Validators.requiredTrue]
     });
-}
+  }
 
-  
-  
 
+
+  password!: String;
 
   onSubmitUserDetails() {
-    
-    console.log("Eingereichter Email-Wert:", this.userDetailsForm.get('email')?.value);
-    console.log("Eingereichter Email-Wert:", this.userDetailsForm.get('firstLastName')?.value);
-    console.log("Eingereichter Email-Wert:", this.userDetailsForm.get('password')?.value);
-    console.log("Eingereichter Email-Wert:", this.userDetailsForm.get('acceptTerms')?.value);
+
+    this.newUser.firstLastName = this.userDetailsForm.get('firstLastName')?.value;
+    this.newUser.email = this.userDetailsForm.get('email')?.value;
+    const password = this.userDetailsForm.get('password')?.value;
+
+    // Diese Methode wird aufgerufen, wenn das Formular abgeschickt wird. Sie aktualisiert den User im Service und navigiert zur nächsten Seite.
+    this.userDataService.updateUser(this.newUser, password); // Ruft updateUser auf dem Service auf, übergibt den neuen User
+    this.router.navigate(['/uploadImage']); // Navigiert programmatisch zur UploadImage-Komponente
+
+
 
   }
 

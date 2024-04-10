@@ -10,6 +10,8 @@
 
     <div class="registerContainer">
 
+        <img class="arrow_back" src="assets\img\arrow_back.png">
+
         <h1 class="registerContainerHeadline">Konto erstellen</h1>
 
         <span class="registerIntroduction">Mit deinem Namen und deiner E-Mail-Adresse hast<br>
@@ -82,7 +84,7 @@
 
             <div class="checkboxContainer">
                 <input class="checkBox" type="checkbox" formControlName="acceptTerms" id="acceptTerms"/>
-                <span>Ich stimme der <span class="dataText">Datenschutzerklären</span> zu.</span>
+                <span class="checkText">Ich stimme der <span class="dataText">Datenschutzerklären</span> zu.</span>
             </div>
 
             <mat-error *ngFor="let validation of validation_messages.password">
@@ -102,8 +104,9 @@
 
             <div class="buttonsContainer">
 
-                <button routerLink="/uploadImage" class="nextButton">Weiter</button>
-
+                <button  class="nextButton"  mat-raised-button type="submit"
+                [disabled]="!userDetailsForm.valid">Weiter</button>
+                <!------>
             </div>
 
 

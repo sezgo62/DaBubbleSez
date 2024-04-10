@@ -16,29 +16,37 @@
 
         <div class="personCircle">
             <!---<img class="person" src="assets\img\person.png">-->
-            <img class="person" [src]="selectedAvatar ? 'assets/img/avatars/avatar{{selectedAvatar}}.png' : 'assets/img/person.png'">
+            <img class="person" [src]="imageCounter ? 'assets/img/avatars/avatar' + imageCounter + '.png' : 'assets/img/person.png'">
 
         </div>
 
-        <span class="newUserName">Freddy Krüger</span>
+        <span class="newUserName" *ngIf="user?.firstLastName">{{user.firstLastName}}</span>
 
         <div class="avatarsContainer">
             <span class="avatarsText">Aus der Liste wählen</span> 
 
             <div class="avatarsImages">
-                <img (click)="selectImage(i)" *ngFor="let avatar of allAvatars; let i = index" src="assets/img/avatars/avatar{{i + 1}}.png">
+                <img class="avatar" (click)="selectImage(i)" *ngFor="let avatar of allAvatars; let i = index" src="assets/img/avatars/avatar{{i + 1}}.png">
                 <!---Wir setzen den Zähler durch den Regler der im Typescript ist hoch und haben dadurch alle 5 Avatare abgebildet.-->
             </div>
         </div>
 
         <div class="uploadContainer">
             <span class="uploadText">Eigenes Bild verwenden</span>
-            <button class="uploadButton">Datei hochladen</button>
+            <!-- Button zum Auslösen des versteckten File Input -->
+            <button class="uploadButton" (click)="hiddenFileInput.click()">Datei hochladen</button>
+            <!-- Verstecktes Input-Element -->
+            <input type="file" #hiddenFileInput (change)="handleFiles(hiddenFileInput.files)" style="display: none;">
         </div>
 
-        <button routerLink="/uploadImage" class="nextButton">Weiter</button>
+        <button (click)="addUser()" class="nextButton">Weiter</button>
 
 
+    </div>
+
+    <div class="footer">
+        <span class="impressum">Impressum</span>
+        <span class="datenschutz">Datenschutz</span>
     </div>
 
 </div>
