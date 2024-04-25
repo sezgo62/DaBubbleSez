@@ -26,7 +26,6 @@ export class RegisterComponent {
 
   userDetailsForm!: FormGroup;
   email: string = '';
-  //accountDetailsForm: any;
   submitted = false;
 
 
@@ -72,9 +71,5 @@ export class RegisterComponent {
     // Diese Methode wird aufgerufen, wenn das Formular abgeschickt wird. Sie aktualisiert den User im Service und navigiert zur nächsten Seite.
     this.userDataService.updateUser(this.newUser, password); // Ruft updateUser auf dem Service auf, übergibt den neuen User
     this.router.navigate(['/uploadImage']); // Navigiert programmatisch zur UploadImage-Komponente
-
-
-
   }
-
 }

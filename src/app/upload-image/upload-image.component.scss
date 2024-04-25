@@ -73,9 +73,10 @@
 }
 
 .personCircle {
-    border-radius: 76px;
-    width: 163px;
-    height: 152px;
+    width: 100px; /* oder eine andere feste Größe */
+    height: 100px;
+    overflow: hidden; /* Stellt sicher, dass nichts über die Ränder hinausgeht */
+    border-radius: 50%; /* Erzeugt einen runden Rahmen */
     background-color: #797EF3;
     margin-top: 20px;
 
@@ -84,7 +85,11 @@
     align-items: center;
 }
 
-
+.person {
+    width: 100%; /* Stellt sicher, dass das Bild den Container voll ausfüllt */
+    height: 100%;
+    object-fit: cover; /* Stellt sicher, dass das Bild den Container bedeckt, ohne das Seitenverhältnis zu verzerren */
+}
 
 .newUserName {
     margin-top: 40px;
@@ -133,17 +138,35 @@
 }
 
 
+
 .uploadContainer {
     width: 100%;
     margin-top: 23px;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
 }
 
 .uploadText {
     font-size: 18px;
 }
+
+.errorText {
+    color: red;
+    //display: none;
+    margin-top:20px;
+}
+
+.unset-d-none {
+    display: unset;
+}
+
+.d-none {
+    display:none;
+
+}
+
+
 
 .nextButton {
     width: 130px;
@@ -169,6 +192,8 @@
         background-color: #8389fd;
     }
 }
+
+
 
 .footer {
     margin-top: 60px;
@@ -304,7 +329,7 @@
 
     .daBubbleLogo {
         width: 67px;
-        }
+    }
 
     .text {
         font-size: 28px;
@@ -336,7 +361,7 @@
     .uploadText {
         font-size: 13.5px;
     }
-    
+
     .nextButton {
         width: 111px;
         height: 38px;

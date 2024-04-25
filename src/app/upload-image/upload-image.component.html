@@ -7,7 +7,8 @@
         </div>
     </div>
 
-    <div class="uploadImageContainer">
+    <div class="uploadImageContainer" (ngSubmit)="onSubmitUserDetails()">
+
 
         <div class="headLineContainer">
             <img class="arrowBack" src="assets\img\arrow_back.png">
@@ -16,31 +17,42 @@
 
         <div class="personCircle">
             <!---<img class="person" src="assets\img\person.png">-->
-            <img class="person" [src]="imageCounter ? 'assets/img/avatars/avatar' + imageCounter + '.png' : 'assets/img/person.png'">
+            <img class="person"
+     [src]="imagePreviewUrl ? imagePreviewUrl : (imageCounter ? 'assets/img/avatars/avatar' + imageCounter + '.png' : 'assets/img/person.png')"
+     alt="Benutzerbild">
 
         </div>
 
         <span class="newUserName" *ngIf="user?.firstLastName">{{user.firstLastName}}</span>
 
         <div class="avatarsContainer">
-            <span class="avatarsText">Aus der Liste wählen</span> 
+            <span class="avatarsText">Aus der Liste wählen</span>
 
             <div class="avatarsImages">
-                <img class="avatar" (click)="selectImage(i)" *ngFor="let avatar of allAvatars; let i = index" src="assets/img/avatars/avatar{{i + 1}}.png">
+                <img class="avatar" (click)="selectAvatar(i)" *ngFor="let avatar of allAvatars; let i = index"
+                    src="assets/img/avatars/avatar{{i + 1}}.png">
                 <!---Wir setzen den Zähler durch den Regler der im Typescript ist hoch und haben dadurch alle 5 Avatare abgebildet.-->
             </div>
         </div>
 
         <div class="uploadContainer">
-            <span class="uploadText">Eigenes Bild verwenden</span>
+            <div class="uploadTextContainer">
+                <span class="uploadText">Eigenes Bild verwenden</span>
+            </div>
+
             <!-- Button zum Auslösen des versteckten File Input -->
             <button class="uploadButton" (click)="hiddenFileInput.click()">Datei hochladen</button>
             <!-- Verstecktes Input-Element -->
+
+
+
             <input type="file" #hiddenFileInput (change)="handleFiles(hiddenFileInput.files)" style="display: none;">
         </div>
 
-        <button (click)="addUser()" class="nextButton">Weiter</button>
+        <span id="errorText" class="errorText d-none">Zum fortfahren bitte ein Avatar auswählen oder selbst ein Bild hochladen.</span>
 
+            <button type="button" id="nextButton" (click)="addUser($event)" class="nextButton"
+            [disabled]="isButtonDisabled">Weiter</button>
 
     </div>
 

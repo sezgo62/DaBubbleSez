@@ -21,8 +21,10 @@ export class LoginComponent implements OnInit {
   accountDetailsForm: any;
 
 
-
-  validation_messages = {
+/**
+ *  Das sind alle Fehlermeldungen die angezeigt werden wenn ein inputfeld nicht ausgefüllt wurde.
+ */
+  validation_messages = { 
     'email': [
       { type: 'required', message: 'Full email is required' }
     ],
@@ -41,24 +43,28 @@ export class LoginComponent implements OnInit {
     ]
   };
 
-
+/**
+ *  Hier haben wir alle inputfelder vom Formular und die Bedingung wie es validiert werden muss.
+ */
   ngOnInit(): void {
-    this.userDetailsForm = this.fb.group({
+    this.userDetailsForm = this.fb.group({  
       email: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
-  loginUser() {
 
-    debugger;
+/**
+ *  @param  userCredential Im userCredential sind alle Daten über den user eingespeichert.
+ */
+  loginUser() {
     const email = this.userDetailsForm.get('email')?.value;
     const password = this.userDetailsForm.get('password')?.value;
 
     const auth = getAuth();
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        this.router.navigate(['/mainScreen']);
+      .then((userCredential) => {   // Im userCredential sind alle Daten über den user eingespeichert.
+        this.router.navigate(['/mainScreen']);  // Diese Zeile befördert uns zur mainScreen component
         // Signed in 
         const user = userCredential.user;
         // ...
@@ -69,11 +75,7 @@ export class LoginComponent implements OnInit {
       });
   }
 
-
   onSubmitUserDetails() {
-
-    console.log("Eingereichter Email-Wert:", this.userDetailsForm.get('email')?.value);
-    console.log("Eingereichter Email-Wert:", this.userDetailsForm.get('password')?.value);
   }
 
 }

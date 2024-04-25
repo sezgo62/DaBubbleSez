@@ -20,6 +20,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { RegisterComponent } from './register/register.component';
 import { UploadImageComponent } from './upload-image/upload-image.component';
 import { MainscreenComponent } from './mainscreen/mainscreen.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 
 @NgModule({
@@ -28,7 +30,9 @@ import { MainscreenComponent } from './mainscreen/mainscreen.component';
     LoginComponent,
     RegisterComponent,
     UploadImageComponent,
-    MainscreenComponent
+    MainscreenComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,
