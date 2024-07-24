@@ -21,7 +21,7 @@
 
     <div class="loginContainer">
 
-        <h1 class="loginContainerHeadline">Anmelden</h1>
+        <h1 class="loginContainerHeadline">sssAnmelden</h1>
 
         <span class="LoginIntroduction">Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die<br>
             du bei der Arbeit verwendest.</span>
@@ -80,7 +80,7 @@
                 <img class="line2" src="assets/img/line.png">
             </div>
 
-            <div class="googleContainer">
+            <div (click)="signInWithGoogle()" class="googleContainer">
                 <img class="googleIcon" src="assets/img/logos/google.png">
                 <span class="googleText">Anmelden mit Google</span>
             </div>
@@ -101,8 +101,8 @@
     </div>
 
     <div class="createAccountContainerResponsive">
-        <span routerLink="/register" class="newMemberHeadline">Neu bei DaBubble!</span>
-        <span class="createAccountText">Konto erstellen</span>
+        <span  class="newMemberHeadline">Neu bei DaBubble!</span>
+        <span routerLink="/register" class="createAccountText">Konto erstellen</span>
     </div>
 
 </div>

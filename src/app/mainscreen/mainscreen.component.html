@@ -1,28 +1,160 @@
 <div class="mainscreenPool">
 
-    <div class="header">
-        <div class="logoContainer">
-            <img class="daBubbleLogo" src="assets\img\logos\daBubble-logo.png">
-            <span class="text">DABubble</span>
-        </div>
+  <div class="header non-selectable">
+    <div class="logoContainer">
+      <img class="daBubbleLogo" src="assets\img\logos\daBubble-logo.png">
+      <span class="text">DABubble</span>
+    </div>
 
 
-        <div class="inputContainer">
+    <div class="inputContainer">
 
-            <input class="inputSearch" type="text" placeholder="code learning durchsuchen">
-            <img class="search" src="assets/img/search.png">
-        </div>
+      <input class="inputSearch" type="text" placeholder="code learning durchsuchen">
+      <img class="search" src="assets/img/search.png">
+    </div>
 
-        <div class="headerProfileContainer">
-            <span class="headerProfileText">
-                Frederick Freddie
-            </span>
-            <img class="profilePicture" src="assets/img/avatars/avatar1.png">
+    <div class="headerProfileContainer">
+      <span class="headerProfileText">
+        Frederick Freddie
+      </span>
+      <img class="profilePicture" src="assets/img/avatars/avatar1.png">
 
-            <img class="keyboardArrowDown" src="assets/img/keyboardArrowDown.png">
-
-        </div>
+      <img class="keyboardArrowDown" src="assets/img/keyboardArrowDown.png">
 
     </div>
 
-</div>
+  </div>
+
+  <div class="middleContainer">
+
+    <!--<div class="sidenav">
+    <mat-drawer-container  class="example-container" autosize>
+      <mat-drawer #drawer class="example-sidenav" mode="side">
+        <p>Auto-resizing sidenav</p>
+
+      </mat-drawer>
+      <mat-drawer-content class="example-sidenav-content">
+
+      <div  class="example-sidenav-content d-none">
+        <button type="button" mat-button (click)="drawer.toggle()">
+          Toggle sidenav
+        </button>
+      </div>
+
+      <div class="toggleContainer d-none" (click)="drawer.toggle()">hallooooo</div>
+    </mat-drawer-content>
+
+    </mat-drawer-container>
+  </div>-->
+
+    <mat-drawer-container class="example-container" autosize>
+      <mat-drawer #drawer class="example-sidenav" mode="side">
+        <div class="sidenavHeader">
+          <div class="logoAndName">
+            <img src="assets/img/logos/workspaceLogo.png">
+            <h1 class="HeaderChannelText">DevSpace</h1>
+          </div>
+
+          <button class="createChannelButton" mat-icon-button> <img src="assets/img/createChannelButton.png"> </button>
+        </div>
+
+        <div class="channelSelectionContainer">
+
+          <div class="channelsDropPool">
+
+            <div (click)="dropChannels()" class="channelsDropGroup non-selectable">
+              <img class="channelsNotDropped" src="assets/img/channelsNotDropped.png"
+                [src]="showChannels ? 'assets/img/channelsDropped.png' : 'assets/img/channelsNotDropped.png'">
+              <img class="channelIcon" src="assets/img/channelIcon.png">
+              <h2 class="channelsDropGroupName">Channels</h2>
+            </div>
+
+            <button (click)="openDialog('0ms', '0ms')" class="createChannelButtonParent"
+              class="createChannelCrossIconParent" mat-icon-button><img class="createChannelCrossIcon"
+                src="assets/img/createChannelCrossIcon.png"></button>
+          </div>
+
+
+          <div *ngIf="showChannels" class="allChannels">
+            <h2 *ngFor="let channel of channels; let i = index" (click)="selectChannel(i, channels.length)"
+              class="channel" [id]="'channel' + i">
+              {{channel}}
+            </h2>
+
+            <!--<h2 (click)="selectChannel()" class="channel" id="channel"># Entwicklerteam</h2>
+            <h2 class="channel" id="channel"># Javascript</h2>
+            <h2 class="channel" id="channel"># CSS</h2>-->
+          </div>
+
+        </div>
+
+
+
+        <div class="messagesSelectionContainer">
+
+          <div class="messagesDropPool">
+
+            <div (click)="dropMessages()" class="messagesDropGroup non-selectable">
+              <img class="messagesNotDropped" src="assets/img/channelsNotDropped.png"
+                [src]="showChannels ? 'assets/img/channelsDropped.png' : 'assets/img/channelsNotDropped.png'">
+              <img class="messagesIcon" src="assets/img/accountCircle.png">
+              <h2 class="messagesDropGroupName">Messages</h2>
+            </div>
+
+
+          </div>
+
+
+          <!--<div *ngIf="showChannels" class="allMessages">
+            <h2 *ngFor="let channel of channels; let i = index" (click)="selectChannel(i, channels.length)" class="channel" [id]="'channel' + i">
+              {{channel}}
+          </h2>
+            
+            <h2 (click)="selectChannel()" class="channel" id="channel"># Entwicklerteam</h2>
+            <h2 class="channel" id="channel"># Javascript</h2>
+            <h2 class="channel" id="channel"># CSS</h2>
+          </div>-->
+
+        </div>
+
+      </mat-drawer>
+
+    </mat-drawer-container>
+
+    <div id="sidenav" class="toggleContainer2 non-selectable" (click)="drawer.toggle(); StyleSidenavButton()">
+      Workspace-Menü schließen <img id="sidenavIcon" class="sidenavOpenerLogoClosed"
+        [src]="sidenavOpen ? 'assets/img/sidenavOpenerLogoOpen.png' : 'assets/img/sidenavOpenerLogoClosed.png'"></div>
+
+
+    <div class="channelScreen">
+
+      <div class="channelHeader">
+        <div class="channelName">
+          <span># Entwicklerteam</span>
+          <img class="arrowDownChannelInfo" src="assets/img/arrowDownChannelInfo.png">
+        </div>
+
+
+        <div class="channelParticipantsAndAddUsers">
+          <!---Mann bekommt hier eine forschleife mit allen user die eingefügt werden.-->
+          <div class="participantsImagesContainer" *ngFor="let user of userFirebaseService.users  | slice:0:3">
+            <img *ngIf="user.image.startsWith('avatar')" [src]="'/assets/img/avatars/' + user.image + '.png'"
+              class="participants" alt="Avatar Image">
+            <img *ngIf="!user.image.startsWith('avatar')" [src]="user.image" class="participants" alt="User Image">
+          </div>
+
+          <span class="numberOfPerticipants">{{userFirebaseService.users.length}}</span>
+
+          <div class="personAddContainer">
+            <img class="personAdd" src="assets/img/personAdd.png">
+          </div>
+        </div>
+
+
+      </div>
+
+      <app-channel></app-channel>
+
+
+    </div>
+  </div>

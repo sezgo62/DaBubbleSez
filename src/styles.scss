@@ -4,3 +4,11 @@ body {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.custom-dialog-container .mdc-dialog__surface {
+    border-radius: 35px !important; /* Runde Ecken */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Schatten */
+  }
+  
+  
+  

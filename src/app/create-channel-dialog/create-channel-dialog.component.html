@@ -1,0 +1,17 @@
+<form class="formstyle" ngNativeValidate (ngSubmit)="createChannel(channelName.value, channelDescription.value)">
+  <h1>Channel erstellen</h1>
+  <p>Channels dienen deinem Team zur Kommunikation. Am besten sollten sie themenbezogen sein, <br> #marketing zum
+    Beispiel.</p>
+
+  <div class="inputContainer1">
+    <h2>Channel-Name</h2>
+    <input class="channelNameInput" #channelName type="text" placeholder="# z.B. Kooperationsprojekte" required>
+  </div>
+
+  <div class="inputContainer2">
+    <h2>Beschreibung <span class="optionalText">(optional)</span></h2>
+    <input class="descriptionInput" #channelDescription type="text" placeholder="Dein Text hier">
+  </div>
+
+  <button class="createChannelButton" type="submit">Erstellen</button>
+</form>

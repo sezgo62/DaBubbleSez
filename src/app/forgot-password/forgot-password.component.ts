@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoginComponent } from '../access/login/login.component';
 import { getAuth, sendSignInLinkToEmail, sendPasswordResetEmail } from "firebase/auth";
 import { userFirebaseService } from '../userFirebase.service';
+import { Router } from '@angular/router';
+import { Auth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-forgot-password',
@@ -14,7 +16,7 @@ export class ForgotPasswordComponent {
   userDetailsForm!: FormGroup;
   
 
-  constructor(private fb: FormBuilder, public userFirebaseService: userFirebaseService) {
+  constructor(private fb: FormBuilder, public userFirebaseService: userFirebaseService, private router: Router) {
 
   }
 
@@ -27,7 +29,7 @@ export class ForgotPasswordComponent {
   onSubmitUserDetails() {
     debugger;
     const email = this.userDetailsForm.get('email')?.value;
-
+    //this.router.navigate(['/resetPassword']);
     
     /*const actionCodeSettings = {
       // URL you want to redirect back to. The domain (www.example.com) for this

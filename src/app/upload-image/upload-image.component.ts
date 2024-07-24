@@ -138,18 +138,21 @@ export class UploadImageComponent implements OnInit {
      * @param isButtonDisabled Wird benötigt um den Button zu disablen falls kein Bild ausgewählt wurde.
  *  @param  userCredential Im userCredential sind alle Daten über den user eingespeichert.
      */
-  addUser(event: MouseEvent): void {
+  async addUser(event: MouseEvent): Promise<void> {
     this.isButtonDisabled = !this.selectedAvatar; // Nehmen wir an, selectedAvatar ist eine weitere Eigenschaft
 
     if (this.selectedAvatar) {
 
       const auth = getAuth(); // Referenz zu Firebase Authentication
-      createUserWithEmailAndPassword(auth, this.user.email, this.password) // createUserWithEmailAndPassword ist eine spezielle Funktion von
+      debugger;
+
+     await createUserWithEmailAndPassword(auth, this.user.email, this.password) // createUserWithEmailAndPassword ist eine spezielle Funktion von
         //  firebase authentication um einen neuen user in der Datenbank zu registrieren
         .then((userCredential) => {  // Erfolgreiche Anmeldung: UserCredential enthält Informationen zum neuen Benutzer
           // Signed up 
 
           const user = userCredential.user; // Zugriff auf das User-Objekt, das den angemeldeten Benutzer repräsentiert
+          this.user.id = user.uid;
           // ...
         })
         .catch((error) => {
@@ -165,12 +168,13 @@ export class UploadImageComponent implements OnInit {
       }
       debugger;
 
-      //this.userService.addUserToFireStore(this.user);
+      this.userService.addUserToFireStore(this.user);
+      console.log('new object', this.user);
 
 
 
 
-      //this.router.navigate(['/mainScreen']); // leitet uns weiter zur mainscreen-Seite
+      this.router.navigate(['/mainScreen']); // leitet uns weiter zur mainscreen-Seite
 
 
       ////////////Bestätigungslink in Bearbeitung////////////

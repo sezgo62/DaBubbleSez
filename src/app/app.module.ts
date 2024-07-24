@@ -22,6 +22,13 @@ import { UploadImageComponent } from './upload-image/upload-image.component';
 import { MainscreenComponent } from './mainscreen/mainscreen.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import {MatIconModule} from '@angular/material/icon';
+import {MatDialogModule} from '@angular/material/dialog';
+import { CreateChannelDialogComponent } from './create-channel-dialog/create-channel-dialog.component';
+import { ChannelComponent } from './channel/channel.component';
+
 
 
 @NgModule({
@@ -32,7 +39,9 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     UploadImageComponent,
     MainscreenComponent,
     ForgotPasswordComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    CreateChannelDialogComponent,
+    ChannelComponent
   ],
   imports: [
     BrowserModule,
@@ -47,11 +56,14 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     MatNativeDateModule,
     MatCheckboxModule,
     MatSelectModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatDialogModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
   ],
-  providers: [],
+  providers: [AngularFireAuth],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,0 +1,77 @@
+.channelNameInput {
+    width: 90%;
+    height: 50px;
+    border-radius: 28px;
+    text-indent: 60px;
+
+    outline: none;
+    border: none;
+    //background-color: #ECEEFE;
+    border: solid 0.1px black;
+
+    &:focus {
+        border: solid 0.5px #797EF3;
+    }
+
+    &:hover {
+        border: solid 0.5px #797EF3;
+    }
+}
+
+
+.descriptionInput {
+    width: 90%;
+    height: 50px;
+    border-radius: 28px;
+    text-indent: 60px;
+
+    outline: none;
+    border: none;
+    //background-color: #ECEEFE;
+    border: solid 0.1px black;
+
+    &:focus {
+        border: solid 0.5px #797EF3;
+    }
+
+    &:hover {
+        border: solid 0.5px #797EF3;
+    }
+}
+
+.inputContainer2 {
+    margin-top: 18px;
+}
+
+.optionalText {
+    color: grey;
+    font-size: 16px;
+}
+
+.formstyle {
+    padding-left: 69px;
+    padding-top: 30px;
+}
+
+.createChannelButton {
+    width: 130px;
+    height: 48px;
+    border-radius: 28px;
+    background-color: #444DF2;
+    margin-right: 15px;
+    font-weight: bold;
+    font-size: 13px;
+    border: none;
+    color: white;
+    margin-top: 30px;
+    position: absolute;
+    right: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+        &:hover {
+            cursor: pointer;
+            background-color: #8389fd;
+        }
+}
