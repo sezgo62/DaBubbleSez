@@ -76,9 +76,9 @@
 
 
           <div *ngIf="showChannels" class="allChannels">
-            <h2 *ngFor="let channel of channels; let i = index" (click)="selectChannel(i, channels.length)"
-              class="channel" [id]="'channel' + i">
-              {{channel}}
+            <h2 *ngFor="let channel of channelFirebaseService.channels; let i = index"
+              (click)="selectChannel(i, channelFirebaseService.channels.length)" class="channel" [id]="'channel' + i">
+              {{channel.nameOfChannel}}
             </h2>
 
             <!--<h2 (click)="selectChannel()" class="channel" id="channel"># Entwicklerteam</h2>
@@ -129,22 +129,22 @@
     <div class="channelScreen">
 
       <div class="channelHeader">
-        <div class="channelName">
+        <div (click)="openDialogToParticipants('0ms', '0ms')" class="channelName">
           <span># Entwicklerteam</span>
           <img class="arrowDownChannelInfo" src="assets/img/arrowDownChannelInfo.png">
         </div>
 
 
         <div class="channelParticipantsAndAddUsers">
-          <!---Mann bekommt hier eine forschleife mit allen user die eingefügt werden.-->
-          <div class="participantsImagesContainer" *ngFor="let user of userFirebaseService.users  | slice:0:3">
-            <img *ngIf="user.image.startsWith('avatar')" [src]="'/assets/img/avatars/' + user.image + '.png'"
-              class="participants" alt="Avatar Image">
-            <img *ngIf="!user.image.startsWith('avatar')" [src]="user.image" class="participants" alt="User Image">
+          <div [matMenuTriggerFor]="menu" class="bundleParticipantsAndCount">
+            <div class="participantsImagesContainer" *ngFor="let user of userFirebaseService.users  | slice:0:3">
+              <img *ngIf="user.image.startsWith('avatar')" [src]="'/assets/img/avatars/' + user.image + '.png'"
+                class="participants" alt="Avatar Image">
+              <img *ngIf="!user.image.startsWith('avatar')" [src]="user.image" class="participants" alt="User Image">
+            </div>
+
+            <span class="numberOfPerticipants">{{userFirebaseService.users.length}}</span>
           </div>
-
-          <span class="numberOfPerticipants">{{userFirebaseService.users.length}}</span>
-
           <div class="personAddContainer">
             <img class="personAdd" src="assets/img/personAdd.png">
           </div>
@@ -152,6 +152,23 @@
 
 
       </div>
+
+      <mat-menu [panelClass]="'custom-menu-panel'" #menu="matMenu">
+
+        <div class="participantsHeader">
+          <h2 class="participantsText">
+              Mitglieder
+          </h2>
+          <img class="close" src="assets/img/close.png">
+        </div>
+
+        <div class="allParticipants">
+          <h2 *ngFor="let channel of channelFirebaseService.channels; let i = index"
+            (click)="selectChannel(i, channelFirebaseService.channels.length)" class="channel" [id]="'channel' + i">
+            {{channel.nameOfChannel}}
+          </h2>
+        </div>
+      </mat-menu>
 
       <app-channel></app-channel>
 

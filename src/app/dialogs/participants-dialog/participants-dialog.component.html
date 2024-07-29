@@ -1,0 +1,57 @@
+<div class="channelInfoPool">
+
+    <div class="channelInfoHeader">
+        <h1 class="channelName"># channelName</h1>
+        <img class="close" src="assets/img/close.png">
+    </div>
+
+    <div *ngIf="ChannelEditinputTurnedOn" class="channelNameContainer">
+        <div class="editChannelNameContainer">
+            <h2 class="channelNameHeader">Channel-Name</h2>
+            <span (click)="changeChannelName()" class="edit">Bearbeiten</span>
+        </div>
+        <span class="channelName2"># channelName</span>
+    </div>
+
+    <div *ngIf="ChannelEditinputTurnedOn == false" class="editChannelNameInputConatainer">
+        <div class="editChannelHeader">
+            <h2 class="editChannelName">Channel Name</h2>
+            <span (click)="saveChannelName()" class="save">Speichern</span>
+        </div>
+        <input class="channelNameInput" #channelName type="text" placeholder="# z.B. Kooperationsprojekte" required>
+    </div>
+
+
+    <div id="channelDescriptionContainer"  class="channelDescriptionContainer">
+        <div class="editChannelDescriptionContainer">
+            <h2 *ngIf="decriptionEditinputTurnedOn" class="descriptionHeaderText">Beschreibung</h2>
+            <!--<h2 class="descriptionHeaderText">{{ decriptionEditinputTurnedOn ? 'Beschreibung' : 'Speichern' }}</h2>-->
+
+            <span *ngIf="decriptionEditinputTurnedOn" (click)="editDescription()" class="editDescription">Bearbeiten</span>
+        </div>
+
+        <span *ngIf="decriptionEditinputTurnedOn" class="channelDescription">Willkommen im Javacript-Channel. Hier könnt ihr als Anfänger die Javascript
+            Grundlagen erlernen und darüber hinaus. Schau mal rein und viel spaß.</span>
+
+        <div *ngIf="decriptionEditinputTurnedOn == false" class="editChannelNameInputConatainer">
+            <div class="editChannelHeader">
+                <h2 class="editChannelName">Beschreibung</h2>
+                <span (click)="saveDescription()" class="save">Speichern</span>
+            </div>
+            <input class="channelNameInput" #description type="text" placeholder="# z.B. Kooperationsprojekte" required>
+        </div>
+
+        <div class="lineContainer">
+            <img class="line" src="assets/img/line.png">
+        </div>
+
+        <div>
+            <h2 class="createdByText">Erstellt von</h2>
+
+            <h1 class="creatorOfChannel">Name</h1>
+
+        </div>
+
+    </div>
+    <button class="leaveChannelButton">Channel verlassen</button>
+</div>

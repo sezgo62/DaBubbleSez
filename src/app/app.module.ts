@@ -28,7 +28,8 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatDialogModule} from '@angular/material/dialog';
 import { CreateChannelDialogComponent } from './create-channel-dialog/create-channel-dialog.component';
 import { ChannelComponent } from './channel/channel.component';
-
+import { ParticipantsDialogComponent } from './dialogs/participants-dialog/participants-dialog.component';
+import {MatMenuModule} from '@angular/material/menu';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { ChannelComponent } from './channel/channel.component';
     ForgotPasswordComponent,
     ResetPasswordComponent,
     CreateChannelDialogComponent,
-    ChannelComponent
+    ChannelComponent,
+    ParticipantsDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -59,6 +61,7 @@ import { ChannelComponent } from './channel/channel.component';
     MatSidenavModule,
     MatIconModule,
     MatDialogModule,
+    MatMenuModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),

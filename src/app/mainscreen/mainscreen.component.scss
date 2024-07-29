@@ -369,10 +369,53 @@ body {
     font-size: 23px;
     font-weight: bold;
     margin-left: 51px;
+    height: 49px;
+    width: 245px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+
+    &:hover {
+        background-color: #ECEEFE;
+        color: #797EF3;
+        cursor: pointer;
+    }
+
+    &:hover .arrowDownChannelInfo {
+        filter: invert(34%) sepia(77%) saturate(2175%) hue-rotate(228deg) brightness(98%) contrast(95%);
+    }
+}
+
+.bundleParticipantsAndCount {
+    height: 64px;
+    width: 185px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+
+    &:hover {
+        background-color: #ECEEFE;
+        color: #797EF3;
+        cursor: pointer;
+    }
+
+    &:hover .numberOfPerticipants {
+        filter: invert(34%) sepia(77%) saturate(2175%) hue-rotate(228deg) brightness(98%) contrast(95%);
+    }
 }
 
 .arrowDownChannelInfo {
     margin-left: 12px;
+
+    
 }
 
 .participantsImagesContainer {
@@ -413,9 +456,26 @@ body {
     align-items: center;
     background-color: #ECEEFE;
     border-radius: 100%;
+    cursor: pointer;
+
+    &:hover .personAdd {
+        filter: invert(34%) sepia(77%) saturate(2175%) hue-rotate(228deg) brightness(98%) contrast(95%);
+    }
 }
 
 .numberOfPerticipants{
     font-size: 24px;
     margin-left: 10px;
 }
+
+.participantsHeader {
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.close {
+    width: 15px;
+    height: 15px;
+}
+

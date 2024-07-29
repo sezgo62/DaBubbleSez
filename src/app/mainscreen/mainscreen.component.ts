@@ -7,6 +7,8 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CreateChannelDialogComponent } from '../create-channel-dialog/create-channel-dialog.component';
 import { userFirebaseService } from '../userFirebase.service';
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { ParticipantsDialogComponent } from '../dialogs/participants-dialog/participants-dialog.component';
+import { ChannelFirebaseService } from '../channel-firebase.service';
 
 @Component({
   selector: 'app-mainscreen',
@@ -18,8 +20,8 @@ export class MainscreenComponent {
   sidenavOpen = false;
   showChannels = false;
 
-  constructor(private cdr: ChangeDetectorRef, public dialog: MatDialog, public userFirebaseService: userFirebaseService) { }
-//um die sidenav zu schließen und zu öffnen, heisst ob es false oder true ist
+  constructor(private cdr: ChangeDetectorRef, public dialog: MatDialog, public userFirebaseService: userFirebaseService, public channelFirebaseService: ChannelFirebaseService) { }
+  //um die sidenav zu schließen und zu öffnen, heisst ob es false oder true ist
   StyleSidenavButton() {
     if (this.sidenavOpen == false) {
       this.sidenavOpen = true;
@@ -38,15 +40,15 @@ export class MainscreenComponent {
     }
   }
 
-   dropChannels() {
+  dropChannels() {
     if (this.showChannels == false) {
       this.showChannels = true;
       this.cdr.detectChanges();
 
     } else {
       this.showChannels = false;
-this.cdr.detectChanges();
-return;
+      this.cdr.detectChanges();
+      return;
     }
     if (this.channelsCount != undefined) {
       this.selectChannel(this.channelSelected, this.channelsCount);
@@ -89,30 +91,30 @@ return;
 
   showMessages: boolean = false;
 
-getImage() {
-  const storage = getStorage();
-getDownloadURL(ref(storage, 'images/stars.jpg'))
-  .then((url) => {
-    // `url` is the download URL for 'images/stars.jpg'
+  getImage() {
+    const storage = getStorage();
+    getDownloadURL(ref(storage, 'images/stars.jpg'))
+      .then((url) => {
+        // `url` is the download URL for 'images/stars.jpg'
 
-    // This can be downloaded directly:
-    const xhr = new XMLHttpRequest();
-    xhr.responseType = 'blob';
-    xhr.onload = (event) => {
-      const blob = xhr.response;
-    };
-    xhr.open('GET', url);
-    xhr.send();
+        // This can be downloaded directly:
+        const xhr = new XMLHttpRequest();
+        xhr.responseType = 'blob';
+        xhr.onload = (event) => {
+          const blob = xhr.response;
+        };
+        xhr.open('GET', url);
+        xhr.send();
 
-    // Or inserted into an <img> element
-    const img = document.getElementById('myimg');
-    img?.setAttribute('src', url);
-  })
-  .catch((error) => {
-    // Handle any errors
-  });
-}
-  
+        // Or inserted into an <img> element
+        const img = document.getElementById('myimg');
+        img?.setAttribute('src', url);
+      })
+      .catch((error) => {
+        // Handle any errors
+      });
+  }
+
   dropMessages() {
     /*if (this.showMessages == false) {
       this.showMessages = true;
@@ -127,19 +129,28 @@ return;
       this.selectChannel(this.channelSelected, this.channelsCount);
     }
   }*/
+  }
+
+
+  openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
+    this.dialog.open(CreateChannelDialogComponent, {
+      panelClass: 'custom-dialog-container',
+      width: '950px',
+      height: '458px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+    });
+  }
+
+
+
+  openDialogToParticipants(enterAnimationDuration: string, exitAnimationDuration: string): void {
+    this.dialog.open(ParticipantsDialogComponent, {
+      panelClass: 'participant-dialog-container',
+      width: '950px',
+      height: '680px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+    });
+  }
 }
-
-
-openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
-  this.dialog.open(CreateChannelDialogComponent, {
-    panelClass: 'custom-dialog-container',
-    width: '950px',
-    height: '458px',
-    enterAnimationDuration,
-    exitAnimationDuration,
-  });
-
-
-}
-}
-

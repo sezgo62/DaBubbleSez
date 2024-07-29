@@ -15,7 +15,7 @@ export class Channel {
     this.dateOfCreation = obj ? obj.dateOfCreation : '';
     this.id = obj ? obj.id : '';
     this.nameOfChannel = obj ? obj.nameOfChannel : '';
-    this.permittedUsers = obj ? obj.permittedUsers : '';
+    this.permittedUsers = obj ? obj.permittedUsers : [];
     this.description = obj ? obj.description : '';
     this.authorOfChannel = obj ? obj.authorOfChannel : '';
 
@@ -31,7 +31,7 @@ export class Channel {
             dateOfCreation: this.dateOfCreation,
             id: this.id,
             nameOfChannel: this.nameOfChannel,
-            impermittedUsersage: this.permittedUsers,
+            permittedUsers: this.permittedUsers,
             description: this.description,
             authorOfChannel: this.authorOfChannel
 

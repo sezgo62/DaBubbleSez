@@ -10,5 +10,39 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Schatten */
   }
   
+  .participant-dialog-container .mdc-dialog__surface {
+    border-top-right-radius: 25px !important;
+    //border-top-left-radius: 20px;
+    border-bottom-right-radius: 25px !important;
+    border-bottom-left-radius: 25px !important;    
+    
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Schatten */
+  }
   
-  
+
+  app-participants-dialog {
+    display: flex;
+    justify-content: center;
+}
+
+.mat-mdc-menu-content {
+    width: 300px;
+    max-width: unset;
+
+}
+
+.custom-menu-panel {
+    max-width: unset; /* Entfernt die max-width Begrenzung */
+    //width: auto; /* Optional: Setzt die Breite auf auto */
+    
+  }
+
+.mat-mdc-menu-panel{
+    max-width: unset;
+
+}
+
+.ng-trigger-transformMenu {
+    max-width: unset;
+
+}

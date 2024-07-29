@@ -22,14 +22,11 @@ export class CreateChannelDialogComponent {
 
   currentDate!: any;
 
-  createChannel(channelName: string, channelDescription: string) {
+  async createChannel(channelName: string, channelDescription: string) {
 
     const auth = getAuth();
     const currentUser = auth.currentUser?.uid
-    this.channel.authorOfChannel = currentUser || 'unknown';
-    this.channel.nameOfChannel = channelName;
-    this.channel.description = channelDescription;
-
+  
    // Aktuelles Datum und Uhrzeit in der europäischen Zeitzone (Berlin)
    const creationDate = new Date();
 
@@ -75,15 +72,22 @@ export class CreateChannelDialogComponent {
     this.channel.authorOfChannel = currentUser || 'unknown';
     this.channel.nameOfChannel = channelName;
     this.channel.description = channelDescription;
-    this.channel.dateOfCreation = Timestamp.fromDate(europeanDate) // Umwandlung in Timestamp;
-    
+    this.channel.dateOfCreation = Timestamp.fromDate(europeanDate) // Umwandlung in Timestamp;  
+
+    if (currentUser) {
+      this.channel.permittedUsers.push(currentUser);
+    } else {
+      this.channel.permittedUsers.push('unknown');
+    }
+
 debugger;
 
     console.log(this.channel);
 
-    this.channelFirebasService.addChannelToFireStore(this.channel);
+    await this.channelFirebasService.addChannelToFireStore(this.channel);
     //console.log(channelName, channelDescription);
-
+    debugger;
+    this.closeDialog();
 
 
     /*this.newUser.firstLastName = this.userDetailsForm.get('firstLastName')?.value;
@@ -96,5 +100,11 @@ debugger;
   }*/
   }
 
+  closeDialog() {
+      this.dialogRef.close();
+  }
+
 }
+
+
 

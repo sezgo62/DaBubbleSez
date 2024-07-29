@@ -1,0 +1,193 @@
+.channelInfoPool {
+    width: 91%;
+}
+
+
+
+.editChannelNameContainer {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    margin-top: 15px;
+}
+
+.channelName {
+    margin-top: 30px;
+    margin-bottom: 0px;
+}
+
+.channelNameHeader {
+    margin-left: 20px;
+}
+
+.channelName2 {
+    margin-left: 20px;
+}
+
+.edit {
+    display: flex;
+    align-items: center;
+
+    margin-right: 20px;
+    color: #535AF1;
+    cursor: pointer;
+}
+
+.channelNameContainer {
+    height: 118px;
+    margin-top: 38px;
+    border: solid 1px #535AF1;
+
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.channelDescriptionContainer {
+    height: 290px;
+    margin-top: 38px;
+    border: solid 1px #535AF1;
+
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.editChannelDescriptionContainer {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    margin-top: 15px;
+}
+
+.channelDescription {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-left: 25px;
+    margin-right: 25px;
+}
+
+.editDescription {
+    display: flex;
+    align-items: center;
+    
+    margin-right: 20px;
+    color: #535AF1;
+}
+
+.descriptionHeaderText {
+    margin-left: 20px;
+    margin-bottom: 0px;
+}
+
+.leaveChannelButton {
+    margin-top: 36px;
+    position: absolute;
+    right: 30px;
+    bottom: 33px;
+    width: 178px;
+    height: 48px;
+    border-radius: 28px;
+    background-color: #444DF2;
+    margin-right: 15px;
+    font-weight: bold;
+    font-size: 17px;
+    border: none;
+    color: white;
+    outline: none;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+        cursor: pointer;
+        background-color: #8389fd;
+    }
+}
+
+.channelInfoHeader {
+    display: flex;
+    justify-content: space-between;
+}
+
+.close {
+    width: 17px;
+    height: 17px;
+    margin-top: 30px;
+    cursor: pointer;
+}
+
+.lineContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 28px;
+}
+
+.line{
+    width: 86%;
+}
+
+.createdByText {
+    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-left: 20px;;
+}
+
+.creatorOfChannel {
+    color: #535AF1;
+    font-size: 34px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+.d-none {
+    display: none;
+}
+
+.channelNameInput {
+    width: 100%;
+    height: 50px;
+    border-radius: 28px;
+    text-indent: 60px;
+
+    outline: none;
+    border: none;
+    //background-color: #ECEEFE;
+    border: solid 0.1px black;
+
+    &:focus {
+        border: solid 0.5px #797EF3;
+    }
+
+    &:hover {
+        border: solid 0.5px #797EF3;
+    }
+}
+
+.editChannelHeader {
+    margin-top: 15px;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.editChannelName {
+    margin-left: 20px;
+}
+
+.save {
+    margin-right: 20px;
+    color: #535AF1;
+    cursor: pointer;
+}
+
+.mat-h2, .mat-headline-6, .mat-typography .mat-h2, .mat-typography .mat-headline-6, .mat-typography h2 {
+    margin: 0;
+}

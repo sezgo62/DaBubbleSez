@@ -18,10 +18,10 @@ export class ChannelFirebaseService {
   channels: any[] = [];
   channel$;
   channel;
-  unsubUser;
+  unsubChannel;
 
   getChannels() {
-    return collection(this.firestore, 'channel');
+    return collection(this.firestore, 'channels');
   }
 
   //unsubList;
@@ -32,9 +32,9 @@ export class ChannelFirebaseService {
   constructor() {
     this.initializeFirebaseApp();
     //this.auth = getAuth();
-    const itemCollection = collection(this.firestore, 'user');
+    const itemCollection = collection(this.firestore, 'channels');
 
-    this.unsubUser = onSnapshot(itemCollection, (list) => {
+    this.unsubChannel = onSnapshot(itemCollection, (list) => {
       list.forEach(element => {
         console.log(element);
 
@@ -49,6 +49,7 @@ export class ChannelFirebaseService {
         console.log(element);
         this.channels.push(element);
         console.log(this.channel);
+console.log('pushed element', element);
 
       });
     });
@@ -71,7 +72,7 @@ export class ChannelFirebaseService {
     });
   }*/
 
-  loadUserData() {
+  loadChannelData() {
     // Beispiel, wie Sie firestore verwenden könnten
     const itemCollection = collection(this.firestore, 'channel');
     // Weitere Operationen...
@@ -81,10 +82,10 @@ export class ChannelFirebaseService {
 
   async addChannelToFireStore(channel: Channel) {
     debugger;
-    const newUserRef = doc(this.getChannels());  // Erstellt eine neue Dokumentreferenz mit einer eindeutigen ID
-    channel.id = newUserRef.id;  // Setzt die ID des User-Objekts auf die ID der neuen Dokumentreferenz
+    const newChannelRef = doc(this.getChannels());  // Erstellt eine neue Dokumentreferenz mit einer eindeutigen ID
+    channel.id = newChannelRef.id;  // Setzt die ID des Channel-Objekts auf die ID der neuen Dokumentreferenz
     debugger;
-    // Konvertiert das User-Objekt zu einem JSON-Objekt
+    // Konvertiert das Channel-Objekt zu einem JSON-Objekt
     const channelJson = channel.toJson();
 
     try {
