@@ -9,6 +9,7 @@ import { userFirebaseService } from '../userFirebase.service';
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { ParticipantsDialogComponent } from '../dialogs/participants-dialog/participants-dialog.component';
 import { ChannelFirebaseService } from '../channel-firebase.service';
+import { Channel } from 'src/models/channel.class';
 
 @Component({
   selector: 'app-mainscreen',
@@ -51,7 +52,7 @@ export class MainscreenComponent {
       return;
     }
     if (this.channelsCount != undefined) {
-      this.selectChannel(this.channelSelected, this.channelsCount);
+      this.StyleSelectedChannel(this.channelSelected, this.channelsCount);
     }
   }
 
@@ -63,7 +64,7 @@ export class MainscreenComponent {
 
 
 
-  selectChannel(i: any, channelsCount: any) {
+  StyleSelectedChannel(i: any, channelsCount: any) {
     this.channelsCount = channelsCount;
     for (let j = 0; j < channelsCount; j++) {
 
@@ -87,6 +88,15 @@ export class MainscreenComponent {
 
       }
     }
+  }
+
+
+
+  selectedChannel(channel: Channel) {
+    this.channelFirebaseService.currentChannel = channel;
+    console.log(channel);
+    this.channelFirebaseService.loadParticipants();
+    //debugger;
   }
 
   showMessages: boolean = false;

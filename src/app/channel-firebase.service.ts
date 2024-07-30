@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment.development';
 import { User } from 'src/models/user.class';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { Channel } from 'src/models/channel.class';
+import { userFirebaseService } from './userFirebase.service';
 
 
 @Injectable({
@@ -16,6 +17,8 @@ export class ChannelFirebaseService {
   firestore: Firestore = inject(Firestore);
 
   channels: any[] = [];
+  currentChannelParticipants: any[] = [];
+  currentChannel!: Channel;
   channel$;
   channel;
   unsubChannel;
@@ -29,7 +32,7 @@ export class ChannelFirebaseService {
 
   //public auth: Auth;
 
-  constructor() {
+  constructor(public userFirebaseService: userFirebaseService) {
     this.initializeFirebaseApp();
     //this.auth = getAuth();
     const itemCollection = collection(this.firestore, 'channels');
@@ -49,7 +52,7 @@ export class ChannelFirebaseService {
         console.log(element);
         this.channels.push(element);
         console.log(this.channel);
-console.log('pushed element', element);
+        console.log('pushed element', element);
 
       });
     });
@@ -57,6 +60,20 @@ console.log('pushed element', element);
 
   initializeFirebaseApp() {
     this.firebaseApp = initializeApp(environment.firebase);
+  }
+
+  loadParticipants() {
+    this.channels.forEach(channel => {
+
+      channel.permittedUsers.forEach((permittedUser: any) => {
+        const permittedUserOnChannel = this.userFirebaseService.users.find(user => user.id === permittedUser);
+        if (permittedUserOnChannel) {
+          this.currentChannelParticipants.push(permittedUserOnChannel);
+          debugger;
+        }
+      });
+
+    });
   }
 
   /*constructor(

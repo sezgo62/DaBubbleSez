@@ -31,18 +31,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 }
 
-.custom-menu-panel {
-    max-width: unset; /* Entfernt die max-width Begrenzung */
-    //width: auto; /* Optional: Setzt die Breite auf auto */
-    
+.cdk-overlay-connected-position-bounding-box .mat-mdc-menu-panel {
+    max-width: unset !important;
   }
-
-.mat-mdc-menu-panel{
-    max-width: unset;
-
-}
-
-.ng-trigger-transformMenu {
-    max-width: unset;
-
-}
+  

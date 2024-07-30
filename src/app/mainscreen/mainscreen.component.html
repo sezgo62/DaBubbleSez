@@ -77,7 +77,7 @@
 
           <div *ngIf="showChannels" class="allChannels">
             <h2 *ngFor="let channel of channelFirebaseService.channels; let i = index"
-              (click)="selectChannel(i, channelFirebaseService.channels.length)" class="channel" [id]="'channel' + i">
+              (click)="StyleSelectedChannel(i, channelFirebaseService.channels.length); selectedChannel(channel)" class="channel" [id]="'channel' + i">
               {{channel.nameOfChannel}}
             </h2>
 
@@ -136,7 +136,7 @@
 
 
         <div class="channelParticipantsAndAddUsers">
-          <div [matMenuTriggerFor]="menu" class="bundleParticipantsAndCount">
+          <div  [matMenuTriggerFor]="menu" class="bundleParticipantsAndCount">
             <div class="participantsImagesContainer" *ngFor="let user of userFirebaseService.users  | slice:0:3">
               <img *ngIf="user.image.startsWith('avatar')" [src]="'/assets/img/avatars/' + user.image + '.png'"
                 class="participants" alt="Avatar Image">
@@ -153,7 +153,7 @@
 
       </div>
 
-      <mat-menu [panelClass]="'custom-menu-panel'" #menu="matMenu">
+      <mat-menu [backdropClass]="'custom-backdrop'" #menu="matMenu">
 
         <div class="participantsHeader">
           <h2 class="participantsText">
@@ -163,9 +163,9 @@
         </div>
 
         <div class="allParticipants">
-          <h2 *ngFor="let channel of channelFirebaseService.channels; let i = index"
-            (click)="selectChannel(i, channelFirebaseService.channels.length)" class="channel" [id]="'channel' + i">
-            {{channel.nameOfChannel}}
+          <h2 *ngFor="let participant of channelFirebaseService.currentChannelParticipants; let i = index"
+             class="channel" [id]="'channel' + i">
+            {{participant.firstLastName}}
           </h2>
         </div>
       </mat-menu>
