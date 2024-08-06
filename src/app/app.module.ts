@@ -30,6 +30,14 @@ import { CreateChannelDialogComponent } from './create-channel-dialog/create-cha
 import { ChannelComponent } from './channel/channel.component';
 import { ParticipantsDialogComponent } from './dialogs/participants-dialog/participants-dialog.component';
 import {MatMenuModule} from '@angular/material/menu';
+import { ActionReducer, MetaReducer, StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { participantsReducer } from 'src/ngRx/participants.reducer';
+import { ParticipantsEffects } from 'src/ngRx/participants.effects';
+import { PostsComponent } from './posts/posts.component';
+//import { localStorageSync } from 'ngrx-store-localstorage'; // Import hinzugefügt
+
+
 
 
 @NgModule({
@@ -43,7 +51,8 @@ import {MatMenuModule} from '@angular/material/menu';
     ResetPasswordComponent,
     CreateChannelDialogComponent,
     ChannelComponent,
-    ParticipantsDialogComponent
+    ParticipantsDialogComponent,
+    PostsComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,204 @@
+.postContainer {
+    margin-top: 100px;
+}
+
+.postContentContainer {
+    padding-left: 44px;
+    display: flex;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #ECEEFE;
+    }
+
+    &:hover .questionContainer {
+        background-color: white;
+    }
+}
+
+.postContent {
+    margin-left: 30px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.nameAndQuestion {
+    display: flex;
+}
+
+.nameAndAnswerAndTime {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.postImage {
+    width: 50px;
+    height: 50px;
+}
+
+.nameAndQuestion {
+    margin-bottom: 10px;
+}
+
+.question {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    width: 93%;
+}
+
+.questionContainer {
+    height: 77px;
+    display: flex;
+    align-items: center;
+    background-color: #ECEEFE;
+
+    align-items: center;
+    margin-bottom: 10px;
+    justify-content: center;
+
+    border-bottom-left-radius: 100px;
+    border-bottom-right-radius: 100px;
+    border-top-right-radius: 100px;
+}
+
+
+.name {
+    margin-right: 14px;
+    font-weight: bold;
+    cursor: pointer;
+
+    &:hover {
+        color: #797EF3;
+    }
+}
+
+.time {
+    color: grey;
+}
+
+.timestampContainer {
+    width: 100%;
+    margin-bottom: 50px;
+    height: 35px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.Date {
+    position: absolute;
+    height: 35px;
+    width: 104px;
+    border: 1px solid black;
+    border-radius: 19px;
+    background-color: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.postLine {
+    width: 94%;
+    height: 2px;
+}
+
+.answerCount {
+    margin-left: 25px;
+    cursor: pointer;
+    color: #797EF3;
+
+    &:hover {
+        color: #797EF3;
+        font-weight: bold;
+
+    }
+}
+
+.lastAnswer {
+    margin-left: 25px;
+}
+
+
+.non-selectable {
+    -webkit-user-select: none;
+    /* Chrome, Safari, Opera */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently supported by most browsers */
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+.myPostContentContainer {
+    padding-right: 44px;
+    display: flex;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #ECEEFE;
+    }
+}
+
+.myPostQuestionContainer {
+    height: 77px;
+    display: flex;
+    align-items: center;
+    background-color: #ECEEFE;
+
+    align-items: center;
+    margin-bottom: 10px;
+    justify-content: center;
+    background-color: #797EF3;
+
+    border-bottom-left-radius: 100px;
+    border-bottom-right-radius: 100px;
+    border-top-left-radius: 100px;
+}
+
+
+.myPostNameAndQuestion {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.myPostAnswerCountContainer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.myPostContent {
+    margin-right: 30px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.test {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+
+    &:hover {
+        background-color: #ECEEFE;
+    }
+}
+
+.myQuestion {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    width: 93%;
+    color: white;
+}

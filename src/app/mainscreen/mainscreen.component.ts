@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -16,7 +16,7 @@ import { Channel } from 'src/models/channel.class';
   templateUrl: './mainscreen.component.html',
   styleUrls: ['./mainscreen.component.scss'],
 })
-export class MainscreenComponent {
+export class MainscreenComponent implements OnInit {
   showFiller = false;
   sidenavOpen = false;
   showChannels = false;
@@ -40,6 +40,11 @@ export class MainscreenComponent {
       sidenavDiv.style.color = '';*/
     }
   }
+
+ngOnInit(): void {
+  document.body.style.backgroundColor = '#ECEEFE';
+
+}
 
   dropChannels() {
     if (this.showChannels == false) {
@@ -92,9 +97,13 @@ export class MainscreenComponent {
 
 
 
-  selectedChannel(channel: Channel) {
-    this.channelFirebaseService.currentChannel = channel;
-    console.log(channel);
+  async selectedChannel(channel: Channel) {
+    //this.channelFirebaseService.currentChannelParticipants = channel;
+   
+    
+    await  this.channelFirebaseService.filterChannels(channel);
+        debugger;
+
     this.channelFirebaseService.loadParticipants();
     //debugger;
   }

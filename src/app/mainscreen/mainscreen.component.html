@@ -77,7 +77,8 @@
 
           <div *ngIf="showChannels" class="allChannels">
             <h2 *ngFor="let channel of channelFirebaseService.channels; let i = index"
-              (click)="StyleSelectedChannel(i, channelFirebaseService.channels.length); selectedChannel(channel)" class="channel" [id]="'channel' + i">
+              (click)="StyleSelectedChannel(i, channelFirebaseService.channels.length); selectedChannel(channel)"
+              class="channel" [id]="'channel' + i">
               {{channel.nameOfChannel}}
             </h2>
 
@@ -136,7 +137,7 @@
 
 
         <div class="channelParticipantsAndAddUsers">
-          <div  [matMenuTriggerFor]="menu" class="bundleParticipantsAndCount">
+          <div [matMenuTriggerFor]="menu" class="bundleParticipantsAndCount">
             <div class="participantsImagesContainer" *ngFor="let user of userFirebaseService.users  | slice:0:3">
               <img *ngIf="user.image.startsWith('avatar')" [src]="'/assets/img/avatars/' + user.image + '.png'"
                 class="participants" alt="Avatar Image">
@@ -146,27 +147,52 @@
             <span class="numberOfPerticipants">{{userFirebaseService.users.length}}</span>
           </div>
           <div class="personAddContainer">
-            <img class="personAdd" src="assets/img/personAdd.png">
+            <img [matMenuTriggerFor]="addUserToChannel" class="personAdd" src="assets/img/personAdd.png">
           </div>
         </div>
 
 
       </div>
 
-      <mat-menu [backdropClass]="'custom-backdrop'" #menu="matMenu">
+      <mat-menu [backdropClass]="'custom-backdrop'" #addUserToChannel="matMenu">
 
-        <div class="participantsHeader">
-          <h2 class="participantsText">
-              Mitglieder
+        <div class="addPersonHeader">
+          <h2 class="addPersonText">
+            Hinzufügen
           </h2>
           <img class="close" src="assets/img/close.png">
         </div>
 
         <div class="allParticipants">
           <h2 *ngFor="let participant of channelFirebaseService.currentChannelParticipants; let i = index"
-             class="channel" [id]="'channel' + i">
+            class="channel" [id]="'channel' + i">
             {{participant.firstLastName}}
           </h2>
+        </div>
+      </mat-menu>
+
+      <mat-menu [backdropClass]="'custom-backdrop'" #menu="matMenu">
+
+        <div class="participantsHeader">
+          <h2 class="participantsText">
+            Mitglieder
+          </h2>
+          <img class="close" src="assets/img/close.png">
+        </div>
+
+        <div class="allParticipants">
+          <div *ngFor="let participant of channelFirebaseService.currentChannelParticipants; let i = index"
+            class="channel" [id]="'channel' + i">
+            <img *ngIf="participant.image.startsWith('avatar')"
+              [src]="'/assets/img/avatars/' + participant.image + '.png'" class="participants" alt="Avatar Image">
+            <img *ngIf="!participant.image.startsWith('avatar')" [src]="participant.image" class="participants"
+              alt="User Image">
+
+            <h2>
+              {{participant.firstLastName}}
+            </h2>
+
+          </div>
         </div>
       </mat-menu>
 
