@@ -24,7 +24,7 @@ export class UploadImageComponent implements OnInit {
   user!: User;
   password!: string;
   userDetailsForm!: FormGroup;
-
+  isNewUser: boolean = false;
 
 
   constructor(private router: Router, private userDataService: UserDataService, private userService: userFirebaseService, private fb: FormBuilder) {
@@ -81,6 +81,13 @@ export class UploadImageComponent implements OnInit {
       if (password) {
 
         this.password = password; // Hiermit holen wir uns das Password aus dem UserDataService, welches wir vom registercomponent zwichengespeichert haben.
+      }
+    });
+    this.userSubscription = this.userDataService.isNewUser$.subscribe(isNewUser => {
+      if (isNewUser) {
+
+        this.isNewUser = isNewUser; // Hiermit holen wir uns das Password aus dem UserDataService, welches wir vom registercomponent zwichengespeichert haben.
+      debugger;
       }
     });
   }
@@ -146,7 +153,7 @@ export class UploadImageComponent implements OnInit {
       const auth = getAuth(); // Referenz zu Firebase Authentication
       debugger;
 
-     await createUserWithEmailAndPassword(auth, this.user.email, this.password) // createUserWithEmailAndPassword ist eine spezielle Funktion von
+      await createUserWithEmailAndPassword(auth, this.user.email, this.password) // createUserWithEmailAndPassword ist eine spezielle Funktion von
         //  firebase authentication um einen neuen user in der Datenbank zu registrieren
         .then((userCredential) => {  // Erfolgreiche Anmeldung: UserCredential enthält Informationen zum neuen Benutzer
           // Signed up 
@@ -219,6 +226,20 @@ export class UploadImageComponent implements OnInit {
     }
   }
 
+  addUserForGoogle() {
+    debugger;
+    if (this.selectedAvatar) {
+
+      if (this.fileRef && this.file) { // Falls eine file vorhanden ist werden wir zu uploadPicture() weitergeleitet. 
+        this.userService.uploadPicture(this.fileRef, this.file, this.user);
+        console.log('file detected');
+      }
+
+      this.userService.addUserToFireStore(this.user);
+
+
+    }
+  }
 
   ngOnDestroy(): void {
     // Beendet das Abonnement, wenn die Komponente zerstört wird, um Memory Leaks zu verhindern

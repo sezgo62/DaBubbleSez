@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { ChannelFirebaseService } from 'src/app/channel-firebase.service';
+import { userFirebaseService } from 'src/app/userFirebase.service';
 
 @Component({
   selector: 'app-participants-dialog',
@@ -10,6 +12,9 @@ export class ParticipantsDialogComponent {
   ChannelEditinputTurnedOn: boolean = true;
   decriptionEditinputTurnedOn: boolean = true;
 
+constructor(public channelFirebaseService: ChannelFirebaseService, public userFirebaseService: userFirebaseService) {
+
+}
 
   changeChannelName() {
     this.ChannelEditinputTurnedOn = false;

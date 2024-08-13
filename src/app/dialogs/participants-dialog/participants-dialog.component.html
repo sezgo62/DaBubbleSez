@@ -1,7 +1,7 @@
 <div class="channelInfoPool">
 
     <div class="channelInfoHeader">
-        <h1 class="channelName"># channelName</h1>
+        <h1 class="channelName">{{channelFirebaseService.currentChannel.nameOfChannel}}</h1>
         <img class="close" src="assets/img/close.png">
     </div>
 
@@ -10,7 +10,7 @@
             <h2 class="channelNameHeader">Channel-Name</h2>
             <span (click)="changeChannelName()" class="edit">Bearbeiten</span>
         </div>
-        <span class="channelName2"># channelName</span>
+        <span class="channelName2"># {{channelFirebaseService.currentChannel.nameOfChannel}}</span>
     </div>
 
     <div *ngIf="ChannelEditinputTurnedOn == false" class="editChannelNameInputConatainer">
@@ -30,8 +30,7 @@
             <span *ngIf="decriptionEditinputTurnedOn" (click)="editDescription()" class="editDescription">Bearbeiten</span>
         </div>
 
-        <span *ngIf="decriptionEditinputTurnedOn" class="channelDescription">Willkommen im Javacript-Channel. Hier könnt ihr als Anfänger die Javascript
-            Grundlagen erlernen und darüber hinaus. Schau mal rein und viel spaß.</span>
+        <span *ngIf="decriptionEditinputTurnedOn" class="channelDescription">{{channelFirebaseService.currentChannel.description}}</span>
 
         <div *ngIf="decriptionEditinputTurnedOn == false" class="editChannelNameInputConatainer">
             <div class="editChannelHeader">
@@ -48,7 +47,7 @@
         <div>
             <h2 class="createdByText">Erstellt von</h2>
 
-            <h1 class="creatorOfChannel">Name</h1>
+            <h1 class="creatorOfChannel">{{channelFirebaseService.extractingUsersName.firstLastName}}</h1>
 
         </div>
 

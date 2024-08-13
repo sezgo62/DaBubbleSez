@@ -15,8 +15,8 @@ import { BehaviorSubject } from 'rxjs';
 
 export class ChannelFirebaseService implements OnInit {
 
- 
-  
+
+
   firestore: Firestore = inject(Firestore);
 
   channels: any[] = [];
@@ -25,6 +25,7 @@ export class ChannelFirebaseService implements OnInit {
   currentChannel!: Channel;
   channel$;
   channel;
+  extractingUsersName!: User;
   unsubChannel;
 
   getChannels() {
@@ -36,7 +37,7 @@ export class ChannelFirebaseService implements OnInit {
 
   //public auth: Auth;
 
-  
+
 
   constructor(public userFirebaseService: userFirebaseService) {
     this.initializeFirebaseApp();
@@ -58,50 +59,58 @@ export class ChannelFirebaseService implements OnInit {
       list.forEach(element => {
         console.log(element);
         this.channels.push(element);
-        console.log(this.channel); 
+        console.log(this.channel);
         console.log('pushed element', element);
       });
     });
-
-    
-
   }
 
-  async filterChannels(channel: Channel) {
-    const itemCollection =  collection(this.firestore, 'channels');
 
 
+  async filterChannels(channel: Channel): Promise<void> {
+    const itemCollection = collection(this.firestore, 'channels');
     const q = query(itemCollection, where("id", "==", channel.id));
-    debugger;
-    this.channel$ = collectionData(q);
-    this.channel = this.channel$.subscribe((list) => {
-       list.forEach(element => {
-        console.log(element);
-         this.currentChannel = element as Channel;
-        debugger;
-        if (this.currentChannel.id && this.currentChannel.nameOfChannel && this.currentChannel.dateOfCreation && this.currentChannel.permittedUsers) {
-          this.currentChannel = this.currentChannel;
-          console.log('pushed element', this.currentChannel);
-      } else {
-          console.error('Das Element hat nicht alle notwendigen Felder:', element);
-      }
-        console.log(this.currentChannel); 
-        console.log('pushed element', element);
+    const channel$ = collectionData(q);
+
+    // Abonniere das Observable und warte bis die Daten vollständig verarbeitet sind
+    //await funktioniert nicht mit observables, Observables  müssen in ein Promise umgewandelt werden wie hier: return new Promise((resolve, reject) => {
+    //Mehr dazu findest du in Readme unter dem Titel: "Promise und Observables"
+    return new Promise((resolve, reject) => { // Resolve das Promise, wenn die Verarbeitung abgeschlossen ist
+      this.channelSubscription = channel$.subscribe({
+        next: (list) => {
+          list.forEach(element => {
+
+            this.currentChannel = element as Channel;
+            console.log('channel is', this.currentChannel);
+            debugger;
+            this.extractingUsersName = this.userFirebaseService.users.find(user => user.id === this.currentChannel.authorOfChannel);
+             if (this.currentChannel.id && this.currentChannel.nameOfChannel && this.currentChannel.dateOfCreation && this.currentChannel.permittedUsers) {
+              console.log('pushed element', this.currentChannel);
+            } else {
+              console.error('Das Element hat nicht alle notwendigen Felder:', element);
+            }
+          });
+          resolve(); // Resolve das Promise, wenn die Verarbeitung abgeschlossen ist
+        },
+        error: (err) => {
+          console.error('Fehler beim Laden der Kanäle:', err);
+          reject(err); // Reject das Promise im Fehlerfall
+        }
       });
     });
-
-    this.loadParticipants();
   }
-  
+
+
   ngOnInit() {
     const storedChannel = localStorage.getItem('currentChannel');
     if (storedChannel) {
       this.currentChannel = JSON.parse(storedChannel);
       //this.loadParticipants();
       console.log('getitem', this.currentChannel);
-      
+
       debugger;
-    }  }
+    }
+  }
 
   private loadCurrentChannel(): Channel | null {
     const storedChannel = localStorage.getItem('currentChannel');
@@ -125,16 +134,16 @@ export class ChannelFirebaseService implements OnInit {
 
   loadParticipants() {
     this.currentChannelParticipants = []; // Array leeren
-  debugger;
-      this.currentChannel.permittedUsers.forEach((permittedUser: any) => {
-        const permittedUserOnChannel = this.userFirebaseService.users.find(user => user.id === permittedUser);
-        if (permittedUserOnChannel) {
-          this.currentChannelParticipants.push(permittedUserOnChannel);
-        }
-      });
+    debugger;
+    this.currentChannel.permittedUsers.forEach((permittedUser: any) => {
+      const permittedUserOnChannel = this.userFirebaseService.users.find(user => user.id === permittedUser);
+      if (permittedUserOnChannel) {
+        this.currentChannelParticipants.push(permittedUserOnChannel);
+      }
+    });
     localStorage.setItem('currentChannel', JSON.stringify(this.currentChannelParticipants));
 
-   
+
   }
 
 
@@ -166,19 +175,19 @@ export class ChannelFirebaseService implements OnInit {
     //debugger;
     // Konvertiert das Channel-Objekt zu einem JSON-Objekt
     //const channelJson = channel.toJson();
-    
+
     try {
       const channelsRef = collection(this.firestore, 'channels');
 
       // Erstellt eine neue Dokumentreferenz mit einer eindeutigen ID
       const newChannelRef = doc(channelsRef);
-     
- 
+
+
       // Setzt die ID des Channel-Objekts auf die ID der neuen Dokumentreferenz
       channel.id = newChannelRef.id;
- 
-       // Konvertiert das Channel-Objekt zu einem JSON-Objekt
-       const channelJson = channel.toJson();
+
+      // Konvertiert das Channel-Objekt zu einem JSON-Objekt
+      const channelJson = channel.toJson();
 
       // Fügt das JSON-Objekt zur Firestore-Datenbank hinzu
 
@@ -191,22 +200,22 @@ export class ChannelFirebaseService implements OnInit {
   }
 
 
-/*async addChannelToFireStore(channel: Channel) {
-    debugger;
-    //const newChannelRef = doc(this.getChannels());  // Erstellt eine neue Dokumentreferenz mit einer eindeutigen ID
-    //channel.id = newChannelRef.id;  // Setzt die ID des Channel-Objekts auf die ID der neuen Dokumentreferenz
-    //debugger;
-    // Konvertiert das Channel-Objekt zu einem JSON-Objekt
-    const channelJson = channel.toJson();
-
-    try {
-      // Fügt das JSON-Objekt zur Firestore-Datenbank hinzu
-
-      const docRef = await addDoc(this.getChannels(), channelJson);
-      console.log('Document written with ID:', docRef.id);  // Loggt die ID des neu erstellten Dokuments
-    } catch (err) {
-      console.log('Error adding document:', err);  // Fängt und loggt Fehler
-    }
-  }*/
+  /*async addChannelToFireStore(channel: Channel) {
+      debugger;
+      //const newChannelRef = doc(this.getChannels());  // Erstellt eine neue Dokumentreferenz mit einer eindeutigen ID
+      //channel.id = newChannelRef.id;  // Setzt die ID des Channel-Objekts auf die ID der neuen Dokumentreferenz
+      //debugger;
+      // Konvertiert das Channel-Objekt zu einem JSON-Objekt
+      const channelJson = channel.toJson();
+  
+      try {
+        // Fügt das JSON-Objekt zur Firestore-Datenbank hinzu
+  
+        const docRef = await addDoc(this.getChannels(), channelJson);
+        console.log('Document written with ID:', docRef.id);  // Loggt die ID des neu erstellten Dokuments
+      } catch (err) {
+        console.log('Error adding document:', err);  // Fängt und loggt Fehler
+      }
+    }*/
 
 }

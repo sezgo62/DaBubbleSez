@@ -5,11 +5,13 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment.development';
 import { FirebaseApp, initializeApp } from '@angular/fire/app';
-import { Auth, signInWithPopup, signInWithRedirect } from '@angular/fire/auth';
+import { Auth, getAdditionalUserInfo, signInWithPopup } from '@angular/fire/auth';
 
 import { GoogleAuthProvider } from "firebase/auth";
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { CurrentUserService } from 'src/app/current-user.service';
+import { UserDataService } from 'src/app/user-data.service';
+import { User } from 'src/models/user.class';
 
 
 @Component({
@@ -19,7 +21,7 @@ import { CurrentUserService } from 'src/app/current-user.service';
 })
 export class LoginComponent implements OnInit {
   //public userFirebaseService: userFirebaseService
-  constructor(public userFirebaseService: userFirebaseService, private fb: FormBuilder, private router: Router,  public currentUserService: CurrentUserService) {
+  constructor(public userFirebaseService: userFirebaseService, private fb: FormBuilder, private router: Router, public currentUserService: CurrentUserService, public dataUserService: UserDataService) {
     this.auth = getAuth(this.userFirebaseService.firebaseApp);
   }
 
@@ -115,29 +117,55 @@ export class LoginComponent implements OnInit {
 
   }*/
 
+    additionalUserInfo: any;
+
   signInWithGoogle() {
     const auth = getAuth();
     const provider = new GoogleAuthProvider(); // Erstellen Sie den Google-Provider
-signInWithPopup(auth, provider)
-  .then((result) => {
-    // This gives you a Google Access Token. You can use it to access the Google API.
-    const credential = GoogleAuthProvider.credentialFromResult(result);
-    const token = credential!.accessToken;
-    // The signed-in user info.
-    const user = result.user;
-    this.router.navigate(['/mainScreen']);  // Diese Zeile befördert uns zur mainScreen component
-    // IdP data available using getAdditionalUserInfo(result)
-    // ...
-  }).catch((error) => {
-    // Handle Errors here.
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // The email of the user's account used.
-    const email = error.customData.email;
-    // The AuthCredential type that was used.
-    const credential = GoogleAuthProvider.credentialFromError(error);
-    // ...
-  });
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        this.additionalUserInfo = getAdditionalUserInfo(result);
+
+        if(this.additionalUserInfo?.isNewUser) {
+          debugger;
+          console.log(result);
+          console.log(this.additionalUserInfo);
+
+          this.dataUserService.clearUser();
+
+          const googleUser = new User;
+          googleUser.firstLastName = result.user.displayName ?? '';
+          googleUser.id = result.user.uid ?? '';
+          googleUser.email = result.user.email ?? '';
+  
+          this.dataUserService.updateUserForGoogle(googleUser, this.additionalUserInfo?.isNewUser);
+
+          this.router.navigate(['/uploadImage']);
+        } else {
+          this.router.navigate(['/mainScreen']);  // Diese Zeile befördert uns zur mainScreen component
+        }
+
+       
+
+       
+
+        const token = credential!.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+      }).catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
   }
 
   onSubmitUserDetails() {

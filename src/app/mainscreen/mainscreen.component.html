@@ -130,8 +130,8 @@
     <div class="channelScreen">
 
       <div class="channelHeader">
-        <div (click)="openDialogToParticipants('0ms', '0ms')" class="channelName">
-          <span># Entwicklerteam</span>
+        <div *ngIf="channelFirebaseService.currentChannel" (click)="openDialogToParticipants('0ms', '0ms')" class="channelName">
+          <span>{{channelFirebaseService.currentChannel.nameOfChannel}}</span>
           <img class="arrowDownChannelInfo" src="assets/img/arrowDownChannelInfo.png">
         </div>
 
