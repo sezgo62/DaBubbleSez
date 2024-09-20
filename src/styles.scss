@@ -1,3 +1,5 @@
+
+
 body {
     margin: 0;
 }
@@ -35,3 +37,22 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     max-width: unset !important;
   }
   
+  .emoji-mart .emoji-mart-bar {
+    display: none; /* Versteckt die Kategorieleiste */
+  }
+
+  .emoji-mart .emoji-mart-scroll {
+    max-height: 250px; /* Passt die Höhe des Scrollbereichs an */
+    overflow-y: auto;  /* Stellt sicher, dass der Inhalt scrollbar bleibt */
+  }
+
+  .emoji-mart .emoji-mart-search {
+    display: none;
+  }
+
+
+  /* Für WebKit-basierte Browser (Chrome, Safari, Edge) */
+.emoji-mart .emoji-mart-scroll::-webkit-scrollbar {
+  width: 8px; /* Breite der Scrollbar */
+  background-color: rgb(68, 67, 67);
+}

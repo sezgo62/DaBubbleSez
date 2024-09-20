@@ -7,6 +7,7 @@
     display: flex;
     padding-top: 10px;
     padding-bottom: 10px;
+    position: relative;
     cursor: pointer;
 
     &:hover {
@@ -16,6 +17,52 @@
     &:hover .questionContainer {
         background-color: white;
     }
+
+    &:hover .emojiContainer {
+        display: flex;
+    }
+
+
+}
+
+.emojiContainer {
+    position: absolute;
+    top: -36px;
+    right: 40px;
+    width: 300px;
+    height: 50px;
+    border: solid 1px black;
+
+    border-top-left-radius: 150px;
+    border-top-right-radius: 150px;
+    border-bottom-left-radius: 150px;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border: solid 2px #babfe9;
+    background-color: white;
+    display: none;
+}
+
+.myEmojiContainer {
+    position: absolute;
+    top: -36px;
+    left: 40px;
+    width: 300px;
+    height: 50px;
+    border: solid 1px black;
+
+    border-top-left-radius: 150px;
+    border-top-right-radius: 150px;
+    border-bottom-left-radius: 150px;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border: solid 2px #babfe9;
+    background-color: white;
+    display: none;
 }
 
 .postContent {
@@ -51,6 +98,7 @@
 }
 
 .questionContainer {
+    width: 605px;
     height: 77px;
     display: flex;
     align-items: center;
@@ -63,11 +111,22 @@
     border-bottom-left-radius: 100px;
     border-bottom-right-radius: 100px;
     border-top-right-radius: 100px;
+    position: relative;
 }
 
 
 .name {
     margin-right: 14px;
+    font-weight: bold;
+    cursor: pointer;
+
+    &:hover {
+        color: #797EF3;
+    }
+}
+
+.myName {
+    margin-left: 14px;
     font-weight: bold;
     cursor: pointer;
 
@@ -94,7 +153,7 @@
 .Date {
     position: absolute;
     height: 35px;
-    width: 104px;
+    width: 124px;
     border: 1px solid black;
     border-radius: 19px;
     background-color: white;
@@ -102,6 +161,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.timestampContainer {
+    position: relative;
 }
 
 .postLine {
@@ -139,23 +202,35 @@
 
 //////////////////////////////////////////////////////////////////////////////////////
 
+
 .myPostContentContainer {
+
     padding-right: 44px;
-    display: flex;
     padding-top: 10px;
     padding-bottom: 10px;
     cursor: pointer;
+    position: relative;
+    display: flex;
+    flex-direction: row-reverse;
+
 
     &:hover {
         background-color: #ECEEFE;
     }
+
+
+    &:hover .myEmojiContainer {
+        display: flex;
+    }
 }
 
 .myPostQuestionContainer {
+    width: 605px;
     height: 77px;
     display: flex;
     align-items: center;
     background-color: #ECEEFE;
+    position: relative;
 
     align-items: center;
     margin-bottom: 10px;
@@ -165,13 +240,17 @@
     border-bottom-left-radius: 100px;
     border-bottom-right-radius: 100px;
     border-top-left-radius: 100px;
+
+
 }
 
 
 .myPostNameAndQuestion {
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     margin-bottom: 10px;
+    flex-direction: row-reverse;
+
 }
 
 .myPostAnswerCountContainer {
@@ -185,6 +264,8 @@
     display: flex;
     flex-direction: column;
 }
+
+
 
 .test {
     display: flex;
@@ -202,3 +283,54 @@
     width: 93%;
     color: white;
 }
+
+.container {
+    display: grid;
+    grid-template-columns: 100% 0%;
+    width: 36%;
+
+    button {
+        background: transparent;
+        border: 0;
+        transform: translateX(-40px);
+        cursor: pointer;
+
+        &:focus {
+            outline: 0;
+        }
+    }
+}
+
+.approvedImage {
+    filter: brightness(0.9) hue-rotate(0deg) contrast(1.5);
+}
+
+.laughSmileybutton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.laugh {
+    width: 48px;
+    height: 48px;
+}
+
+.showEmojisOfPost {
+    display: flex;
+}
+
+.smallEmojiContainer {
+    width: 90px;
+    height: 40px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border: 1px solid #8A86F6;
+    border-radius: 21px;
+    margin-right: 10px;
+}
+
+.emoji-mart .emoji-mart-bar {
+    display: none; /* Versteckt die Kategorieleiste */
+  }

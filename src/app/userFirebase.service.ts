@@ -6,20 +6,21 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { StorageReference } from "firebase/storage";
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 
-import { getAuth, Auth } from '@angular/fire/auth';
+import { getAuth, Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { FirebaseApp, initializeApp } from '@angular/fire/app';
 import { environment } from 'src/environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
-export class userFirebaseService {
+export class userFirebaseService implements OnInit {
 
   firestore: Firestore = inject(Firestore);
 
   users: any[] = [];
   user$;
   user;
+  uid!: any;
   unsubUser;
 
   getUsers() {
@@ -32,6 +33,20 @@ export class userFirebaseService {
   //public auth: Auth;
 
   constructor() {
+
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        this.uid = user.uid;
+        console.log('User UID:', this.uid);
+        //this.initializeUserSnapshot();  // Jetzt ist uid gesetzt, also initialisieren wir die anderen Dinge
+      } else {
+        console.log('No user logged in');
+      }
+    });
+  
+
+
     this.initializeFirebaseApp();
     //this.auth = getAuth();
     const itemCollection = collection(this.firestore, 'user');
@@ -51,12 +66,20 @@ export class userFirebaseService {
         console.log(element);
         this.users.push(element);
         console.log(this.users);
-        
+
       });
     });
   }
 
-  
+  initializeUserSnapshot() {
+    throw new Error('Method not implemented.');
+  }
+
+  ngOnInit(): void {
+    const auth = getAuth();
+    this.uid = auth.currentUser?.uid
+    debugger;
+    }
 
   initializeFirebaseApp() {
     this.firebaseApp = initializeApp(environment.firebase);

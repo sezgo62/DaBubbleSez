@@ -10,6 +10,10 @@ import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { ParticipantsDialogComponent } from '../dialogs/participants-dialog/participants-dialog.component';
 import { ChannelFirebaseService } from '../channel-firebase.service';
 import { Channel } from 'src/models/channel.class';
+import { Post } from 'src/models/post.class';
+import { FieldValue, serverTimestamp, Timestamp } from '@angular/fire/firestore';
+import twemoji from 'twemoji';
+
 
 @Component({
   selector: 'app-mainscreen',
@@ -20,6 +24,10 @@ export class MainscreenComponent implements OnInit {
   showFiller = false;
   sidenavOpen = false;
   showChannels = false;
+  post: Post = new Post();
+  public textArea: string = "";
+  public isEmojiPickerVisible: boolean = false; //Diese Variable steuert, ob der Emoji-Picker sichtbar ist oder nicht. Wenn sie auf true gesetzt wird, wird der Emoji-Picker angezeigt; bei false wird er ausgeblendet.
+
 
   constructor(private cdr: ChangeDetectorRef, public dialog: MatDialog, public userFirebaseService: userFirebaseService, public channelFirebaseService: ChannelFirebaseService) { }
   //um die sidenav zu schließen und zu öffnen, heisst ob es false oder true ist
@@ -102,7 +110,6 @@ ngOnInit(): void {
    
     
     await  this.channelFirebaseService.filterChannels(channel);
-        debugger;
 
     this.channelFirebaseService.loadParticipants();
     //debugger;
@@ -132,6 +139,17 @@ ngOnInit(): void {
       .catch((error) => {
         // Handle any errors
       });
+  }
+
+  sendPost(message: string) {
+    debugger;
+   this.post.authorOfPost = this.userFirebaseService.uid;
+   this.post.dateOfPost = serverTimestamp() // Serverseitiger Zeit
+   this.post.textOfPost = message;
+   this.post.emojiOfPost;
+   this.post.authorOfPost = this.userFirebaseService.uid;
+   this.post.id = '';
+   this.channelFirebaseService.addPostToFirestore(this.post);
   }
 
   dropMessages() {
@@ -172,4 +190,14 @@ return;
       exitAnimationDuration,
     });
   }
+
+  public toggleEmojiPicker(): void {
+    this.isEmojiPickerVisible = !this.isEmojiPickerVisible; // Umschalten der Sichtbarkeit des Emoji-Pickers
+  }
+
+  public addEmoji(event: any) {
+    this.textArea += event.emoji.native; // Emoji wird dem Text hinzugefügt
+    this.isEmojiPickerVisible = false; // Picker wird nach Auswahl ausgeblendet
 }
+}
+

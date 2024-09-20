@@ -3,7 +3,7 @@
   <div class="header non-selectable">
     <div class="logoContainer">
       <img class="daBubbleLogo" src="assets\img\logos\daBubble-logo.png">
-      <span class="text">DABubble</span>
+      <span (click)="drawer.toggle()" class="text">DABubble</span>
     </div>
 
 
@@ -122,15 +122,16 @@
 
     </mat-drawer-container>
 
-    <div id="sidenav" class="toggleContainer2 non-selectable" (click)="drawer.toggle(); StyleSidenavButton()">
+    <div id="sidenav" class="toggleContainer2 non-selectable" (click)="drawer2.toggle(); StyleSidenavButton()">
       Workspace-Menü schließen <img id="sidenavIcon" class="sidenavOpenerLogoClosed"
         [src]="sidenavOpen ? 'assets/img/sidenavOpenerLogoOpen.png' : 'assets/img/sidenavOpenerLogoClosed.png'"></div>
 
-
+    <!--<div class="channelScreenPool">-->
     <div class="channelScreen">
 
       <div class="channelHeader">
-        <div *ngIf="channelFirebaseService.currentChannel" (click)="openDialogToParticipants('0ms', '0ms')" class="channelName">
+        <div *ngIf="channelFirebaseService.currentChannel" (click)="openDialogToParticipants('0ms', '0ms')"
+          class="channelName">
           <span>{{channelFirebaseService.currentChannel.nameOfChannel}}</span>
           <img class="arrowDownChannelInfo" src="assets/img/arrowDownChannelInfo.png">
         </div>
@@ -138,13 +139,18 @@
 
         <div class="channelParticipantsAndAddUsers">
           <div [matMenuTriggerFor]="menu" class="bundleParticipantsAndCount">
-            <div class="participantsImagesContainer" *ngFor="let user of userFirebaseService.users  | slice:0:3">
+            <div class="participantsImagesContainer" *ngFor="let user of channelFirebaseService.currentChannelParticipants  | slice:0:3">
               <img *ngIf="user.image.startsWith('avatar')" [src]="'/assets/img/avatars/' + user.image + '.png'"
                 class="participants" alt="Avatar Image">
               <img *ngIf="!user.image.startsWith('avatar')" [src]="user.image" class="participants" alt="User Image">
             </div>
 
-            <span class="numberOfPerticipants">{{userFirebaseService.users.length}}</span>
+            <span *ngIf="channelFirebaseService.currentChannel?.permittedUsers?.length" class="numberOfParticipants">
+              {{ channelFirebaseService.currentChannel.permittedUsers.length }}
+            </span>
+
+
+
           </div>
           <div class="personAddContainer">
             <img [matMenuTriggerFor]="addUserToChannel" class="personAdd" src="assets/img/personAdd.png">
@@ -198,6 +204,75 @@
 
       <app-channel></app-channel>
 
+      <div class="inputPostContainer">
+        <input placeholder="Type a message" type="text" name="textarea" [(ngModel)]="textArea" #message
+          class="inputPost">
+
+        <div class="iconsInputContainer">
+          <div class="allIcons">
+            <button  class="addPost" mat-icon-button><img class="addPost" src="assets/img/addPost.png"></button>
+            <img class="postLine" src="assets/img/postLine.png">
+
+            <emoji-mart class="emoji-mart" *ngIf="isEmojiPickerVisible" (emojiSelect)="addEmoji($event)" title="Choose your emoji"></emoji-mart>
+
+
+            <button (click)="toggleEmojiPicker()" mat-icon-button><img class="emojiPost"
+                src="assets/img/addEmojiPost.png"></button>
+            <button mat-icon-button><img class="markSomeone" src="assets/img/markSomeone.png"></button>
+          </div>
+
+          <button (click)="sendPost(message.value)" mat-icon-button><img class="send"
+              src="assets/img/send.png"></button>
+        </div>
+
+      </div>
 
     </div>
+
+<!------------------------------------------------------------------------>
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer #drawer2 class="example-sidenav" mode="side" position="end">
+    <div class="sidenavHeaderThread">
+        <h1 class="headerChannelTextThread">Thread</h1>
+      <span class="channelNameThread">#ChannelName</span>
+    </div>
+
+    <div class="channelSelectionContainer">
+      <div class="channelsDropPool">
+        <div (click)="dropChannels()" class="channelsDropGroup non-selectable">
+          <img class="channelsNotDropped" src="assets/img/channelsNotDropped.png"
+            [src]="showChannels ? 'assets/img/channelsDropped.png' : 'assets/img/channelsNotDropped.png'">
+          <img class="channelIcon" src="assets/img/channelIcon.png">
+          <h2 class="channelsDropGroupName">Channels</h2>
+        </div>
+
+        <button (click)="openDialog('0ms', '0ms')" class="createChannelButtonParent" mat-icon-button>
+          <img class="createChannelCrossIcon" src="assets/img/createChannelCrossIcon.png">
+        </button>
+      </div>
+
+      <div *ngIf="showChannels" class="allChannels">
+        <h2 *ngFor="let channel of channelFirebaseService.channels; let i = index"
+          (click)="StyleSelectedChannel(i, channelFirebaseService.channels.length); selectedChannel(channel)"
+          class="channel" [id]="'channel' + i">
+          {{channel.nameOfChannel}}
+        </h2>
+      </div>
+    </div>
+
+    <div class="messagesSelectionContainer">
+      <div class="messagesDropPool">
+        <div (click)="dropMessages()" class="messagesDropGroup non-selectable">
+          <img class="messagesNotDropped" src="assets/img/channelsNotDropped.png"
+            [src]="showChannels ? 'assets/img/channelsDropped.png' : 'assets/img/channelsNotDropped.png'">
+          <img class="messagesIcon" src="assets/img/accountCircle.png">
+          <h2 class="messagesDropGroupName">Messages</h2>
+        </div>
+      </div>
+    </div>
+  </mat-drawer>
+</mat-drawer-container>
+
+<!------------------------------------------------------------------------>
   </div>
+</div>

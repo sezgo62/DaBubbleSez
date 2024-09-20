@@ -22,15 +22,17 @@
     </div>
 
 
-    <div id="channelDescriptionContainer"  class="channelDescriptionContainer">
+    <div id="channelDescriptionContainer" class="channelDescriptionContainer">
         <div class="editChannelDescriptionContainer">
             <h2 *ngIf="decriptionEditinputTurnedOn" class="descriptionHeaderText">Beschreibung</h2>
             <!--<h2 class="descriptionHeaderText">{{ decriptionEditinputTurnedOn ? 'Beschreibung' : 'Speichern' }}</h2>-->
 
-            <span *ngIf="decriptionEditinputTurnedOn" (click)="editDescription()" class="editDescription">Bearbeiten</span>
+            <span *ngIf="decriptionEditinputTurnedOn" (click)="editDescription()"
+                class="editDescription">Bearbeiten</span>
         </div>
 
-        <span *ngIf="decriptionEditinputTurnedOn" class="channelDescription">{{channelFirebaseService.currentChannel.description}}</span>
+        <span *ngIf="decriptionEditinputTurnedOn"
+            class="channelDescription">{{channelFirebaseService.currentChannel.description}}</span>
 
         <div *ngIf="decriptionEditinputTurnedOn == false" class="editChannelNameInputConatainer">
             <div class="editChannelHeader">

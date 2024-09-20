@@ -35,7 +35,9 @@ import { EffectsModule } from '@ngrx/effects';
 import { participantsReducer } from 'src/ngRx/participants.reducer';
 import { ParticipantsEffects } from 'src/ngRx/participants.effects';
 import { PostsComponent } from './posts/posts.component';
+import { PickerModule } from "@ctrl/ngx-emoji-mart";
 //import { localStorageSync } from 'ngrx-store-localstorage'; // Import hinzugefügt
+import { DatePipe } from '@angular/common';
 
 
 
@@ -71,11 +73,12 @@ import { PostsComponent } from './posts/posts.component';
     MatIconModule,
     MatDialogModule,
     MatMenuModule,
+    PickerModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
   ],
-  providers: [AngularFireAuth],
+  providers: [AngularFireAuth, DatePipe  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
