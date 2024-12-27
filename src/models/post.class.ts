@@ -11,6 +11,10 @@ export class Post {
     dateOfPost: Timestamp | Date | FieldValue; // Erlaube sowohl Date als auch Timestamp
     authorName: any;
     emojiInformations: any;
+    answerInformations: any;
+    email: any;
+    online: boolean = false;
+    lengthOfAnswers: number = 0;
 
     constructor(obj?: any) {
         this.answers = obj ? obj.answers : [];

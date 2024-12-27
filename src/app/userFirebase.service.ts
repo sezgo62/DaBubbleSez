@@ -9,6 +9,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { getAuth, Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { FirebaseApp, initializeApp } from '@angular/fire/app';
 import { environment } from 'src/environments/environment.development';
+import { ChannelFirebaseService } from './channel-firebase.service';
 
 @Injectable({
   providedIn: 'root'
@@ -65,8 +66,9 @@ export class userFirebaseService implements OnInit {
       list.forEach(element => {
         console.log(element);
         this.users.push(element);
+        //debugger;
+        //this.channelFirebaseService.allExistingChannelsAndUsers.push(element);
         console.log(this.users);
-
       });
     });
   }

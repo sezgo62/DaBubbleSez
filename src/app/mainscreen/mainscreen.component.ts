@@ -1,7 +1,7 @@
-import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { Component, ChangeDetectorRef, OnInit, ViewChild, HostListener } from '@angular/core';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CreateChannelDialogComponent } from '../create-channel-dialog/create-channel-dialog.component';
@@ -13,6 +13,9 @@ import { Channel } from 'src/models/channel.class';
 import { Post } from 'src/models/post.class';
 import { FieldValue, serverTimestamp, Timestamp } from '@angular/fire/firestore';
 import twemoji from 'twemoji';
+import { Answer } from 'src/models/answers.class';
+import { DrawerService } from '../drawer.service';
+import { debounceTime, map, Subject } from 'rxjs';
 
 
 @Component({
@@ -25,11 +28,22 @@ export class MainscreenComponent implements OnInit {
   sidenavOpen = false;
   showChannels = false;
   post: Post = new Post();
+  answer: Answer = new Answer();
   public textArea: string = "";
   public isEmojiPickerVisible: boolean = false; //Diese Variable steuert, ob der Emoji-Picker sichtbar ist oder nicht. Wenn sie auf true gesetzt wird, wird der Emoji-Picker angezeigt; bei false wird er ausgeblendet.
+  isLargeScreen: boolean = window.innerWidth > 1444;
+  isSidenavOpen: boolean = false;
+  searchControl = new FormControl('');
+  items: string[] = ['aa', 'Apfel', 'Banane', 'Orange', 'Pfirsich', 'Traube']; // Beispiel-Daten
+  filteredItems: any[] = [];
+  filteredItemsAddParticipants: any[] = [];
 
 
-  constructor(private cdr: ChangeDetectorRef, public dialog: MatDialog, public userFirebaseService: userFirebaseService, public channelFirebaseService: ChannelFirebaseService) { }
+
+  @ViewChild('drawer') drawer: MatDrawer | undefined;
+  //@ViewChild('drawer2') drawer2: MatDrawer | undefined;
+
+  constructor(private cdr: ChangeDetectorRef, public dialog: MatDialog, public userFirebaseService: userFirebaseService, public channelFirebaseService: ChannelFirebaseService, private drawerService: DrawerService) { }
   //um die sidenav zu schließen und zu öffnen, heisst ob es false oder true ist
   StyleSidenavButton() {
     if (this.sidenavOpen == false) {
@@ -49,9 +63,69 @@ export class MainscreenComponent implements OnInit {
     }
   }
 
+ toggleDrawer() {
+    this.drawer?.toggle(); // TypeScript wird gezwungen, drawer als nicht undefined anzunehmen
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.isLargeScreen = window.innerWidth > 1444;
+  }
+
+  @ViewChild('drawer2') drawer2!: MatDrawer;
+
+
 ngOnInit(): void {
   document.body.style.backgroundColor = '#ECEEFE';
 
+
+  this.drawerService.openDrawer$.subscribe(() => {
+    this.drawer2.open();
+  });
+
+   // Abonniere das Schließen des Drawers
+   this.drawerService.closeDrawer$.subscribe(() => {
+    this.drawer2.close();
+  });
+
+
+    // Filter-Logik mit debounceTime, um Verzögerungen zu minimieren und die Performance zu optimieren
+    this.searchControl.valueChanges.pipe(
+      debounceTime(300), // Wartezeit von 300ms nach jedem Input
+      map(value => this.filterItems(value || ''))
+    ).subscribe(filteredItems => {
+      this.filteredItems = filteredItems;
+      debugger;
+
+    });
+ }
+
+ private filterItems(searchTerm: string): any[] {
+  if (!searchTerm) {
+    return [];
+  }
+
+  return this.channelFirebaseService.allExistingChannelsAndUsers
+    .filter((element: any) => {
+      const channelName = element.nameOfChannel ? element.nameOfChannel.toLowerCase() : '';
+      const userName = element.firstLastName ? element.firstLastName.toLowerCase() : '';
+      return channelName.includes(searchTerm.toLowerCase()) || userName.includes(searchTerm.toLowerCase());
+    });
+}
+
+async redirectUserOrChannel(item: any) {
+if(item.nameOfChannel) {
+await this.channelFirebaseService.filterChannels(item);
+this.channelFirebaseService.loadParticipants();
+}
+
+}
+
+
+
+
+closeDrawer() {
+  this.drawer2.close();  // Schließt das Drawer
 }
 
   dropChannels() {
@@ -147,10 +221,19 @@ ngOnInit(): void {
    this.post.dateOfPost = serverTimestamp() // Serverseitiger Zeit
    this.post.textOfPost = message;
    this.post.emojiOfPost;
-   this.post.authorOfPost = this.userFirebaseService.uid;
    this.post.id = '';
    this.channelFirebaseService.addPostToFirestore(this.post);
   }
+
+sendAnswer(answerMessage: string) {
+  this.answer.authorOfAnswer = this.userFirebaseService.uid;
+   this.answer.timeAnswerPosted = serverTimestamp() // Serverseitiger Zeit
+   this.answer.answerText = answerMessage;
+   this.answer.emojiOfAnswer;
+   this.answer.id = '';
+   this.channelFirebaseService.addAnswerToFirestore(this.answer, this.channelFirebaseService.threadPost);
+  }
+
 
   dropMessages() {
     /*if (this.showMessages == false) {
@@ -199,5 +282,59 @@ return;
     this.textArea += event.emoji.native; // Emoji wird dem Text hinzugefügt
     this.isEmojiPickerVisible = false; // Picker wird nach Auswahl ausgeblendet
 }
+
+
+
+getFormattedDate(post: Post): string {
+  let date: Date;
+  let time: Date;
+  if (post.dateOfPost instanceof Timestamp) {
+    // Wenn es ein Timestamp ist, konvertiere es in ein Date
+    date = post.dateOfPost.toDate();
+  } else if (post.dateOfPost instanceof Date) {
+    // Wenn es bereits ein Date ist, verwenden wir es direkt
+    date = post.dateOfPost;
+  } else {
+    // Falls es ein FieldValue (serverTimestamp) ist, geben wir eine Platzhalterzeit oder eine andere Nachricht zurück
+    return 'Zeitstempel wird generiert...'; // oder eine leere Zeichenkette
+  }
+
+  // Formatieren des Datums als String, z.B. 'dd. MMMM yyyy'
+  return date.toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' });
+
+   // Formatieren der Uhrzeit als String, z.B. 'HH:mm'
+}
+
+getFormattedTime(post: Post): string {
+  let date: Date;
+
+  if (post.dateOfPost instanceof Timestamp) {
+      date = post.dateOfPost.toDate();
+  } else if (post.dateOfPost instanceof Date) {
+      date = post.dateOfPost;
+  } else {
+      return 'Zeitstempel wird generiert...';
+  }
+
+  return date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+}
+
+getFormattedTimeAnswer(answer: Answer): string {
+  let date: Date;
+
+  if (answer.timeAnswerPosted instanceof Timestamp) {
+      date = answer.timeAnswerPosted.toDate();
+  } else if (answer.timeAnswerPosted instanceof Date) {
+      date = answer.timeAnswerPosted;
+  } else {
+      return 'Zeitstempel wird generiert...';
+  }
+
+  return date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+}
+
+
+
+
 }
 

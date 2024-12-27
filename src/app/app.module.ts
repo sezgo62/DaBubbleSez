@@ -38,6 +38,9 @@ import { PostsComponent } from './posts/posts.component';
 import { PickerModule } from "@ctrl/ngx-emoji-mart";
 //import { localStorageSync } from 'ngrx-store-localstorage'; // Import hinzugefügt
 import { DatePipe } from '@angular/common';
+import { ResponsiveMainscreenComponent } from './responsive-mainscreen/responsive-mainscreen.component';
+import { OpenProfileDialogComponent } from './open-profile-dialog/open-profile-dialog.component';
+import { PrivateChatComponent } from './private-chat/private-chat.component';
 
 
 
@@ -54,7 +57,10 @@ import { DatePipe } from '@angular/common';
     CreateChannelDialogComponent,
     ChannelComponent,
     ParticipantsDialogComponent,
-    PostsComponent
+    PostsComponent,
+    ResponsiveMainscreenComponent,
+    OpenProfileDialogComponent,
+    PrivateChatComponent
   ],
   imports: [
     BrowserModule,

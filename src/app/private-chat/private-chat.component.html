@@ -1,0 +1,124 @@
+<!--<div *ngIf="channelFirebaseService.messageChoosedPerson">
+
+    <div *ngIf="channelFirebaseService.currentChannel" class="channelHeader">
+        <img *ngIf="channelFirebaseService.openMessageToUserInformations.image.startsWith('avatar')"
+            class="imageToOpeningMessage"
+            [src]="'/assets/img/avatars/' + channelFirebaseService.openMessageToUserInformations.image + '.png'"
+            class="participants" alt="Avatar Image">
+        <img *ngIf="!channelFirebaseService.openMessageToUserInformations.image.startsWith('avatar')"
+            [src]="channelFirebaseService.openMessageToUserInformations.image" class="imageToOpeningMessage"
+            alt="User Image">
+    </div>
+
+
+    <div class="nameImageContainer">
+        <img *ngIf="channelFirebaseService.openMessageToUserInformations.image.startsWith('avatar')"
+            class="imageToOpeningMessage"
+            [src]="'/assets/img/avatars/' + channelFirebaseService.openMessageToUserInformations.image + '.png'"
+            class="participants" alt="Avatar Image">
+        <img *ngIf="!channelFirebaseService.openMessageToUserInformations.image.startsWith('avatar')"
+            [src]="channelFirebaseService.openMessageToUserInformations.image" class="imageToOpeningMessage"
+            alt="User Image">
+        <img src="assets/img/avatars/{{channelFirebaseService.openMessageToUserInformations.image}}.png">--------
+        <span class="recipientName">Noah Braun</span>
+    </div>
+
+    <span>Diese Unterhaltung findet nur zwischen {{'@Noah Braun'}} und dir statt.</span>
+</div>-->
+
+
+
+<div *ngIf="channelFirebaseService.createMessage" class="createYourMessageContainer">
+    <h2>Neue Nachricht</h2>
+
+    <div class="inputContainer">
+        <div>
+            <input [formControl]="searchControl" class="inputSearch" type="text" #privateMessage
+                placeholder="code learning durchsuchen">
+            <img class="search" src="assets/img/search.png">
+        </div>
+
+        <div *ngIf="filteredItems.length > 0" class="results-dropdown">
+            <span *ngFor="let item of filteredItems" class="result-item">{{ item.nameOfChannel || item.firstLastName }}
+                <b>{{ item.nameOfChannel ? 'channel' : 'user' }}</b></span>
+        </div>
+
+    </div>
+</div>
+
+<div class="chatContainer">
+
+    <div class="answerContainer" *ngFor="let answer of channelFirebaseService.allAnswersOfCurrentOpenedThread"
+        [ngClass]="answer.authorOfAnswer == userFirebaseService.uid ? 'myPostContentContainer' : 'postContentContainer'">
+
+        <div class="postimageContentBundle">
+            <img class="postImage" src="assets/img/avatars/avatar1.png">
+
+            <div [ngClass]="answer.authorOfAnswer == userFirebaseService.uid ? 'myPostContent' : 'postContent'">
+                <div class="nameAndAnswerAndTime">
+                    <div
+                        [ngClass]="answer.authorOfAnswer == userFirebaseService.uid ? 'myPostNameAndQuestion' : 'nameAndQuestion'">
+                        <span
+                            [ngClass]="answer.authorOfAnswer == userFirebaseService.uid ? 'myName' : 'name'">{{answer.authorName}}</span>
+                        <span class="time">{{ getFormattedTimeAnswer(answer) }}</span>
+                    </div>
+                    <div
+                        [ngClass]="answer.authorOfAnswer == userFirebaseService.uid ? 'myPostQuestionContainer' : 'questionContainer'">
+                        <span [ngClass]="answer.authorOfAnswer == userFirebaseService.uid ? 'myQuestion' : 'question'">
+                            {{answer.answerText}}
+                        </span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="iconsInputContainerPool">
+
+        <div *ngIf="channelFirebaseService.messageChoosedPerson">
+
+            <div class="nameImageContainer">
+                <img *ngIf="channelFirebaseService.openMessageToUserInformations.image.startsWith('avatar')"
+                    class="imageToOpeningMessage"
+                    [src]="'/assets/img/avatars/' + channelFirebaseService.openMessageToUserInformations.image + '.png'"
+                    class="participants" alt="Avatar Image">
+                <img *ngIf="!channelFirebaseService.openMessageToUserInformations.image.startsWith('avatar')"
+                    [src]="channelFirebaseService.openMessageToUserInformations.image" class="imageToOpeningMessage"
+                    alt="User Image">
+                <!--<img src="assets/img/avatars/{{channelFirebaseService.openMessageToUserInformations.image}}.png">-->
+                <span class="recipientName">Noah Braun</span>
+            </div>
+
+            <span>Diese Unterhaltung findet nur zwischen {{'@Noah Braun'}} und dir statt.</span>
+        </div>
+
+
+
+        <div class="inputPostContainer" *ngIf="channelFirebaseService.inputMessage">
+            <input placeholder="Type a message" type="text" name="textarea" [(ngModel)]="textArea" #privateMessage
+                class="inputPost">
+
+            <div class="iconsInputContainer">
+                <div class="allIcons">
+                    <button class="addPost" mat-icon-button><img class="addPost" src="assets/img/addPost.png"></button>
+                    <img class="postLine" src="assets/img/postLine.png">
+
+                    <emoji-mart class="emoji-mart" *ngIf="isEmojiPickerVisible" (emojiSelect)="addEmoji($event)"
+                        title="Choose your emoji"></emoji-mart>
+
+
+                    <button mat-icon-button><img class="emojiPost" src="assets/img/addEmojiPost.png"></button>
+                    <button mat-icon-button><img class="markSomeone" src="assets/img/markSomeone.png"></button>
+                </div>
+
+                <button mat-icon-button><img class="send" src="assets/img/send.png"></button>
+            </div>
+
+        </div>
+    </div>
+
+</div>

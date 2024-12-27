@@ -56,3 +56,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   width: 8px; /* Breite der Scrollbar */
   background-color: rgb(68, 67, 67);
 }
+
+.cdk-overlay-pane.custom-dialog-container {
+  width: 500px !important;
+  height: 758px !important;
+}

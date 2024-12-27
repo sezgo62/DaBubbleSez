@@ -61,6 +61,13 @@
     text-indent: 60px;
 }
 
+.inputSearchParticipants {
+    width: 90%;
+    height: 60px;
+    border-radius: 43px;
+    text-indent: 60px;
+}
+
 .search {
     width: 27px;
     height: 27px;
@@ -155,6 +162,13 @@ mat-drawer-container {
     background-color: unset;
     overflow: unset;
     margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+.mat-drawer-inner-container {
+    overflow: hidden;
+
 }
 
 .example-sidenav-content {
@@ -165,6 +179,9 @@ mat-drawer-container {
     width: 300px;
     /* Setzen Sie hier die gewünschte Breite der Sidebar */
     border: 1px solid grey;
+
+    border-radius: 30px;
+    border: unset;
 }
 
 mat-drawer-content {
@@ -193,8 +210,22 @@ mat-drawer-content {
 app-channel {
     overflow-y: auto;
     width: 100%;
-
     padding-bottom: 211px;
+
+}
+
+.selectChannelDisclaimer {
+    width: 350px;
+    height: 350px;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ECEEFE;
+}
+
+.mat-mdc-menu-content ng-tns-c2786309385-1 {
+    padding: unset !important;
 }
 
 .channelScreenPool {
@@ -223,10 +254,12 @@ body {
 }
 
 .sidenavHeader {
+    margin-top: 12px;
+
+
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin-top: 12px;
 }
 
 .HeaderChannelText {
@@ -389,7 +422,7 @@ body {
     width: 100%;
     z-index: 1;
     background-color: white;
-    
+
     position: absolute;
     top: 0;
 }
@@ -514,7 +547,46 @@ body {
     justify-content: space-between;
 }
 
-.addPersonText {}
+.allParticipants {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 53px;
+}
+
+.participantName {
+    padding-left: 17px;
+    margin: 0;
+}
+
+.results-dropdown {
+    z-index: 99;
+    position: absolute;
+    background-color: white;
+    border-radius: 15px;
+    width: 80%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.result-item {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 15px;
+    width: fit-content;
+    cursor: pointer;
+    margin-left: 30px;
+
+    &:hover {
+        background-color: #c0c2fd;
+    }
+}
 
 :host {
     background-color: blue;
@@ -522,6 +594,15 @@ body {
 }
 
 .inputPost {
+    width: 98.3%;
+    height: 132%;
+    border: solid 1px black;
+    border-radius: 21px;
+    outline: none;
+    border: none;
+}
+
+.inputAnswerPost {
     width: 99.3%;
     height: 132%;
     border: solid 1px black;
@@ -541,12 +622,11 @@ body {
     background-color: white;
 
     position: absolute;
-    bottom: 29px;
+    bottom: 20px;
 
     display: flex;
     flex-direction: column;
 }
-
 
 .iconsInputContainer {
     display: flex;
@@ -593,10 +673,11 @@ body {
 
 
 .sidenavHeaderThread {
+    padding-top: 12px;
+
     display: flex;
-    justify-content: space-around;
     align-items: center;
-    margin-top: 12px;
+    justify-content: space-between;
 }
 
 .headerChannelTextThread {
@@ -606,5 +687,459 @@ body {
 
 .channelNameThread {
     color: #7B76F5;
+    margin-left: 12px;
 }
 
+.headerChannelContainer {
+    display: flex;
+    align-items: center;
+}
+
+.closeThread {
+    height: 15px;
+    width: 15px;
+    cursor: pointer;
+}
+
+.closeThreadButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 16px;
+}
+
+
+///////////////////////////////////////////////////////////////////ALL STYLES FOR THREADPOST//////////////////////////////////////////////////////////////////
+
+.postContainer {
+    margin-top: 30px;
+}
+
+
+.postContainerPool {
+    overflow-y: auto;
+    height: 61%;
+    padding-bottom: 204px;
+    //padding-top: 50px;
+
+    display: flex;
+    //justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.postimageContentBundle {
+    display: flex;
+}
+
+.lienThread {
+    width: 53%;
+}
+
+.postContentContainer {
+    padding-left: 18px;
+    display: flex;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    position: relative;
+    cursor: pointer;
+    flex-direction: column;
+
+    &:hover {
+        background-color: #ECEEFE;
+    }
+
+    &:hover .questionContainer {
+        background-color: white;
+    }
+
+    &:hover .emojiContainer {
+        display: flex;
+    }
+
+
+
+}
+
+.emojiContainer {
+    position: absolute;
+    top: -48px;
+    right: 40px;
+    width: 244px;
+    height: 50px;
+    border: solid 1px black;
+
+    border-top-left-radius: 150px;
+    border-top-right-radius: 150px;
+    border-bottom-left-radius: 150px;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border: solid 2px #babfe9;
+    background-color: white;
+    display: none;
+}
+
+.myEmojiContainer {
+    position: absolute;
+    top: -36px;
+    left: 0px;
+    width: 244px;
+    height: 50px;
+    border: solid 1px black;
+    border-top-left-radius: 150px;
+    border-top-right-radius: 150px;
+    border-bottom-left-radius: 150px;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border: solid 2px #babfe9;
+    background-color: white;
+    display: none;
+}
+
+.postContent {
+    margin-left: 30px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.nameAndQuestion {
+    display: flex;
+}
+
+.nameAndAnswerAndTime {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.postImage {
+    width: 50px;
+    height: 50px;
+}
+
+.nameAndQuestion {
+    margin-bottom: 10px;
+}
+
+.question {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    width: 93%;
+}
+
+.questionContainer {
+    width: 605px;
+    height: 77px;
+    display: flex;
+    align-items: center;
+    background-color: #ECEEFE;
+
+    align-items: center;
+    margin-bottom: 10px;
+    justify-content: center;
+
+    border-bottom-left-radius: 100px;
+    border-bottom-right-radius: 100px;
+    border-top-right-radius: 100px;
+    position: relative;
+}
+
+
+.name {
+    margin-right: 14px;
+    font-weight: bold;
+    cursor: pointer;
+
+    &:hover {
+        color: #797EF3;
+    }
+}
+
+.myName {
+    margin-left: 14px;
+    font-weight: bold;
+    cursor: pointer;
+
+    &:hover {
+        color: #797EF3;
+    }
+}
+
+.time {
+    color: grey;
+}
+
+.timestampContainer {
+    width: 100%;
+    margin-bottom: 50px;
+    height: 35px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.Date {
+    position: absolute;
+    height: 35px;
+    width: 124px;
+    border: 1px solid black;
+    border-radius: 19px;
+    background-color: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.timestampContainer {
+    position: relative;
+}
+
+.postLine {
+    width: 94%;
+    height: 2px;
+}
+
+.answerCount {
+    color: #797EF3;
+    margin-right: 15px;
+}
+
+.lastAnswer {
+    margin-left: 25px;
+}
+
+
+.non-selectable {
+    -webkit-user-select: none;
+    /* Chrome, Safari, Opera */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently supported by most browsers */
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+.myPostContentContainer {
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    position: relative;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+
+    &:hover {
+        background-color: #ECEEFE;
+    }
+
+    &:hover .myEmojiContainer {
+        display: flex;
+    }
+}
+
+
+
+.myPostQuestionContainer {
+    width: 605px;
+    height: 77px;
+    display: flex;
+    align-items: center;
+    background-color: #ECEEFE;
+    position: relative;
+
+    align-items: center;
+    margin-bottom: 10px;
+    justify-content: center;
+    background-color: #797EF3;
+
+    border-bottom-left-radius: 100px;
+    border-bottom-right-radius: 100px;
+    border-top-left-radius: 100px;
+
+
+}
+
+
+.myPostNameAndQuestion {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+    flex-direction: row-reverse;
+
+}
+
+.answerCountContainer {
+    display: flex;
+    align-items: center;
+}
+
+.myPostAnswerCountContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.myPostContent {
+    margin-right: 30px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+.test {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+
+    &:hover {
+        background-color: #ECEEFE;
+    }
+}
+
+.myQuestion {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    width: 93%;
+    color: white;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 100% 0%;
+    width: 36%;
+
+    button {
+        background: transparent;
+        border: 0;
+        transform: translateX(-40px);
+        cursor: pointer;
+
+        &:focus {
+            outline: 0;
+        }
+    }
+}
+
+.lineThread {
+    width: 60%;
+}
+
+.approvedImage {
+    filter: brightness(0.9) hue-rotate(0deg) contrast(1.5);
+}
+
+.laughSmileybutton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.laugh {
+    width: 48px;
+    height: 48px;
+}
+
+.showEmojisOfPost {
+    display: flex;
+    width: 100%;
+}
+
+.smallEmojiContainer {
+    width: 90px;
+    height: 40px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border: 1px solid #8A86F6;
+    border-radius: 21px;
+    margin-right: 10px;
+}
+
+.emoji-mart .emoji-mart-bar {
+    display: none;
+    /* Versteckt die Kategorieleiste */
+}
+
+
+
+.test {
+    width: 100%;
+    height: 100vh;
+    background-color: blue;
+    display: none;
+}
+
+
+.threadQuestionContainer {
+    width: 176px;
+}
+
+
+.approvedButton,
+.handsUpButton,
+.laughButton,
+.commentButton,
+.rocketButton,
+.nerdButton {
+    width: 26px !important;
+    height: 26px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.questionContainer {
+    width: 155px;
+}
+
+.myPostQuestionContainer {
+    width: 155px;
+}
+
+.example-sidenav2 {
+    width: 300px;
+    /* Setzen Sie hier die gewünschte Breite der Sidebar */
+    border: 1px solid grey;
+
+    border-radius: 30px !important;
+    border: unset !important;
+}
+
+.nerdAnswer {
+    width: 20px;
+}
+
+.rocketAnswer {
+    width: 20px;
+}
+
+.laughAnswer {
+    width: 32px;
+    height: 32px;
+}
+
+.handsUpAnswer {
+    width: 20px;
+}
+
+.approvedAnswer {
+    width: 20px;
+}
+
+@media(max-width: 1444px) {}

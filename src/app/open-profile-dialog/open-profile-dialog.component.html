@@ -1,0 +1,29 @@
+<div class="dialogContent">
+
+    <div class="dialogHeader">
+        <h2 class="profile">Profil</h2>
+        <img class="close" src="assets/img/close.png">
+    </div>
+
+    <div class="profilePicContainer">
+        <img class="profilePicture" src="assets/img/avatars/avatar1.png">
+    </div>
+
+    <div class="profileInformations">
+
+        <h2 class="profileName">{{channelFirebaseService.profileInformations.authorName}}</h2>
+
+        <div *ngIf="channelFirebaseService.profileInformations.online == true" class="activeProfile"> <img class="onlineProfile" src="assets/img/onlineProfile.png"> Aktiv </div>
+        <div *ngIf="channelFirebaseService.profileInformations.online == false" class="notActiveProfile"> <img class="offline" src="assets/img/offline.png"> Aktiv </div>
+
+        <div class="emailContainer"> <img class="mailProfile" src="assets/img/mailProfile.png">{{channelFirebaseService.profileInformations.email}}</div>
+
+        <span class="email">noahbraATbeispiel.com</span>
+
+    </div>
+
+    <div class="messageButtonContainer">
+        <button (click)="channelFirebaseService.openMessageToUser(channelFirebaseService.profileInformations); closeDialog()" class="messageButton"><img class="messageProfile" src="assets/img/messageProfile.png"> Nachricht </button>
+    </div>
+
+</div>

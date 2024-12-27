@@ -1,10 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Emoji } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { ChannelFirebaseService } from '../channel-firebase.service';
 import { userFirebaseService } from '../userFirebase.service';
 import { Post } from 'src/models/post.class';
 import { Timestamp } from '@angular/fire/firestore';
 import { DatePipe } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { OpenProfileDialogComponent } from '../open-profile-dialog/open-profile-dialog.component';
+import { MatDrawer } from '@angular/material/sidenav';
+import { DrawerService } from '../drawer.service';
+
 
 @Component({
   selector: 'app-channel',
@@ -13,9 +18,17 @@ import { DatePipe } from '@angular/common';
 })
 export class ChannelComponent {
 
-  constructor(public channelFirebaseService: ChannelFirebaseService, public userFirebaseService: userFirebaseService, private datePipe: DatePipe) {
+// Zugriff auf das MatDrawer-Element
+@ViewChild('drawer2') drawer2!: MatDrawer;
+
+  constructor(public channelFirebaseService: ChannelFirebaseService, public userFirebaseService: userFirebaseService, private datePipe: DatePipe, public dialog: MatDialog, private drawerService: DrawerService) {
 
   }
+
+// Methode zum Öffnen des Drawers
+openDrawer() {
+  this.drawerService.triggerOpenDrawer();  // Löst das Öffnen des Drawers aus
+}
 
   getFormattedDate(post: Post): string {
     let date: Date;
@@ -60,4 +73,15 @@ export class ChannelComponent {
     //this.textArea${event.emoji.native} ist ein Template-String (auch bekannt als Template-Literal) in JavaScript/TypeScript, der den aktuellen Inhalt von textArea (${this.textArea}) mit dem ausgewählten Emoji (${event.emoji.native}) kombiniert.
     this.isEmojiPickerVisible = false;
   }
+
+  openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
+    this.dialog.open(OpenProfileDialogComponent, {
+      panelClass: 'custom-dialog-container',
+      width: '950px',
+      height: '458px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+    });
+  }
+  
 }

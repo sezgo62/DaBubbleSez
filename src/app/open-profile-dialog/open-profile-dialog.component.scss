@@ -1,0 +1,114 @@
+.dialogHeader {
+    padding-top: 27px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile {
+    font-size: 26px;
+    margin: unset;
+    margin-left: 65px;
+}
+
+.close {
+    margin-right: 65px;
+    cursor: pointer;
+}
+
+.profilePicContainer {
+    height: 200px;
+    padding-top: 50px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profilePicture {
+    width: 190px;
+    height: 190px;
+}
+
+.profileInformations {
+    padding-top: 60px;
+    padding-left: 60px;
+}
+
+.profileName {
+    margin-bottom: 20px;
+    font-size: 32px;
+}
+
+.activeProfile {
+    padding-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.notActiveProfile {
+    padding-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.email {
+    padding-bottom: 20px;
+
+}
+
+.emailContainer {
+    padding-bottom: 20px;
+
+    display: flex;
+    align-items: center;
+}
+
+.messageButton {
+    padding-bottom: 20px;
+    padding-top: 20px;
+    background-color: #444DF2;
+    width: 150px;
+    color: white;
+    border-radius: 30px;
+    margin-top: 50px;
+    border: none;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+        background-color: #8389fd;
+    }
+
+}
+
+.messageProfile {
+    margin-right: 15px;
+}
+
+.mailProfile {
+    margin-right: 15px;
+}
+
+.messageButtonContainer {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+}
+
+.email {
+    color: #1381FF;
+}
+
+.offline {
+    margin-right: 10px;
+}
+
+.onlineProfile {
+    margin-right: 10px;
+}

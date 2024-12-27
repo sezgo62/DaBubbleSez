@@ -1,89 +1,137 @@
-<div class="channelPool" *ngFor="let post of channelFirebaseService.allPosts">
-    <div class="postContainer">
+<ng-container>
 
-        <div class="timestampContainer non-selectable">
-            <img class="postLine" src="assets/img/line.png">
-            <span class="Date">{{ getFormattedDate(post) }}</span>
-        </div>
 
-        <div
-            [ngClass]="post.authorOfPost == userFirebaseService.uid ? 'myPostContentContainer' : 'postContentContainer'">
-            <img class="postImage" src="assets/img/avatars/avatar1.png">
+    <div>
+        <div class="channelPool" *ngFor="let post of channelFirebaseService.allPosts">
+            <div class="postContainer">
 
-            <div [ngClass]="post.authorOfPost == userFirebaseService.uid ? 'myPostContent' : 'postContent'">
-                <div class="nameAndAnswerAndTime">
-                    <div
-                        [ngClass]="post.authorOfPost == userFirebaseService.uid ? 'myPostNameAndQuestion' : 'nameAndQuestion'">
-                        <span
-                            [ngClass]="post.authorOfPost == userFirebaseService.uid ? 'myName' : 'name'">{{post.authorName}}</span>
-                        <span class="time">{{ getFormattedTime(post) }}</span>
-                    </div>
-                    <div
-                        [ngClass]="post.authorOfPost == userFirebaseService.uid ? 'myPostQuestionContainer' : 'questionContainer'">
-                        <span [ngClass]="post.authorOfPost == userFirebaseService.uid ? 'myQuestion' : 'question'">
-                            {{post.textOfPost}}
-                        </span>
-
-                    </div>
+                <div class="timestampContainer non-selectable">
+                    <img class="postLine" src="assets/img/line.png">
+                    <span class="Date">{{ getFormattedDate(post) }}</span>
                 </div>
 
                 <div
-                    [ngClass]="post.authorOfPost == userFirebaseService.uid ? 'myPostAnswerCountContainer' : 'answerCountContainer'">
-                    <span class="answerCount"></span>
-                    <span class="lastAnswer">Letzte Antwort {{'11:25'}}</span>
+                    [ngClass]="post.authorOfPost == userFirebaseService.uid ? 'myPostContentContainer' : 'postContentContainer'">
+                    <img class="postImage" src="assets/img/avatars/avatar1.png">
+
+                    <div [ngClass]="post.authorOfPost == userFirebaseService.uid ? 'myPostContent' : 'postContent'">
+                        <div class="nameAndAnswerAndTime">
+                            <div
+                                [ngClass]="post.authorOfPost == userFirebaseService.uid ? 'myPostNameAndQuestion' : 'nameAndQuestion'">
+                                <span
+                                    (click)="openDialog('0ms', '0ms'); channelFirebaseService.getProfileInformations(post)"
+                                    [ngClass]="post.authorOfPost == userFirebaseService.uid ? 'myName' : 'name'">{{post.authorName}}</span>
+                                <span class="time">{{ getFormattedTime(post) }}</span>
+                            </div>
+                            <div
+                                [ngClass]="post.authorOfPost == userFirebaseService.uid ? 'myPostQuestionContainer' : 'questionContainer'">
+                                <span
+                                    [ngClass]="post.authorOfPost == userFirebaseService.uid ? 'myQuestion' : 'question'">
+                                    {{post.textOfPost}}
+                                </span>
+
+                            </div>
+                        </div>
+
+                        <div
+                            [ngClass]="post.authorOfPost == userFirebaseService.uid ? 'myPostAnswerCountContainer' : 'answerCountContainer'">
+                            <span (click)="channelFirebaseService.openPost(post); openDrawer()"
+                                class="answerCount">{{post.lengthOfAnswers}}</span>
+                            <span class="lastAnswer">Letzte Antwort {{'11:25'}}</span>
+                        </div>
+
+                        <div class="showEmojisOfPost">
+
+
+                            <div class="smallEmojiContainer"
+                                *ngIf="(post.emojiInformations && post.emojiInformations?.nerd.likeCount.length > 0)">
+                                <img src="assets/img/reactions/nerd.png">
+                                {{post.emojiInformations.nerd.likeCount.length}}
+                            </div>
+
+                            <div class="smallEmojiContainer"
+                                *ngIf="(post.emojiInformations && post.emojiInformations?.rocket.likeCount.length > 0)">
+                                <img src="assets/img/reactions/rocket.png">
+                                {{post.emojiInformations.rocket.likeCount.length}}
+                            </div>
+
+                            <div class="smallEmojiContainer"
+                                *ngIf="(post.emojiInformations && post.emojiInformations?.laugh.likeCount.length > 0)">
+                                <img class="laugh" src="assets/img/reactions/laugh.webp">
+                                {{post.emojiInformations.laugh.likeCount.length}}
+                            </div>
+
+                            <div class="smallEmojiContainer"
+                                *ngIf="(post.emojiInformations && post.emojiInformations?.handsUp.likeCount.length > 0)">
+                                <img src="assets/img/reactions/handsUp.png">
+                                {{post.emojiInformations.handsUp.likeCount.length}}
+                            </div>
+
+                            <div class="smallEmojiContainer"
+                                *ngIf="(post.emojiInformations && post.emojiInformations?.approved.likeCount.length > 0)">
+                                <img src="assets/img/reactions/approved.png">
+                                {{post.emojiInformations.approved.likeCount.length}}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div
+                        [ngClass]="post.authorOfPost == userFirebaseService.uid ? 'myEmojiContainer' : 'emojiContainer'">
+                        <button (click)="channelFirebaseService.addEmojiToFirestore('approved', post)"
+                            mat-icon-button><img class="approvedImage" src="assets/img/reactions/approved.png"></button>
+                        <button (click)="channelFirebaseService.addEmojiToFirestore('handsUp', post)"
+                            mat-icon-button><img class="" src="assets/img/reactions/handsUp.png"></button>
+                        <button (click)="channelFirebaseService.addEmojiToFirestore('nerd', post)" mat-icon-button><img
+                                class="" src="assets/img/reactions/nerd.png"></button>
+                        <button (click)="channelFirebaseService.addEmojiToFirestore('laugh', post)"
+                            class="laughSmileybutton" mat-icon-button><img class="laugh"
+                                src="assets/img/reactions/laugh.webp"></button>
+                        <button (click)="channelFirebaseService.addEmojiToFirestore('rocket', post)"
+                            mat-icon-button><img class="" src="assets/img/reactions/rocket.png"></button>
+                        <button mat-icon-button><img class="" src="assets/img/reactions/comment.png"></button>
+
+                    </div>
+
                 </div>
-
-                <div class="showEmojisOfPost">
-
-
-                    <div class="smallEmojiContainer"
-                        *ngIf="(post.emojiInformations && post.emojiInformations?.nerd.likeCount.length > 0)">
-                        <img src="assets/img/reactions/nerd.png"> {{post.emojiInformations.nerd.likeCount.length}}
-                    </div>
-
-                    <div class="smallEmojiContainer"
-                        *ngIf="(post.emojiInformations && post.emojiInformations?.rocket.likeCount.length > 0)">
-                        <img src="assets/img/reactions/rocket.png"> {{post.emojiInformations.rocket.likeCount.length}}
-                    </div>
-
-                    <div class="smallEmojiContainer"
-                        *ngIf="(post.emojiInformations && post.emojiInformations?.laugh.likeCount.length > 0)">
-                        <img class="laugh" src="assets/img/reactions/laugh.webp"> {{post.emojiInformations.laugh.likeCount.length}}
-                    </div>
-
-                    <div class="smallEmojiContainer"
-                        *ngIf="(post.emojiInformations && post.emojiInformations?.handsUp.likeCount.length > 0)">
-                        <img src="assets/img/reactions/handsUp.png"> {{post.emojiInformations.handsUp.likeCount.length}}
-                    </div>
-
-                    <div class="smallEmojiContainer"
-                        *ngIf="(post.emojiInformations && post.emojiInformations?.approved.likeCount.length > 0)">
-                        <img src="assets/img/reactions/approved.png">
-                        {{post.emojiInformations.approved.likeCount.length}}
-                    </div>
-
-                </div>
-
             </div>
-
-            <div [ngClass]="post.authorOfPost == userFirebaseService.uid ? 'myEmojiContainer' : 'emojiContainer'">
-                <button (click)="channelFirebaseService.addEmojiToFirestore('approved', post)" mat-icon-button><img
-                        class="approvedImage" src="assets/img/reactions/approved.png"></button>
-                <button (click)="channelFirebaseService.addEmojiToFirestore('handsUp', post)" mat-icon-button><img
-                        class="" src="assets/img/reactions/handsUp.png"></button>
-                <button (click)="channelFirebaseService.addEmojiToFirestore('nerd', post)" mat-icon-button><img
-                        class="" src="assets/img/reactions/nerd.png"></button>
-                <button (click)="channelFirebaseService.addEmojiToFirestore('laugh', post)" class="laughSmileybutton" mat-icon-button><img class="laugh"
-                        src="assets/img/reactions/laugh.webp"></button>
-                <button (click)="channelFirebaseService.addEmojiToFirestore('rocket', post)" mat-icon-button><img class="" src="assets/img/reactions/rocket.png"></button>
-                <button mat-icon-button><img class="" src="assets/img/reactions/comment.png"></button>
-
-            </div>
-
         </div>
-    </div>
-</div>
 
+        <div class="iconsInputContainerPool">
+            <div class="inputPostContainer">
+                <input placeholder="Type a message" type="text" name="textarea" [(ngModel)]="textArea" #message
+                    class="inputPost">
+
+                <div class="iconsInputContainer">
+                    <div class="allIcons">
+                        <button class="addPost" mat-icon-button><img class="addPost"
+                                src="assets/img/addPost.png"></button>
+                        <img class="postLine" src="assets/img/postLine.png">
+
+                        <emoji-mart class="emoji-mart" *ngIf="isEmojiPickerVisible" (emojiSelect)="addEmoji($event)"
+                            title="Choose your emoji"></emoji-mart>
+
+
+                        <button mat-icon-button><img class="emojiPost" src="assets/img/addEmojiPost.png"></button>
+                        <button mat-icon-button><img class="markSomeone" src="assets/img/markSomeone.png"></button>
+                    </div>
+
+                    <button mat-icon-button><img class="send" src="assets/img/send.png"></button>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="errorMessageContainer" *ngIf="channelFirebaseService.showErrorMessageForChannel">
+        <h1>You are not allowed in this channel or channel does not exist</h1>
+    </div>
+
+
+</ng-container>
 
 
 <!--------------------------------------------------------------------------->
