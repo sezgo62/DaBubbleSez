@@ -273,6 +273,14 @@ body {
     align-items: center;
 }
 
+
+
+.createMessageButton {
+    &:hover {
+        filter: invert(34%) sepia(77%) saturate(2175%) hue-rotate(228deg) brightness(98%) contrast(95%);
+    } 
+}
+
 .createChannelButton {
     &:hover {
         filter: invert(34%) sepia(77%) saturate(2175%) hue-rotate(228deg) brightness(98%) contrast(95%);

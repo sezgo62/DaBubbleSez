@@ -83,12 +83,11 @@
     height: 100%;
     display: flex;
     justify-content: center;
-
-    //display: none;
+    flex-direction: column;
 }
 
 .iconsInputContainerPool {
-    width: 98%;
+    width: 98.8%;
     background-color: white;
     display: flex;
     flex-direction: column;
@@ -174,4 +173,219 @@
     bottom: 30px;
     left: 143px;
     z-index: 1;
+}
+
+.myPostContentContainer {
+
+    padding-right: 44px;
+    padding-top: 18px;
+    padding-bottom: 22px;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    flex-direction: row-reverse;
+
+    height: 20%;
+    display: flex;
+    align-items: center;
+    margin-top: 19px;
+
+    &:hover {
+        background-color: #ECEEFE;
+    }
+
+
+    &:hover .myEmojiContainer {
+        display: flex;
+    }
+}
+
+
+.postContentContainer {
+    padding-left: 44px;
+    display: flex;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    position: relative;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #ECEEFE;
+    }
+
+    &:hover .question {
+        background-color: white;
+    }
+
+    &:hover .emojiContainer {
+        display: flex;
+    }
+}
+
+
+.myPostQuestionContainer {
+    min-height: 77px;
+    padding-left: 50px;
+    padding-right: 77px;
+}
+
+.questionContainer {
+    min-height: 77px;
+    padding-left: 50px;
+    padding-right: 77px;
+}
+
+.myPostContent {
+    margin-right: 30px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.postContent {
+    margin-left: 30px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.nameAndAnswerAndTime {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.myPostNameAndQuestion {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+    flex-direction: row-reverse;
+
+}
+
+.myName {
+    margin-left: 14px;
+    font-weight: bold;
+    cursor: pointer;
+
+    &:hover {
+        color: #797EF3;
+    }
+}
+
+.name {
+    margin-right: 14px;
+    font-weight: bold;
+    cursor: pointer;
+
+    &:hover {
+        color: #797EF3;
+    }
+}
+
+.postImage {
+    width: 50px;
+    height: 50px;
+}
+
+
+
+.answerContainer {
+    width: 100%;
+    height: 130px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.myQuestion {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 62px;
+    padding-right: 50px;
+    width: 93%;
+    display: flex;
+    align-items: center;
+    color: white;
+    background-color: #ECEEFE;
+    position: relative;
+    align-items: center;
+    margin-bottom: 10px;
+    justify-content: center;
+    background-color: #797EF3;
+    border-bottom-left-radius: 100px;
+    border-bottom-right-radius: 100px;
+    border-top-left-radius: 100px;
+}
+
+.question {
+    width: 353px;
+    min-height: 49px;
+    display: flex;
+    align-items: center;
+    background-color: #ECEEFE;
+    align-items: center;
+    margin-bottom: 10px;
+    justify-content: center;
+    border-bottom-left-radius: 100px;
+    border-bottom-right-radius: 100px;
+    border-top-right-radius: 100px;
+    position: relative;
+}
+
+.timestampContainer {
+    width: 100%;
+    margin-bottom: 50px;
+    height: 35px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.non-selectable {
+    -webkit-user-select: none;
+    /* Chrome, Safari, Opera */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently supported by most browsers */
+
+    position:relative
+}
+
+.postLine {
+    width: 94%;
+    height: 2px;
+    margin-right: 13px;
+}
+
+.Date {
+    position: absolute;
+    height: 35px;
+    width: 149px;
+    border: 1px solid black;
+    border-radius: 19px;
+    background-color: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.messageContainer {
+    width: 100%;
+    padding-top: 50px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.messageContainerPool {
+    overflow-y: auto;
+    padding-bottom: 257px;
+    width: 100%;
 }

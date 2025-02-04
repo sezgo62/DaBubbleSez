@@ -12,6 +12,8 @@ import { DatePipe } from '@angular/common';
 import { FieldValue } from '@angular/fire/firestore';
 import { Answer } from 'src/models/answers.class';
 import { getAuth } from '@angular/fire/auth';
+import { Message } from 'src/models/message.class';
+import { MessageLobby } from 'src/models/messageLobby.class';
 
 
 @Injectable({
@@ -28,19 +30,26 @@ export class ChannelFirebaseService implements OnInit {
   FilteredChannels: any[] = [];
   currentChannelParticipants: any[] = [];
   currentChannel!: Channel;
+  currentLobby: string = '';
   channel$;
   users$;
   post$!: Observable<DocumentData[]>;
+  messages$!: Observable<DocumentData[]>;
   emoji$!: Observable<DocumentData[]>;
   answer$!: Observable<DocumentData[]>;
   post: any;
+  message: Message = new Message();
+  messageLobby: MessageLobby = new MessageLobby()
   //channel;
   //user;
   extractingUsersName!: User;
   allPosts: Post[] = []; // oder DocumentData[], je nachdem wie du es typisierst
+  allMessages: Message[] = []; // oder DocumentData[], je nachdem wie du es typisierst
   allAnswersOfCurrentOpenedThread: Answer[] = []; // oder DocumentData[], je nachdem wie du es typisierst
   threadPost: any;
   postSubscription: Subscription | undefined;
+  messageSubscription: Subscription | undefined;
+
   answerSubscription: Subscription | undefined;
   profileInformations!: Post;
   //unsubChannel;
@@ -52,7 +61,7 @@ export class ChannelFirebaseService implements OnInit {
   allExistingChannelsAndUsers: any[] = [];
   disclaimer: boolean = true;
   inputMessage: boolean = false;
-
+  activatePrivateChatTemplate: boolean = false;
 
   getChannels() {
     return collection(this.firestore, 'channels');
@@ -101,66 +110,63 @@ export class ChannelFirebaseService implements OnInit {
 
   uid: any;
   checkUserForChannelEntrance: any;
+  isProcessing: boolean = false;
+
+
+
+
+
 
   async filterChannels(channel: Channel): Promise<void> {
-    this.createMessage = false;
+    this.isProcessing = false;
+
+    //await new Promise(resolve => setTimeout(resolve, 1000));
+
+    this.createNewMessage = false;
     this.inputMessage = false;
-    // Unsubscribe von einer alten Subscription, falls vorhanden
+
     if (this.channelSubscription) {
       this.channelSubscription.unsubscribe();
     }
-    debugger;
-    const itemCollection = collection(this.firestore, 'channels');
 
-    const auth = getAuth();
-    this.uid = auth.currentUser?.uid
-    this.checkUserForChannelEntrance = channel.permittedUsers.find(permittedUser => permittedUser === this.uid);
-    debugger;
-    if (this.checkUserForChannelEntrance) {
-      const q = query(itemCollection, where("id", "==", channel.id));
-      this.showErrorMessageForChannel = false;
+    try {
+      const itemCollection = collection(this.firestore, 'channels');
+      const auth = getAuth();
+      this.uid = auth.currentUser?.uid;
+      this.checkUserForChannelEntrance = channel.permittedUsers.find(permittedUser => permittedUser === this.uid);
 
+      if (this.checkUserForChannelEntrance) {
+        const q = query(itemCollection, where("id", "==", channel.id));
+        const channel$ = collectionData(q);
 
-
-      const channel$ = collectionData(q);
-
-      // Abonniere das Observable und warte bis die Daten vollständig verarbeitet sind
-      //await funktioniert nicht mit observables, Observables  müssen in ein Promise umgewandelt werden wie hier: return new Promise((resolve, reject) => {
-      //Mehr dazu findest du in Readme unter dem Titel: "Promise und Observables"
-      return new Promise<void>((resolve, reject) => { // Resolve das Promise, wenn die Verarbeitung abgeschlossen ist
-        this.channelSubscription = channel$.subscribe({
-          next: (list) => {
-            list.forEach(element => {
-
-              this.currentChannel = element as Channel;
-              console.log('channel is', this.currentChannel);
-              debugger;
-              this.extractingUsersName = this.userFirebaseService.users.find(user => user.id === this.currentChannel.authorOfChannel);
-              if (this.currentChannel.id && this.currentChannel.nameOfChannel && this.currentChannel.dateOfCreation && this.currentChannel.permittedUsers) {
-                console.log('pushed element', this.currentChannel);
-              } else {
-                console.error('Das Element hat nicht alle notwendigen Felder:', element);
-              }
-            });
-            resolve(); // Resolve das Promise, wenn die Verarbeitung abgeschlossen ist
-          },
-          error: (err) => {
-            console.error('Fehler beim Laden der Kanäle:', err);
-            reject(err); // Reject das Promise im Fehlerfall
-          }
+        await new Promise<void>((resolve, reject) => {
+          this.channelSubscription = channel$.subscribe({
+            next: (list) => {
+              list.forEach(element => {
+                this.currentChannel = element as Channel;
+                console.log('channel is', this.currentChannel);
+              });
+              resolve();
+            },
+            error: (err) => {
+              console.error('Fehler beim Laden der Kanäle:', err);
+              reject(err);
+            },
+          });
         });
-      }).then(() => {
 
-        this.filterPosts(); // Wird aufgerufen, nachdem das Promise aufgelöst wurde
-      });
-    } else {
-      console.log('user isnt allowed in this channel');
+        this.filterPosts();
+      } else {
+        this.showErrorMessageForChannel = true;
+        this.createNewMessage = false;
+      }
+    } finally {
       debugger;
-      this.showErrorMessageForChannel = true;
-      this.createMessage = false;
-      this.disclaimer = false;
+      this.isProcessing = true;
+      this.inputMessage = false;
     }
   }
+
 
   showErrorMessageForChannel: boolean = false;
 
@@ -392,6 +398,12 @@ export class ChannelFirebaseService implements OnInit {
       this.postSubscription.unsubscribe();
       this.allPosts = [];
       this.currentChannel = null!;
+    }
+
+    if (this.messageSubscription) {
+      this.messageSubscription.unsubscribe();
+      this.allMessages = [];
+
     }
 
   }
@@ -872,46 +884,258 @@ export class ChannelFirebaseService implements OnInit {
   }
 
 
-  getProfileInformations(post: Post) {
-    this.profileInformations = post;
-    const authorOfPost = this.userFirebaseService.users.find(user => user.id === post.authorOfPost);
-    this.profileInformations.online = authorOfPost.online;
+  getProfileInformations(userInformations: any) {
+    if (userInformations.authorOfPost) {
+      this.profileInformations = userInformations;
+      const authorOfPost = this.userFirebaseService.users.find(user => user.id === userInformations.authorOfPost);
+      this.profileInformations.online = authorOfPost.online;
+    } else if (userInformations.authorOfMessage) {
+      this.profileInformations = userInformations;
+      const authorOfPost = this.userFirebaseService.users.find(user => user.id === userInformations.authorOfPost);
+      this.profileInformations.online = authorOfPost.online;
+    }
 
   }
 
-  createMessage: boolean = false;
-
-  async sendMessage() {
-
-   await this.ngOnDestroy();
-
-   setTimeout(() => {
-    this.testSendMessage();
-
-   }, 3000);
 
 
+  createNewMessage: boolean = false;
 
-
-  }
-
-  testSendMessage() {
-    this.inputMessage = true;
-    this.createMessage = true;
-    this.openMessageToUserInformations = undefined;
-    this.messageChoosedPerson = false;
+  createMessage() {
+    this.activatePrivateChatTemplate = true;
+    this.disclaimer = false;
     debugger;
+
+    setTimeout(() => {
+      this.ngOnDestroy();
+      this.inputMessage = true;
+      this.createNewMessage = true;
+      this.openMessageToUserInformations = undefined;
+      debugger;
+      this.messageChoosedPerson = false;
+      this.isProcessing = false;
+      debugger;
+    }, 1000);
+
+    setTimeout(() => {
+      this.ngOnDestroy();
+    }, 1200);
+
   }
+
+  messageSnapshot: any;
+
+  async addMessageToFirestore(message: Message) {
+
+    const auth = getAuth();
+    this.uid = auth.currentUser?.uid;
+
+
+
+
+
+    if (this.currentLobby) {
+
+      //const messageDocRef = doc(this.firestore, 'messageLobby', this.currentLobby);  
+      //this.messageSnapshot = await getDoc(messageDocRef);
+      this.addMessageToMessageCollection(message);
+
+
+    } else {
+      try {
+        const messagesLobbyRef = collection(this.firestore, 'messageLobby');
+        debugger;
+
+        // Erstellt eine neue Dokumentreferenz mit einer eindeutigen ID
+        const newMessagesLobbyRef = doc(messagesLobbyRef);
+
+        this.messageLobby.id = newMessagesLobbyRef.id;
+
+        const messageLobbyJson = this.messageLobby.toJson();
+
+        await setDoc(newMessagesLobbyRef, messageLobbyJson);
+
+        debugger;
+
+      } catch {
+        console.log('err');
+
+      } finally {
+        await this.saveCollectionInsideMessageLobby(message);
+
+      }
+    }
+  }
+
+  async addMessageToMessageCollection(message: Message) {
+    const messageRef = collection(this.firestore, `messageLobby/${this.currentLobby}/messages`);
+    const newMessageRef = doc(messageRef);
+    message.id = newMessageRef.id;
+    const messageJson = message.toJson();
+
+    await setDoc(newMessageRef, messageJson);
+  }
+
+  async saveCollectionInsideMessageLobby(message: Message) {
+    const messagesRef = collection(this.firestore, `messageLobby/${this.messageLobby.id}/messages`);
+    const newMessagesRef = doc(messagesRef);
+    message.id = newMessagesRef.id;
+    const messageToJson = message.toJson();
+    await setDoc(newMessagesRef, messageToJson);
+    this.saveLobbyInsideUserConversationsSender(message);
+  }
+
+  async saveLobbyInsideUserConversationsSender(message: Message) {
+    const userDocRef = doc(this.firestore, 'user', this.uid);
+    const UserData = (await getDoc(userDocRef)).data() as { [key: string]: any };
+    const conversationsArray = UserData?.['conversations'] || [];
+
+    await updateDoc(userDocRef, {
+      [`conversations`]: arrayUnion(this.messageLobby.id)
+    })
+
+    await this.LobbyInsideUserConversationsRecipient();
+  }
+
+
+
+  async LobbyInsideUserConversationsRecipient() {
+    debugger;
+    const userDocRef = doc(this.firestore, 'user', this.openMessageToUserInformations.id);
+    const UserData = (await getDoc(userDocRef)).data() as { [key: string]: any };
+    const conversationsArray = UserData?.['conversations'] || [];
+
+    await updateDoc(userDocRef, {
+      [`conversations`]: arrayUnion(this.messageLobby.id)
+    })
+  }
+
+
+
+
+
+
 
   openMessageToUserInformations: any;
 
-  openMessageToUser(post: Post) {
-    const authorOfPost = this.userFirebaseService.users.find(user => user.id === post.authorOfPost);
 
-    this.openMessageToUserInformations = authorOfPost;
-    this.messageChoosedPerson = true;
+  
+  openMessageToUser(entity: Post | User) {
+
+    const auth = getAuth();
+    this.uid = auth.currentUser?.uid;
+
+    debugger;
+    if ('authorOfPost' in entity) {
+      // Es handelt sich um ein Post-Objekt
+      const authorOfPost = this.userFirebaseService.users.find(user => user.id === entity.authorOfPost);
+      this.openMessageToUserInformations = authorOfPost;
+    } else if(this.uid != entity.id) {
+      // Es handelt sich um ein User-Objekt
+      this.openMessageToUserInformations = entity;
+
+    }
+
+
+    //this.disclaimer = false;
+    this.createNewMessage = false;
+    debugger;
     this.ngOnDestroy();
+    this.inputMessage = true;
+    this.checkConversations();
   }
+
+
+  async checkConversations(): Promise<void> {
+
+    const auth = getAuth();
+    this.uid = auth.currentUser?.uid;
+
+    this.activatePrivateChatTemplate = true;
+    debugger;
+    if (this.uid != this.openMessageToUserInformations.id) {
+
+      console.log('uid user', this.uid);
+      console.log('recipient', this.openMessageToUserInformations);
+
+
+
+      // Referenzen für beide Nutzer-Dokumente erstellen
+      const user1DocRef = doc(this.firestore, 'user', this.uid);
+      const user2DocRef = doc(this.firestore, 'user', this.openMessageToUserInformations.id);
+
+      // Nutzer-Daten abrufen/Documents holen
+      const user1Snapshot = await getDoc(user1DocRef);
+      const user2Snapshot = await getDoc(user2DocRef);
+
+      //Wir holen uns die Daten um mit ihnen zu arbeiten und exists checkt für uns ob diese Documents tatsächtlich existieren. 
+      if (user1Snapshot.exists() && user2Snapshot.exists()) {
+        const user1Data: any = user1Snapshot.data();
+        const user2Data: any = user2Snapshot.data();
+
+        // Conversations-Arrays extrahieren
+        const user1Conversations: string[] = user1Data.conversations || [];
+        const user2Conversations: string[] = user2Data.conversations || [];
+
+        // Abfrage, um gemeinsame IDs zu finden
+        debugger;
+
+        const matchingIDs = user1Conversations.filter(id => user2Conversations.includes(id));
+        debugger;
+        if (matchingIDs.length > 0) {
+          console.log('Gemeinsame Conversations:', matchingIDs);
+          this.filterMessages(matchingIDs[0]);
+          debugger;
+          this.messageChoosedPerson = false;
+        }
+      } else {
+        console.error('Eins oder beide User-Dokumente existieren nicht.');
+        this.messageChoosedPerson = true;
+      }
+    }
+    //this.messageChoosedPerson = false;
+  }
+
+  async filterMessages(lobby: string) {
+    this.currentLobby = lobby;
+
+    debugger;
+    const itemCollection = collection(this.firestore, `messageLobby/${lobby}/messages`);
+    const q = query(itemCollection, orderBy('timeMessagePosted', 'asc')); // Sortierung nach 'timeMessagePosted'
+
+    this.messages$ = collectionData(q);
+
+
+    if (this.messageSubscription) {
+      this.messageSubscription.unsubscribe(); // Beende alte Subscription
+    }
+
+    this.messageSubscription = this.messages$.pipe(take(1)).subscribe(async (list) => {
+      debugger;
+      this.allMessages = []; // Setze das Array zurück, um Doppelungen zu vermeiden
+
+      for (const element of list) {
+        const message = new Message(element);
+
+        // Konvertiere den Firestore Timestamp in ein Date-Objekt
+        if (message.timeMessagePosted instanceof Timestamp) {
+          message.timeMessagePosted = message.timeMessagePosted.toDate();
+        }
+
+        const authorOfPost = this.userFirebaseService.users.find(user => user.id === message.authorOfMessage);
+
+        if (authorOfPost) {
+          message.authorName = authorOfPost.firstLastName; // Dynamisch das Feld hinzufügen
+        }
+        this.allMessages.push(message); // Füge den Post zur Liste hinzu
+        debugger;
+        console.log('mission completed', this.allMessages);
+
+      }
+    });
+
+  }
+
 
   private openDrawerSubject = new Subject<void>();
 
@@ -921,6 +1145,8 @@ export class ChannelFirebaseService implements OnInit {
   triggerOpenDrawer() {
     this.openDrawerSubject.next();
   }
+
+
 
   /*await updateDoc(emojiDocRef, {
      [`${emojiname}.likeCount`]: arrayUnion(this.userFirebaseService.uid)

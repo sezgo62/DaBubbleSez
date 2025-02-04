@@ -3,7 +3,7 @@ import { Emoji } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { ChannelFirebaseService } from '../channel-firebase.service';
 import { userFirebaseService } from '../userFirebase.service';
 import { Post } from 'src/models/post.class';
-import { Timestamp } from '@angular/fire/firestore';
+import { serverTimestamp, Timestamp } from '@angular/fire/firestore';
 import { DatePipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { OpenProfileDialogComponent } from '../open-profile-dialog/open-profile-dialog.component';
@@ -18,12 +18,26 @@ import { DrawerService } from '../drawer.service';
 })
 export class ChannelComponent {
 
+  post: Post = new Post();
+
+
 // Zugriff auf das MatDrawer-Element
 @ViewChild('drawer2') drawer2!: MatDrawer;
 
   constructor(public channelFirebaseService: ChannelFirebaseService, public userFirebaseService: userFirebaseService, private datePipe: DatePipe, public dialog: MatDialog, private drawerService: DrawerService) {
 
   }
+
+sendPost(message: string) {
+    debugger;
+   this.post.authorOfPost = this.userFirebaseService.uid;
+   this.post.dateOfPost = serverTimestamp() // Serverseitiger Zeit
+   this.post.textOfPost = message;
+   this.post.emojiOfPost;
+   this.post.id = '';
+   this.channelFirebaseService.addPostToFirestore(this.post);
+  }
+
 
 // Methode zum Öffnen des Drawers
 openDrawer() {

@@ -99,7 +99,7 @@
 
 .questionContainer {
     width: 605px;
-    height: 77px;
+    min-height: 77px;
     display: flex;
     align-items: center;
     background-color: #ECEEFE;
@@ -226,7 +226,7 @@
 
 .myPostQuestionContainer {
     width: 605px;
-    height: 77px;
+    min-height: 77px;
     display: flex;
     align-items: center;
     background-color: #ECEEFE;
@@ -240,8 +240,6 @@
     border-bottom-left-radius: 100px;
     border-bottom-right-radius: 100px;
     border-top-left-radius: 100px;
-
-
 }
 
 

@@ -1,5 +1,5 @@
 import { Injectable, OnInit, inject } from '@angular/core';
-import { Firestore, collection, collectionData, doc, getDocs, query, onSnapshot, addDoc } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, doc, getDocs, query, onSnapshot, addDoc, setDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { User } from 'src/models/user.class';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -10,6 +10,7 @@ import { getAuth, Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { FirebaseApp, initializeApp } from '@angular/fire/app';
 import { environment } from 'src/environments/environment.development';
 import { ChannelFirebaseService } from './channel-firebase.service';
+import { arrayUnion, updateDoc } from '@firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +35,7 @@ export class userFirebaseService implements OnInit {
   //public auth: Auth;
 
   constructor() {
-
+    //Diese Funktion checkt jeder Zeit ob ein user durch die authentication des firebase eingeloggt ist oder nicht.
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -45,7 +46,7 @@ export class userFirebaseService implements OnInit {
         console.log('No user logged in');
       }
     });
-  
+
 
 
     this.initializeFirebaseApp();
@@ -81,7 +82,7 @@ export class userFirebaseService implements OnInit {
     const auth = getAuth();
     this.uid = auth.currentUser?.uid
     debugger;
-    }
+  }
 
   initializeFirebaseApp() {
     this.firebaseApp = initializeApp(environment.firebase);
@@ -109,14 +110,24 @@ export class userFirebaseService implements OnInit {
 
 
   async addUserToFireStore(user: User) {
-    debugger;
     // Konvertiert das User-Objekt zu einem JSON-Objekt
     const userJson = user.toJson();
 
     try {
+
+      const auth = getAuth();
+      this.uid = auth.currentUser?.uid
+
+      const usersRef = collection(this.firestore, 'user');
+
+
+      // Erstellt eine neue Dokumentreferenz mit einer eindeutigen ID
+      const newUsersRef = doc(usersRef, this.uid);
+      debugger;
+
       // Fügt das JSON-Objekt zur Firestore-Datenbank hinzu
-      const docRef = await addDoc(this.getUsers(), userJson);
-      console.log('Document written with ID:', docRef.id);  // Loggt die ID des neu erstellten Dokuments
+      const docRef = await setDoc(newUsersRef, userJson);
+      //console.log('Document written with ID:', docRef.id);  // Loggt die ID des neu erstellten Dokuments
     } catch (err) {
       console.log('Error adding document:', err);  // Fängt und loggt Fehler
     }
@@ -147,4 +158,8 @@ export class userFirebaseService implements OnInit {
     return doc(collection(this.firestore, colId), docId);
   }
 
+   async createChat() {
+  
+  
+}
 }

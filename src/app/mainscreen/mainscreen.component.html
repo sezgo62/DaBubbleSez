@@ -2,7 +2,7 @@
 
   <div class="header non-selectable">
     <div class="logoContainer">
-      <img (click)="channelFirebaseService.ngOnDestroy()" class="daBubbleLogo" src="assets\img\logos\daBubble-logo.png">
+      <img class="daBubbleLogo" src="assets\img\logos\daBubble-logo.png">
       <span class="text">DABubble</span>
     </div>
 
@@ -46,7 +46,7 @@
               <h1 class="HeaderChannelText">DevSpace</h1>
             </div>
 
-            <button (click)="channelFirebaseService.sendMessage()" class="createChannelButton" mat-icon-button> 
+            <button (click)="channelFirebaseService.createMessage()" class="createMessageButton" mat-icon-button>
               <img src="assets/img/createChannelButton.png">
             </button>
           </div>
@@ -198,8 +198,10 @@
             </div>
           </div>
         </mat-menu>
+<!--<div class="selectChannelDisclaimer" *ngIf="!channelFirebaseService.currentChannel && channelFirebaseService.allMessages >= 0 == false && !channelFirebaseService.messageChoosedPerson && channelFirebaseService.disclaimer">-->
 
-        <div class="selectChannelDisclaimer" *ngIf="!channelFirebaseService.currentChannel && channelFirebaseService.createMessage == false && !channelFirebaseService.messageChoosedPerson && channelFirebaseService.disclaimer">
+
+        <div class="selectChannelDisclaimer"  *ngIf="!channelFirebaseService.currentChannel && channelFirebaseService.allMessages.length == 0 && !channelFirebaseService.messageChoosedPerson && channelFirebaseService.disclaimer">
           <h1>Pls select a channel</h1>
         </div>
 
@@ -207,7 +209,7 @@
 
 
 
-        <app-private-chat ></app-private-chat>
+        <app-private-chat *ngIf="channelFirebaseService.activatePrivateChatTemplate"></app-private-chat>
 
         <!--<div class="inputPostContainer">
           <input placeholder="Type a message" type="text" name="textarea" [(ngModel)]="textArea" #message
