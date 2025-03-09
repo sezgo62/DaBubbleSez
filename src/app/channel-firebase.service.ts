@@ -62,6 +62,8 @@ export class ChannelFirebaseService implements OnInit {
   disclaimer: boolean = true;
   inputMessage: boolean = false;
   activatePrivateChatTemplate: boolean = false;
+  isVariableTrueForResponsive: boolean = false;
+
 
   getChannels() {
     return collection(this.firestore, 'channels');
@@ -1039,7 +1041,6 @@ export class ChannelFirebaseService implements OnInit {
 
     //this.disclaimer = false;
     this.createNewMessage = false;
-    debugger;
     this.ngOnDestroy();
     this.inputMessage = true;
     this.checkConversations();

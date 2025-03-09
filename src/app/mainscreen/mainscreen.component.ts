@@ -37,8 +37,9 @@ export class MainscreenComponent implements OnInit {
   items: string[] = ['aa', 'Apfel', 'Banane', 'Orange', 'Pfirsich', 'Traube']; // Beispiel-Daten
   filteredItems: any[] = [];
   filteredItemsAddParticipants: any[] = [];
-
-
+  channelSelected: any;
+  channelsCount: any;
+  messagesCount: any;
 
   @ViewChild('drawer') drawer: MatDrawer | undefined;
   //@ViewChild('drawer2') drawer2: MatDrawer | undefined;
@@ -98,6 +99,8 @@ ngOnInit(): void {
       debugger;
 
     });
+
+    this.userFirebaseService;
  }
 
  private filterItems(searchTerm: string): any[] {
@@ -143,11 +146,24 @@ closeDrawer() {
     }
   }
 
-  channels = ['# Entwicklerteam', '# javascript', '# CSS'];
 
-  channelSelected: any;
+  dropMessages() {
+    if (this.showMessages == false) {
+      this.showMessages = true;
+      this.cdr.detectChanges();
 
-  channelsCount: any;
+    } else {
+      this.showMessages = false;
+      this.cdr.detectChanges();
+      return;
+    }
+    if (this.messagesCount != undefined) {
+      this.StyleSelectedMessageOnDropdown(this.channelSelected, this.messagesCount);
+    }
+  }
+
+
+  
 
 
 
@@ -177,7 +193,31 @@ closeDrawer() {
     }
   }
 
+  StyleSelectedMessageOnDropdown(i: any, messagesCount: any) {
+    this.messagesCount = messagesCount;
+    for (let j = 0; j < messagesCount; j++) {
 
+      let styledElement = document.getElementById(`channel${j}`) as HTMLElement;
+
+      styledElement.style.filter = '';
+    }
+
+
+    if (i != undefined || i != this.channelSelected) {
+      let styledElement = document.getElementById(`channel${i}`) as HTMLElement | null;
+      this.channelSelected = i;
+
+      if (styledElement) {
+        if (styledElement.style.filter) {
+          styledElement.style.filter = '';
+        } else {
+          styledElement.style.filter = 'invert(34%) sepia(77%) saturate(2175%) hue-rotate(228deg) brightness(98%) contrast(95%)';
+        }
+      } else {
+
+      }
+    }
+  }
 
   async selectedChannel(channel: Channel) {
     //this.channelFirebaseService.currentChannelParticipants = channel;
@@ -235,21 +275,6 @@ sendAnswer(answerMessage: string) {
   }
 
 
-  dropMessages() {
-    /*if (this.showMessages == false) {
-      this.showMessages = true;
-      this.cdr.detectChanges();
-
-    } else {
-      this.showMessages = false;
-this.cdr.detectChanges();
-return;
-    }
-    if (this.channelsCount != undefined) {
-      this.selectChannel(this.channelSelected, this.channelsCount);
-    }
-  }*/
-  }
 
 
   openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
@@ -334,7 +359,13 @@ getFormattedTimeAnswer(answer: Answer): string {
 }
 
 
-
+blatest() {
+  if(this.channelFirebaseService.isVariableTrueForResponsive == true) {
+    this.channelFirebaseService.isVariableTrueForResponsive = false;
+  } else {
+    this.channelFirebaseService.isVariableTrueForResponsive = true;
+  }
+}
 
 }
 

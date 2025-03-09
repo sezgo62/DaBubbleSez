@@ -1,6 +1,6 @@
 import { Injectable, OnInit, inject } from '@angular/core';
 import { Firestore, collection, collectionData, doc, getDocs, query, onSnapshot, addDoc, setDoc } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { firstValueFrom, lastValueFrom, Observable } from 'rxjs';
 import { User } from 'src/models/user.class';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { StorageReference } from "firebase/storage";
@@ -34,18 +34,82 @@ export class userFirebaseService implements OnInit {
 
   //public auth: Auth;
 
+  filteredUsers: any;
+  conversationId: any;
   constructor() {
     //Diese Funktion checkt jeder Zeit ob ein user durch die authentication des firebase eingeloggt ist oder nicht.
     const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
+
+    //onAuthStateChanged()` wird nur EINMAL aufgerufen
+    onAuthStateChanged(auth, async (user) => {
+      console.log('🔄 Auth-Status geändert');
+
       if (user) {
         this.uid = user.uid;
-        console.log('User UID:', this.uid);
-        //this.initializeUserSnapshot();  // Jetzt ist uid gesetzt, also initialisieren wir die anderen Dinge
+        console.log('✅ Eingeloggter User UID:', this.uid);
+
+        // 🔥 Firestore-Daten abrufen
+        const itemCollection = collection(this.firestore, 'user');
+        this.user$ = collectionData(itemCollection);
+
+        // 🔥 Warten, bis ALLE User geladen wurden
+        const usersList = await firstValueFrom(this.user$);
+        this.users = usersList;
+        console.log('✅ Firestore Users vollständig geladen:', this.users);
+
+        // 🔥 Jetzt erst `findUser` ausführen
+        const findUser = this.users.find(u => u.id === this.uid);
+
+
+        if (findUser) {
+          this.loggedInUser = findUser;
+
+
+
+
+          const userConversationIds = this.loggedInUser.conversations; // 🔥 IDs der Unterhaltungen
+
+          // 🔍 Alle Benutzer mit gemeinsamer `conversationId` finden
+          this.filteredUsers = this.users
+            .flatMap(user => {
+              if (user.id === this.loggedInUser.id) return []; // Sich selbst ignorieren
+
+              const sharedConversations = user.conversations?.filter((convId: string) =>
+                this.loggedInUser.conversations.includes(convId)
+              ) || [];
+
+              if (sharedConversations.length === 0) return []; // Kein Match
+
+              return {
+                conversationId: sharedConversations[0], // Direkt die einzige ID nehmen
+                user1: this.loggedInUser,
+                user2: user
+              };
+            });
+
+          console.log('✅ Gefilterte Benutzer mit gemeinsamen Conversations:', this.filteredUsers);
+
+
+          console.log('✅ Gefilterte User-Paare mit gemeinsamen Conversations:', this.filteredUsers);
+
+
+
+
+
+
+
+
+
+
+          console.log('✅ User gefunden:', this.loggedInUser);
+        } else {
+          console.log('⚠️ User nicht gefunden in Firestore');
+        }
       } else {
-        console.log('No user logged in');
+        console.log('⚠️ Kein User eingeloggt');
       }
     });
+
 
 
 
@@ -67,22 +131,33 @@ export class userFirebaseService implements OnInit {
       list.forEach(element => {
         console.log(element);
         this.users.push(element);
-        //debugger;
-        //this.channelFirebaseService.allExistingChannelsAndUsers.push(element);
         console.log(this.users);
       });
     });
+
   }
+
+  auth: any;
 
   initializeUserSnapshot() {
     throw new Error('Method not implemented.');
   }
 
   ngOnInit(): void {
-    const auth = getAuth();
-    this.uid = auth.currentUser?.uid
-    debugger;
+    this.auth = getAuth();
+    this.uid = this.auth.currentUser?.uid
+
+
+    //const matchingIDs = loggedInUser.filter(id => user2Conversations.includes(id));
+    const itemCollection = collection(this.firestore, 'user');
+
+    this.user$ = collectionData(itemCollection);
+
+
+
   }
+
+  loggedInUser: User = new User();
 
   initializeFirebaseApp() {
     this.firebaseApp = initializeApp(environment.firebase);
@@ -158,8 +233,8 @@ export class userFirebaseService implements OnInit {
     return doc(collection(this.firestore, colId), docId);
   }
 
-   async createChat() {
-  
-  
-}
+  async createChat() {
+
+
+  }
 }

@@ -1,7 +1,7 @@
 <div class="mainscreenPool">
 
   <div class="header non-selectable">
-    <div class="logoContainer">
+    <div (click)="blatest()" class="logoContainer">
       <img class="daBubbleLogo" src="assets\img\logos\daBubble-logo.png">
       <span class="text">DABubble</span>
     </div>
@@ -36,7 +36,7 @@
 
 
   <div class="middleContainer">
-    <ng-container *ngIf="isLargeScreen; else mobileContent">
+    <ng-container *ngIf="isLargeScreen || channelFirebaseService.isVariableTrueForResponsive; else mobileContent">
 
       <mat-drawer-container class="example-container" autosize>
         <mat-drawer #drawer mode="side" [(opened)]="isSidenavOpen" class="example-sidenav" mode="side">
@@ -90,22 +90,24 @@
 
               <div (click)="dropMessages()" class="messagesDropGroup non-selectable">
                 <img class="messagesNotDropped" src="assets/img/channelsNotDropped.png"
-                  [src]="showChannels ? 'assets/img/channelsDropped.png' : 'assets/img/channelsNotDropped.png'">
+                  [src]="showMessages ? 'assets/img/channelsDropped.png' : 'assets/img/channelsNotDropped.png'">
                 <img class="messagesIcon" src="assets/img/accountCircle.png">
                 <h2 class="messagesDropGroupName">Messages</h2>
               </div>
             </div>
 
 
-            <!--<div *ngIf="showChannels" class="allMessages">
-            <h2 *ngFor="let channel of channels; let i = index" (click)="selectChannel(i, channels.length)" class="channel" [id]="'channel' + i">
-              {{channel}}
-          </h2>
-            
-            <h2 (click)="selectChannel()" class="channel" id="channel"># Entwicklerteam</h2>
+            <div *ngIf="showMessages" class="allChannels">
+              <h2 (click)="channelFirebaseService.openMessageToUser(privateMessage.user2)" *ngFor="let privateMessage of userFirebaseService.filteredUsers; let i = index"
+                (click)="StyleSelectedChannel(i, channelFirebaseService.channels.length);"
+                class="channel" [id]="'channel' + i">
+                {{privateMessage.user2.firstLastName}}
+              </h2>
+
+              <!--<h2 (click)="selectChannel()" class="channel" id="channel"># Entwicklerteam</h2>
             <h2 class="channel" id="channel"># Javascript</h2>
-            <h2 class="channel" id="channel"># CSS</h2>
-          </div>-->
+            <h2 class="channel" id="channel"># CSS</h2>-->
+            </div>
 
           </div>
 
@@ -198,14 +200,16 @@
             </div>
           </div>
         </mat-menu>
-<!--<div class="selectChannelDisclaimer" *ngIf="!channelFirebaseService.currentChannel && channelFirebaseService.allMessages >= 0 == false && !channelFirebaseService.messageChoosedPerson && channelFirebaseService.disclaimer">-->
+        <!--<div class="selectChannelDisclaimer" *ngIf="!channelFirebaseService.currentChannel && channelFirebaseService.allMessages >= 0 == false && !channelFirebaseService.messageChoosedPerson && channelFirebaseService.disclaimer">-->
 
 
-        <div class="selectChannelDisclaimer"  *ngIf="!channelFirebaseService.currentChannel && channelFirebaseService.allMessages.length == 0 && !channelFirebaseService.messageChoosedPerson && channelFirebaseService.disclaimer">
+        <div class="selectChannelDisclaimer"
+          *ngIf="!channelFirebaseService.currentChannel && channelFirebaseService.allMessages.length == 0 && !channelFirebaseService.messageChoosedPerson && channelFirebaseService.disclaimer">
           <h1>Pls select a channel</h1>
         </div>
 
-        <app-channel *ngIf="channelFirebaseService.allPosts.length > 0 || channelFirebaseService.showErrorMessageForChannel"></app-channel>
+        <app-channel
+          *ngIf="channelFirebaseService.allPosts.length > 0 || channelFirebaseService.showErrorMessageForChannel"></app-channel>
 
 
 
@@ -498,7 +502,9 @@
 
 
     <ng-template #mobileContent>
-      <app-responsive-mainscreen></app-responsive-mainscreen>
+      <ng-container *ngIf="!channelFirebaseService.isVariableTrueForResponsive">
+        <app-responsive-mainscreen></app-responsive-mainscreen>
+      </ng-container>
     </ng-template>
 
   </div>

@@ -432,3 +432,15 @@
     left: 143px;
     z-index: 1;
 }
+
+
+
+@media(max-width: 850px) {
+    .questionContainer {
+        width: 100%;
+    }
+
+    .myPostQuestionContainer {
+        width: 100%;
+    }
+}

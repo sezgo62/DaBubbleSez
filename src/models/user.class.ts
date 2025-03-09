@@ -5,6 +5,7 @@ online: boolean = false;
 image: string;
 id: string;
 conversations: Array<string> = [];
+allMessages: Array<any> = [];
 
 constructor(obj?: any ) {
 this.firstLastName = obj ? obj.firstLastName : '';

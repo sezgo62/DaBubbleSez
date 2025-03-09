@@ -278,7 +278,7 @@ body {
 .createMessageButton {
     &:hover {
         filter: invert(34%) sepia(77%) saturate(2175%) hue-rotate(228deg) brightness(98%) contrast(95%);
-    } 
+    }
 }
 
 .createChannelButton {
@@ -764,9 +764,6 @@ body {
     &:hover .emojiContainer {
         display: flex;
     }
-
-
-
 }
 
 .emojiContainer {
@@ -1150,4 +1147,68 @@ body {
     width: 20px;
 }
 
-@media(max-width: 1444px) {}
+@media(max-width: 1444px) {
+    .middleContainer {
+        justify-content: center;
+        align-items: center;
+    }
+
+    .toggleContainer2 {
+        display: none;
+    }
+}
+
+
+@media(max-width: 1200px) {
+    .daBubbleLogo {
+        width: 70px;
+    }
+
+    .text {
+        font-size: 32px;
+    }
+
+    .inputContainer {
+        width: 29%;
+    }
+
+    .headerProfileText {
+        font-size: 21px;
+    }
+
+    .profilePicture {
+        width: 54px;
+        height: 54px;
+    }
+}
+
+@media(max-width: 1040px) {
+    .search {
+        right: 13px;
+    }
+}
+
+@media(max-width: 950px) {
+
+    .inputContainer {
+        display: none;
+    }
+
+}
+
+@media(max-width: 850px) {
+
+    .middleContainer {
+        width: 71%;
+    }
+
+    .questionContainer {
+        width: 100%;
+    }
+
+    .channelScreen {
+        position: relative;
+        width: 450px;
+    }
+
+}
