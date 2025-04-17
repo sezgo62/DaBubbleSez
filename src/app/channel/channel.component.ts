@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, HostListener, ViewChild } from '@angular/core';
 import { Emoji } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { ChannelFirebaseService } from '../channel-firebase.service';
 import { userFirebaseService } from '../userFirebase.service';
@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { OpenProfileDialogComponent } from '../open-profile-dialog/open-profile-dialog.component';
 import { MatDrawer } from '@angular/material/sidenav';
 import { DrawerService } from '../drawer.service';
+import { OpenedThreadComponent } from '../opened-thread/opened-thread.component';
 
 
 @Component({
@@ -24,7 +25,7 @@ export class ChannelComponent {
 // Zugriff auf das MatDrawer-Element
 @ViewChild('drawer2') drawer2!: MatDrawer;
 
-  constructor(public channelFirebaseService: ChannelFirebaseService, public userFirebaseService: userFirebaseService, private datePipe: DatePipe, public dialog: MatDialog, private drawerService: DrawerService) {
+  constructor(public channelFirebaseService: ChannelFirebaseService, public userFirebaseService: userFirebaseService, private datePipe: DatePipe, public dialog: MatDialog,public dialogOpenThread: MatDialog, private drawerService: DrawerService) {
 
   }
 
@@ -98,4 +99,25 @@ openDrawer() {
     });
   }
   
+isLargeScreen: boolean = window.innerWidth > 1444;
+
+@HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.isLargeScreen = window.innerWidth > 1444;
+
+  }
+
+  openDialogForOPenedThread(enterAnimationDuration: string, exitAnimationDuration: string): void {
+    if(this.isLargeScreen == false) {
+      this.dialog.open(OpenedThreadComponent, {
+        panelClass: 'custom-dialog-container',
+        width: '950px',
+        height: '458px',
+        enterAnimationDuration,
+        exitAnimationDuration,
+      });
+    }
+   
+  }
+
 }

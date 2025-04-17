@@ -62,17 +62,21 @@ private filterItems(searchTerm: string): any[] {
 }
 
 async redirectUserOrChannel(item: any) {
+  debugger;
   if(item.nameOfChannel) {
   await this.channelFirebaseService.filterChannels(item);
   this.channelFirebaseService.loadParticipants();
+  } else {
+    this.channelFirebaseService.openMessageToUser(item);
   }
   
+  this.searchControl.setValue(''); // ← das ist der korrekte Angular-Weg
+
   }
 
   async selectedChannel(channel: Channel) {
     //this.channelFirebaseService.currentChannelParticipants = channel;
-   
-    
+       
     await  this.channelFirebaseService.filterChannels(channel);
 
     this.channelFirebaseService.loadParticipants();
@@ -178,16 +182,18 @@ return;
     }
   }
 
-  toggleMainscreen() {
+  /*toggleMainscreen() {
     debugger;
-    if(this.channelFirebaseService.isVariableTrueForResponsive == true) {
+
+    if(this.channelFirebaseService.showChannelResponsive == true) {
       this.channelFirebaseService.isVariableTrueForResponsive = false;
     } else {
       this.channelFirebaseService.isVariableTrueForResponsive = true;
     }
-  }
+  }*/
   
-
+    
+    
   openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
     this.dialog.open(CreateChannelDialogComponent, {
       panelClass: 'custom-dialog-container',

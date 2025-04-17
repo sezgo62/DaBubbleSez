@@ -15,6 +15,8 @@ export class Post {
     email: any;
     online: boolean = false;
     lengthOfAnswers: number = 0;
+    latestAnswer: any;
+
 
     constructor(obj?: any) {
         this.answers = obj ? obj.answers : [];
@@ -23,6 +25,7 @@ export class Post {
         this.id = obj ? obj.id : '';
         this.textOfPost = obj ? obj.textOfPost : '';
         this.dateOfPost = obj ? obj.dateOfPost : new Date();
+        this.latestAnswer = obj ? obj.latestAnswer: '';
     }
 
     // Die toJson Methode, um das Post-Objekt in ein JSON-Format zu konvertieren
@@ -34,6 +37,7 @@ export class Post {
             id: this.id,
             textOfPost: this.textOfPost,
             dateOfPost: this.dateOfPost instanceof Date ? Timestamp.fromDate(this.dateOfPost) : serverTimestamp(),
+            latestAnswer: this.latestAnswer
         };
     }
 }

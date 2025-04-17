@@ -5,6 +5,7 @@
         <div class="channelPool" *ngFor="let post of channelFirebaseService.allPosts">
             <div class="postContainer">
 
+
                 <div class="timestampContainer non-selectable">
                     <img class="postLine" src="assets/img/line.png">
                     <span class="Date">{{ getFormattedDate(post) }}</span>
@@ -12,6 +13,16 @@
 
                 <div
                     [ngClass]="post.authorOfPost == userFirebaseService.uid ? 'myPostContentContainer' : 'postContentContainer'">
+
+
+
+
+                    <img *ngIf="post.authorOfPost == userFirebaseService.uid"
+                    class="myDeleteTrash"
+                    (click)="channelFirebaseService.deletePost(post)"
+                    src="assets/img/deleteTrash.png">
+
+                    
                     <img class="postImage" src="assets/img/avatars/avatar1.png">
 
                     <div [ngClass]="post.authorOfPost == userFirebaseService.uid ? 'myPostContent' : 'postContent'">
@@ -35,9 +46,9 @@
 
                         <div
                             [ngClass]="post.authorOfPost == userFirebaseService.uid ? 'myPostAnswerCountContainer' : 'answerCountContainer'">
-                            <span (click)="channelFirebaseService.openPost(post); openDrawer()"
+                            <span (click)="channelFirebaseService.openPost(post); openDrawer(); openDialogForOPenedThread('0ms', '0ms');"
                                 class="answerCount">{{post.lengthOfAnswers}}</span>
-                            <span class="lastAnswer">Letzte Antwort {{'11:25'}}</span>
+                           <!-- <span class="lastAnswer">Letzte Antwort {{post.latestAnswer?.timeAnswerPosted | date:'HH:mm'}}</span>-->
                         </div>
 
                         <div class="showEmojisOfPost">
@@ -134,96 +145,3 @@
 </ng-container>
 
 
-<!--------------------------------------------------------------------------->
-
-
-<!--<button (click)="isEmojiPickerVisible = !isEmojiPickerVisible;">😀</button>
-<br /><emoji-mart class="emoji-mart" *ngIf="isEmojiPickerVisible" (emojiSelect)="addEmoji($event)"
-    title="Choose your emoji"></emoji-mart>
-
-<div class="container">
-    <p placeholder="Type a message" type="text" name="textarea" [(ngModel)]="textArea">dsdsddsdsd</p>
-
-    <button (click)="isEmojiPickerVisible = !isEmojiPickerVisible;">😀</button>
-</div>-->
-
-<!--<div class="postContainer" *ngFor="let post of channelFirebaseService.allPosts">
-
-        <div class="timestampContainer non-selectable" *ngIf="post.authorOfPost == userFirebaseService.uid">
-            <img class="postLine" src="assets/img/line.png">
-            <span class="Date">{{ getFormattedDate(post) }} </span>
-        </div>
-
-        <div class="test">
-            <div class="myPostContentContainer">
-
-                <div class="myPostContent">
-                    <div class="nameAndAnswerAndTime">
-                        <div class="myPostNameAndQuestion">
-                            <span class="name">{{post.authorOfPost}}</span>
-                            <span class="time">{{ getFormattedDate(post)  | date: 'HH:mm' : 'Europe/Berlin' }}</span>
-                        </div>
-                        <div class="myPostQuestionContainer">
-                            <span class="myQuestion">
-                                {{post.textOfPost}}
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="myPostAnswerCountContainer">
-                        <span class="answerCount">{{post.answers.length}}</span>
-                        <span class="lastAnswer">Letzte Antwort {{post.dateOfPost}}</span>
-                    </div>
-
-                </div>
-
-                <img class="postImage" src="assets/img/avatars/avatar1.png">
-
-
-            </div>
-        </div>
-
-    </div>
-
-</div>-->
-
-
-<!---<div class="channelPool" *ngFor="let post of channelFirebaseService.allPosts">
-    <div class="postContainer" *ngIf="post.authorOfPost != userFirebaseService.uid">
-
-        <div class="timestampContainer non-selectable" >
-            <img class="postLine" src="assets/img/line.png">
-            <span class="Date"> tzz</span>
-        </div>
-
-        <div [ngClass]="post.authorOfPost == userFirebaseService.uid ? 'mypostContentContainer' : 'postContentContainer'">
-            <img class="postImage" src="assets/img/avatars/avatar1.png">
-
-            <div class="postContent" [ngClass]="post.authorOfPost == userFirebaseService.uid ? 'myPostContent' : 'postContent'">
-                <div class="nameAndAnswerAndTime">
-                    <div  [ngClass]="post.authorOfPost == userFirebaseService.uid ? 'myPostNameAndQuestion' : 'nameAndQuestion'">
-                        <span class="name">{{post.authorOfPost}}</span>
-                        <span class="time"></span>
-                    </div>
-                    <div class="questionContainer">
-                        <span class="question">
-                           {{post.textOfPost}}
-                        </span>
-                        <div class="emojiContainer">
-                            <button mat-icon-button><img class="approvedImage" src="assets/img/approved.png"></button>
-                            <button mat-icon-button><img class="" src="assets/img/addReaction.png"></button>
-                            <button mat-icon-button><img class="" src="assets/img/comment.png"></button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="answerCountContainer">
-                    <span class="answerCount">{{post.answers.length}}</span>
-                    <span class="lastAnswer">Letzte Antwort {{post.dateOfPost}}</span>
-                </div>
-
-            </div>
-
-
-        </div>
-    </div>-->

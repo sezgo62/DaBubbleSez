@@ -1,6 +1,6 @@
-import { Injectable, OnInit, inject } from '@angular/core';
+import { HostListener, Injectable, OnInit, inject } from '@angular/core';
 import { FirebaseApp, initializeApp } from '@angular/fire/app';
-import { CollectionReference, DocumentData, Firestore, addDoc, collection, collectionData, doc, onSnapshot, where, query, setDoc, Timestamp, orderBy, updateDoc, getDocs, increment, arrayUnion, getDoc, arrayRemove } from '@angular/fire/firestore';
+import { CollectionReference, DocumentData, Firestore, addDoc, collection, collectionData, doc, onSnapshot, where, query, setDoc, Timestamp, orderBy, updateDoc, getDocs, increment, arrayUnion, getDoc, arrayRemove, deleteDoc, limit } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment.development';
 import { User } from 'src/models/user.class';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -11,9 +11,10 @@ import { Post } from 'src/models/post.class';
 import { DatePipe } from '@angular/common';
 import { FieldValue } from '@angular/fire/firestore';
 import { Answer } from 'src/models/answers.class';
-import { getAuth } from '@angular/fire/auth';
+import { getAuth, signOut } from '@angular/fire/auth';
 import { Message } from 'src/models/message.class';
 import { MessageLobby } from 'src/models/messageLobby.class';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -63,7 +64,9 @@ export class ChannelFirebaseService implements OnInit {
   inputMessage: boolean = false;
   activatePrivateChatTemplate: boolean = false;
   isVariableTrueForResponsive: boolean = false;
-
+  isVariableTrueForResponsiveOpenedThread: boolean = false;
+  addParticipantTextMap: { [key: number]: string } = {}; // Speichert Button-Texte pro ID
+  showChannelResponsive: boolean = false;
 
   getChannels() {
     return collection(this.firestore, 'channels');
@@ -74,11 +77,15 @@ export class ChannelFirebaseService implements OnInit {
 
   //public auth: Auth;
 
+  goBackToNavigator() {
+    this.showChannelResponsive = false;
+  }
 
 
+  constructor(public userFirebaseService: userFirebaseService, private datePipe: DatePipe, private router: Router) {
+    //this.initializeFirebaseApp();
 
-  constructor(public userFirebaseService: userFirebaseService, private datePipe: DatePipe) {
-    this.initializeFirebaseApp();
+
 
     const channelsCollection = collection(this.firestore, 'channels');
     const usersCollection = collection(this.firestore, 'user');
@@ -110,17 +117,71 @@ export class ChannelFirebaseService implements OnInit {
     });
   }
 
+  logout(): Promise<void> {
+    const auth = getAuth();
+    return signOut(auth);
+  }
+
+  /*blatest() {
+    debugger;
+    if (this.isVariableTrueForResponsive == true) {
+      this.isVariableTrueForResponsive = true;
+      this.isVariableTrueForResponsiveOpenedThread = true;
+    } else {
+      this.isVariableTrueForResponsiveOpenedThread = true;
+      this.isVariableTrueForResponsive = true;
+    }
+  }*/
+
+  //////
+
+  getAllExistingUsers() {
+    const usersCollection = collection(this.firestore, 'user');
+
+    // Users-Observable
+    this.users$ = collectionData(usersCollection);
+
+    // Abonniere `users$`, sobald `channels` fertig ist, und speichere alles in `allExistingChannelsAndUsers`
+    this.users$.pipe(take(1)).subscribe((usersList) => {
+
+      usersList.forEach(user => {
+        console.log('User:', user);
+        this.getAllExistingUsersArray.push(user); // Dann alle Users hinzufügen
+      });
+      console.log('All channels and users:', this.getAllExistingUsersArray);
+    });
+  }
+
+  getAllExistingUsersArray: any[] = [];
+
   uid: any;
   checkUserForChannelEntrance: any;
   isProcessing: boolean = false;
 
+  navigateToMainscreen() {
+
+    this.ngOnDestroy();
+
+    this.messageChoosedPerson = false;
+
+    this.router.navigate(['/mainScreen']);
 
 
+  }
 
+
+  navigateToOPenedThreadForMobile() {
+    this.router.navigate(['/mainScreen']);
+
+    this.isVariableTrueForResponsiveOpenedThread = true;
+    this.isVariableTrueForResponsive = true;
+
+  }
 
 
   async filterChannels(channel: Channel): Promise<void> {
     this.isProcessing = false;
+    this.showChannelResponsive = true;
 
     //await new Promise(resolve => setTimeout(resolve, 1000));
 
@@ -163,7 +224,6 @@ export class ChannelFirebaseService implements OnInit {
         this.createNewMessage = false;
       }
     } finally {
-      debugger;
       this.isProcessing = true;
       this.inputMessage = false;
     }
@@ -238,6 +298,13 @@ export class ChannelFirebaseService implements OnInit {
           post.email = authorOfPost.email;
         }
 
+        const latestAnswer = await this.getLatestAnswer(channelId, post.id);
+        post.latestAnswer = latestAnswer;
+
+        //debugger;
+        console.log('ttttttttime is', latestAnswer);
+
+
         // Länge der Antworten abrufen
         const answersLength = await this.getAnswersLength(post);
         post.lengthOfAnswers = answersLength;
@@ -259,6 +326,27 @@ export class ChannelFirebaseService implements OnInit {
       }
     });
   }
+
+
+  async getLatestAnswer(channelId: string, postId: string): Promise<any> {
+    const answersCollection = collection(this.firestore, `channels/${channelId}/posts/${postId}/answer`);
+    const q = query(answersCollection, orderBy('timeAnswerPosted', 'desc'), limit(1));
+
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      const doc = querySnapshot.docs[0];
+      const data = doc.data();
+      // Falls Timestamp enthalten ist:
+      if (data['timeAnswerPosted'] instanceof Timestamp) {
+        data['timeAnswerPosted'] = data['timeAnswerPosted'].toDate();
+      }
+      return data;
+    } else {
+      return null; // keine Antwort vorhanden
+    }
+  }
+
+
 
   async filterChats() {
     console.log('channels are', this.channels);
@@ -340,8 +428,24 @@ export class ChannelFirebaseService implements OnInit {
     });
   }
 
+  isLargeScreen: boolean = window.innerWidth > 1444;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.isLargeScreen = window.innerWidth > 1444;
+
+  }
 
   openPost(post: Post) {
+
+    debugger;
+
+    if (this.isLargeScreen == false) {
+      this.navigateToOPenedThreadForMobile();
+    }
+
+    //console.log('large screen', this.isLargeScreen);
+
     this.threadPost = post;
 
     const channelId = this.currentChannel.id;
@@ -371,7 +475,6 @@ export class ChannelFirebaseService implements OnInit {
         if (authorOfPost) {
           answer.authorName = authorOfPost.firstLastName;  // Dynamisch das Feld hinzufügen
         }
-        debugger;
         // Überprüfen, ob die Emoji-Collection leer ist
         if (!await this.checkIfAnswerCollectionIsEmpty(channelId, post.id, answer.id)) {
           const emojiCollectionRef = collection(this.firestore, `channels/${channelId}/posts/${post.id}/answer/${answer.id}/emoji`);
@@ -426,9 +529,9 @@ export class ChannelFirebaseService implements OnInit {
     return storedChannel ? JSON.parse(storedChannel) : null;
   }
 
-  initializeFirebaseApp() {
+  /*initializeFirebaseApp() {
     this.firebaseApp = initializeApp(environment.firebase);
-  }
+  }*/
 
 
   loadChannels() {
@@ -440,7 +543,6 @@ export class ChannelFirebaseService implements OnInit {
   }
 
   loadParticipants() {
-    debugger;
     if (this.currentChannel && this.currentChannel.permittedUsers) {
       this.currentChannelParticipants = []; // Array leeren
       this.currentChannel.permittedUsers.forEach((permittedUser: any) => {
@@ -458,18 +560,7 @@ export class ChannelFirebaseService implements OnInit {
   }
 
 
-  /*constructor(
-    private afAuth: AngularFireAuth, // Verwenden Sie AngularFireAuth
-  ) {
-    this.afAuth.authState.subscribe(user => {
-      if (user) {
-        console.log("User logged in: ", user);
-        this.loadUserData();
-      } else {
-        console.log("No user logged in");
-      }
-    });
-  }*/
+
 
   loadChannelData() {
     // Beispiel, wie Sie firestore verwenden könnten
@@ -480,11 +571,7 @@ export class ChannelFirebaseService implements OnInit {
 
 
   async addChannelToFireStore(channel: Channel) {
-    //const newChannelRef = doc(this.getChannels());  // Erstellt eine neue Dokumentreferenz mit einer eindeutigen ID
-    //channel.id = newChannelRef.id;  // Setzt die ID des Channel-Objekts auf die ID der neuen Dokumentreferenz
-    //debugger;
-    // Konvertiert das Channel-Objekt zu einem JSON-Objekt
-    //const channelJson = channel.toJson();
+
 
     try {
       const channelsRef = collection(this.firestore, 'channels');
@@ -506,7 +593,7 @@ export class ChannelFirebaseService implements OnInit {
     }
   }
 
-  addPostToFirestore(post: Post) {
+  async addPostToFirestore(post: Post) {
     if (!this.currentChannel) {
       console.error('No current channel selected');
       return;
@@ -521,13 +608,173 @@ export class ChannelFirebaseService implements OnInit {
     // Setzt die ID des Channel-Objekts auf die ID der neuen Dokumentreferenz
     post.id = postDocRef.id;
     const postJson = post.toJson();
-    setDoc(postDocRef, postJson).then(() => {
+    await setDoc(postDocRef, postJson).then(() => {
       console.log("Post set with custom ID: ", postDocRef.id);
+
+
+      onSnapshot(postsCollectionRef, async (snapshot) => {
+
+        this.allAnswersOfCurrentOpenedThread = [];
+
+        console.log('Emoji Collection Updated');
+        // Wenn sich die Emoji-Collection ändert, rufe filterPosts erneut auf
+        // Abrufen aller Dokumente in der Emoji-Collection
+        const querySnapshotForEmoji = await getDocs(postsCollectionRef);
+        //////////////////
+
+        this.postSubscription = this.post$.pipe(take(1)).subscribe((list) => {
+          this.allPosts = [];  // Setze das Array zurück, um Doppelungen zu vermeiden
+
+          list.forEach(async (element) => {
+            const post = new Post(element);
+
+            // Konvertiere den Firestore Timestamp in ein Date-Objekt
+            if (post.dateOfPost instanceof Timestamp) {
+              post.dateOfPost = post.dateOfPost.toDate();
+            }
+
+            const authorOfPost = this.userFirebaseService.users.find(user => user.id === post.authorOfPost);
+
+            if (authorOfPost) {
+              post.authorName = authorOfPost.firstLastName;  // Dynamisch das Feld hinzufügen
+            }
+
+
+            this.allPosts.push(post);
+
+          });
+        });
+
+      });
+
+
+
+      const element = document.getElementById('scrollBehavior');
+      element?.scrollTo({
+        top: element.scrollHeight,
+        behavior: 'smooth'
+      });
+
     }).catch((error) => {
       console.error("Error setting post: ", error);
     });
   }
 
+
+  async deletePost(post: Post) {
+    const channelId = this.currentChannel.id;
+
+    const postCollection = collection(this.firestore, `channels/${channelId}/posts`);
+
+
+    const auth = getAuth();
+    this.uid = auth.currentUser?.uid;
+    debugger;
+    if (this.uid === post.authorOfPost) {
+      debugger;
+      await deleteDoc(doc(this.firestore, `channels/${channelId}/posts`, post.id));
+
+
+      onSnapshot(postCollection, async (snapshot) => {
+
+        this.allAnswersOfCurrentOpenedThread = [];
+
+        console.log('Emoji Collection Updated');
+        // Wenn sich die Emoji-Collection ändert, rufe filterPosts erneut auf
+        // Abrufen aller Dokumente in der Emoji-Collection
+        const querySnapshotForEmoji = await getDocs(postCollection);
+        //////////////////
+
+        this.postSubscription = this.post$.pipe(take(1)).subscribe((list) => {
+          this.allPosts = [];  // Setze das Array zurück, um Doppelungen zu vermeiden
+
+          list.forEach(async (element) => {
+            const post = new Post(element);
+
+            // Konvertiere den Firestore Timestamp in ein Date-Objekt
+            if (post.dateOfPost instanceof Timestamp) {
+              post.dateOfPost = post.dateOfPost.toDate();
+            }
+
+            const authorOfPost = this.userFirebaseService.users.find(user => user.id === post.authorOfPost);
+
+            if (authorOfPost) {
+              post.authorName = authorOfPost.firstLastName;  // Dynamisch das Feld hinzufügen
+            }
+
+
+            this.allPosts.push(post);
+
+          });
+        });
+
+      });
+
+
+    }
+
+
+  }
+
+
+  async deleteAnswer(answer: Answer) {
+    const channelId = this.currentChannel.id;
+
+    const answerCollectionRef = collection(this.firestore, `channels/${channelId}/posts/${this.threadPost.id}/answer`);
+
+
+    const auth = getAuth();
+    this.uid = auth.currentUser?.uid;
+    debugger;
+
+    if (this.uid === answer.authorOfAnswer) {
+      debugger;
+      await deleteDoc(doc(this.firestore, `channels/${channelId}/posts/${this.threadPost.id}/answer`, answer.id));
+
+
+      onSnapshot(answerCollectionRef, async (snapshot) => {
+
+        this.allAnswersOfCurrentOpenedThread = [];
+
+        console.log('Emoji Collection Updated');
+        // Wenn sich die Emoji-Collection ändert, rufe filterPosts erneut auf
+        // Abrufen aller Dokumente in der Emoji-Collection
+        const querySnapshotForEmoji = await getDocs(answerCollectionRef);
+        //////////////////
+
+        this.answerSubscription = this.answer$.pipe(take(1)).subscribe((list) => {
+          this.allAnswersOfCurrentOpenedThread = [];  // Setze das Array zurück, um Doppelungen zu vermeiden
+
+          list.forEach(async (element) => {
+            const answer = new Answer(element);
+
+            // Konvertiere den Firestore Timestamp in ein Date-Objekt
+            if (answer.timeAnswerPosted instanceof Timestamp) {
+              answer.timeAnswerPosted = answer.timeAnswerPosted.toDate();
+            }
+
+            const authorOfPost = this.userFirebaseService.users.find(user => user.id === answer.authorOfAnswer);
+
+            if (authorOfPost) {
+              answer.authorName = authorOfPost.firstLastName;  // Dynamisch das Feld hinzufügen
+            }
+
+
+            this.allAnswersOfCurrentOpenedThread.push(answer);
+
+          });
+        });
+
+      });
+
+
+
+    }
+
+
+
+
+  }
 
   async addEmojiToFirestore(emojiname: string, post: Post) {
     if (!this.currentChannel) {
@@ -624,7 +871,6 @@ export class ChannelFirebaseService implements OnInit {
 
     // Abrufen aller Dokumente in der Emoji-Collection
     const querySnapshot = await getDocs(emojiCollectionRef);
-    debugger;
 
     if (await this.checkIfAnswerCollectionIsEmpty(channelId, post.id, answer.id)) {
       console.log('Die Emoji-Collection ist leer. Initialisiere das Dokument.');
@@ -658,7 +904,6 @@ export class ChannelFirebaseService implements OnInit {
         // Wenn sich die Emoji-Collection ändert, rufe filterPosts erneut auf
         // Abrufen aller Dokumente in der Emoji-Collection
         const querySnapshotForEmoji = await getDocs(emojiCollectionRef);
-        debugger;
 
         if (!snapshot.empty) {
           const firstDoc = snapshot.docs[0];
@@ -671,7 +916,6 @@ export class ChannelFirebaseService implements OnInit {
     } else {
       console.log('Die Emoji-Collection hat bereits Dokumente.');
       //const emojiDocRef = doc(this.firestore, `channels/${channelId}/posts/${idOfPost}/emoji/emojiStats`);
-      debugger;
       const firstDoc = querySnapshot.docs[0];
       const emojiDocRef = firstDoc.ref; // Dokumentreferenz des ersten Dokuments
 
@@ -721,7 +965,6 @@ export class ChannelFirebaseService implements OnInit {
     // Abrufen aller Dokumente in der Emoji-Collection
     const querySnapshot = await getDocs(answerCollectionRef);
 
-    debugger;
 
     console.log('Die Emoji-Collection ist leer. Initialisiere das Dokument.');
 
@@ -745,7 +988,6 @@ export class ChannelFirebaseService implements OnInit {
       // Wenn sich die Emoji-Collection ändert, rufe filterPosts erneut auf
       // Abrufen aller Dokumente in der Emoji-Collection
       const querySnapshotForEmoji = await getDocs(answerCollectionRef);
-      debugger;
       //////////////////
 
       this.answerSubscription = this.answer$.pipe(take(1)).subscribe((list) => {
@@ -765,7 +1007,6 @@ export class ChannelFirebaseService implements OnInit {
             answer.authorName = authorOfPost.firstLastName;  // Dynamisch das Feld hinzufügen
           }
 
-          debugger;
 
           this.allAnswersOfCurrentOpenedThread.push(answer);
 
@@ -819,6 +1060,7 @@ export class ChannelFirebaseService implements OnInit {
   }
 
 
+
   async checkIfCollectionIsEmpty(channelId: string, idOfPost: string): Promise<boolean> {
     const emojiCollectionRef = collection(this.firestore, `channels/${channelId}/posts/${idOfPost}/emoji`);
     console.log("Abfrage gestartet...");
@@ -839,7 +1081,6 @@ export class ChannelFirebaseService implements OnInit {
   }
 
   async checkIfAnswerCollectionIsEmpty(channelId: string, idOfPost: string, idOfAnswer: string): Promise<boolean> {
-    debugger;
     const answerCollectionRef = collection(this.firestore, `channels/${channelId}/posts/${idOfPost}/answer/${idOfAnswer}/emoji`);
     console.log("Abfrage gestartet...");
     try {
@@ -887,6 +1128,7 @@ export class ChannelFirebaseService implements OnInit {
 
 
   getProfileInformations(userInformations: any) {
+    debugger;
     if (userInformations.authorOfPost) {
       this.profileInformations = userInformations;
       const authorOfPost = this.userFirebaseService.users.find(user => user.id === userInformations.authorOfPost);
@@ -895,28 +1137,45 @@ export class ChannelFirebaseService implements OnInit {
       this.profileInformations = userInformations;
       const authorOfPost = this.userFirebaseService.users.find(user => user.id === userInformations.authorOfPost);
       this.profileInformations.online = authorOfPost.online;
+    } else if (userInformations.firstLastName) {
+      this.profileInformations = userInformations;
+      const profileOwner = this.userFirebaseService.users.find(user => user.id === userInformations.id);
+      this.profileInformations.online = profileOwner.online;
     }
-
   }
 
 
+  /*getMyProfileInformations(userInformations: any) {
+    if (userInformations.id) {
+      this.profileInformations = userInformations;
+      const profileOwner = this.userFirebaseService.users.find(user => user.id === userInformations.id);
+      this.profileInformations.online = profileOwner.online;
+    } else if (userInformations.authorOfMessage) {
+      this.profileInformations = userInformations;
+      const authorOfPost = this.userFirebaseService.users.find(user => user.id === userInformations.id);
+      this.profileInformations.online = authorOfPost.online;
+    }
+
+  }*/
 
   createNewMessage: boolean = false;
 
   createMessage() {
+    //debugger;
+    this.showChannelResponsive = true;
+    this.isVariableTrueForResponsive = false;
+
+    //this.isVariableTrueForResponsive = false;
     this.activatePrivateChatTemplate = true;
     this.disclaimer = false;
-    debugger;
 
     setTimeout(() => {
       this.ngOnDestroy();
       this.inputMessage = true;
       this.createNewMessage = true;
       this.openMessageToUserInformations = undefined;
-      debugger;
       this.messageChoosedPerson = false;
       this.isProcessing = false;
-      debugger;
     }, 1000);
 
     setTimeout(() => {
@@ -1013,6 +1272,26 @@ export class ChannelFirebaseService implements OnInit {
   }
 
 
+  getText(index: number): string {
+    return this.addParticipantTextMap[index] || 'Hinzufügen';
+  }
+
+  updateText(index: number, newText: string) {
+    this.addParticipantTextMap[index] = newText;
+  }
+
+  async addUserToChannel(user: User, i: any) {
+
+    this.updateText(i, 'Hinzugefügt!');
+
+    const channelDocRef = doc(this.firestore, 'channels', this.currentChannel.id);
+    const channelData = (await getDoc(channelDocRef)).data() as { [key: string]: any };
+    const conversationsArray = channelData?.['conversations'] || [];
+
+    await updateDoc(channelDocRef, {
+      [`permittedUsers`]: arrayUnion(user.id)
+    })
+  }
 
 
 
@@ -1021,18 +1300,18 @@ export class ChannelFirebaseService implements OnInit {
   openMessageToUserInformations: any;
 
 
-  
+
   openMessageToUser(entity: Post | User) {
+    this.showChannelResponsive = true;
 
     const auth = getAuth();
     this.uid = auth.currentUser?.uid;
 
-    debugger;
     if ('authorOfPost' in entity) {
       // Es handelt sich um ein Post-Objekt
       const authorOfPost = this.userFirebaseService.users.find(user => user.id === entity.authorOfPost);
       this.openMessageToUserInformations = authorOfPost;
-    } else if(this.uid != entity.id) {
+    } else if (this.uid != entity.id) {
       // Es handelt sich um ein User-Objekt
       this.openMessageToUserInformations = entity;
 
@@ -1053,7 +1332,6 @@ export class ChannelFirebaseService implements OnInit {
     this.uid = auth.currentUser?.uid;
 
     this.activatePrivateChatTemplate = true;
-    debugger;
     if (this.uid != this.openMessageToUserInformations.id) {
 
       console.log('uid user', this.uid);
@@ -1079,14 +1357,11 @@ export class ChannelFirebaseService implements OnInit {
         const user2Conversations: string[] = user2Data.conversations || [];
 
         // Abfrage, um gemeinsame IDs zu finden
-        debugger;
 
         const matchingIDs = user1Conversations.filter(id => user2Conversations.includes(id));
-        debugger;
         if (matchingIDs.length > 0) {
           console.log('Gemeinsame Conversations:', matchingIDs);
           this.filterMessages(matchingIDs[0]);
-          debugger;
           this.messageChoosedPerson = false;
         }
       } else {
@@ -1098,9 +1373,10 @@ export class ChannelFirebaseService implements OnInit {
   }
 
   async filterMessages(lobby: string) {
+    //this.ngOnDestroy();
     this.currentLobby = lobby;
+    this.showChannelResponsive = true;
 
-    debugger;
     const itemCollection = collection(this.firestore, `messageLobby/${lobby}/messages`);
     const q = query(itemCollection, orderBy('timeMessagePosted', 'asc')); // Sortierung nach 'timeMessagePosted'
 
@@ -1112,7 +1388,7 @@ export class ChannelFirebaseService implements OnInit {
     }
 
     this.messageSubscription = this.messages$.pipe(take(1)).subscribe(async (list) => {
-      debugger;
+
       this.allMessages = []; // Setze das Array zurück, um Doppelungen zu vermeiden
 
       for (const element of list) {
@@ -1129,7 +1405,7 @@ export class ChannelFirebaseService implements OnInit {
           message.authorName = authorOfPost.firstLastName; // Dynamisch das Feld hinzufügen
         }
         this.allMessages.push(message); // Füge den Post zur Liste hinzu
-        debugger;
+
         console.log('mission completed', this.allMessages);
 
       }
@@ -1146,7 +1422,6 @@ export class ChannelFirebaseService implements OnInit {
   triggerOpenDrawer() {
     this.openDrawerSubject.next();
   }
-
 
 
   /*await updateDoc(emojiDocRef, {

@@ -1,0 +1,458 @@
+.openedThreadPool {
+    width: 500px;
+    height: 600px;
+    background-color: white;
+    position: relative;
+    border-radius: 20px;
+
+
+}
+
+.mat-drawer-inner-container {
+    overflow: hidden;
+
+}
+
+.sidenavHeaderThread {
+    padding-top: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.headerChannelContainer {
+    display: flex;
+    align-items: center;
+}
+
+
+.headerChannelTextThread {
+    margin: 0;
+    margin-left: 16px;
+}
+
+.channelNameThread {
+    color: #7B76F5;
+    margin-left: 12px;
+}
+
+.postContainer {
+    margin-top: 30px;
+}
+
+
+.postContainerPool {
+    overflow-y: auto;
+    height: 59%;
+    padding-bottom: 169px;
+    display: flex;    
+    align-items: center;
+    flex-direction: column;
+
+    scrollbar-width: none;
+
+}
+
+.postContentContainer {
+    width: 100%;
+    padding-left: 18px;
+    display: flex;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    position: relative;
+    cursor: pointer;
+    flex-direction: column;
+
+    &:hover {
+        background-color: #ECEEFE;
+    }
+
+    &:hover .questionContainer {
+        background-color: white;
+    }
+
+    &:hover .emojiContainer {
+        display: flex;
+    }
+}
+
+.myPostContentContainer {
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    position: relative;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+
+    &:hover {
+        background-color: #ECEEFE;
+    }
+
+    &:hover .myEmojiContainer {
+        display: flex;
+    }
+
+    &:hover .myDeleteTrash {
+        visibility: visible;
+        opacity: 1;
+    }
+}
+
+.postimageContentBundle {
+    display: flex;
+}
+
+.postImage {
+    width: 50px;
+    height: 50px;
+}
+
+.postContent {
+    margin-left: 30px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.myPostContent {
+    margin-right: 30px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.myPostNameAndQuestion {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+    flex-direction: row-reverse;
+
+}
+
+.nameAndQuestion {
+    display: flex;
+}
+
+.name {
+    margin-right: 14px;
+    font-weight: bold;
+    cursor: pointer;
+
+    &:hover {
+        color: #797EF3;
+    }
+}
+
+.myName {
+    margin-left: 14px;
+    font-weight: bold;
+    cursor: pointer;
+
+    &:hover {
+        color: #797EF3;
+    }
+}
+
+.time {
+    color: grey;
+}
+
+.questionContainer {
+    display: flex;
+    align-items: center;
+    background-color: #ECEEFE;
+
+    align-items: center;
+    margin-bottom: 10px;
+    justify-content: center;
+
+    border-bottom-left-radius: 100px;
+    border-bottom-right-radius: 100px;
+    border-top-right-radius: 100px;
+    position: relative;
+}
+
+/*.myPostQuestionContainer {
+    width: 155px;
+}*/
+.myPostQuestionContainer {
+    //width: 605px;
+    height: 77px;
+    display: flex;
+    align-items: center;
+    background-color: #ECEEFE;
+    position: relative;
+
+    align-items: center;
+    margin-bottom: 10px;
+    justify-content: center;
+    background-color: #797EF3;
+
+    border-bottom-left-radius: 100px;
+    border-bottom-right-radius: 100px;
+    border-top-left-radius: 100px;
+
+
+}
+
+.myPostimageContentBundle {
+    display: flex;
+    flex-direction: row-reverse;
+    width: 84%;
+}
+
+
+
+
+.timestampContainer {
+    width: 100%;
+    margin-bottom: 50px;
+    height: 35px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+
+
+.question {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    width: 93%;
+}
+
+.myQuestion {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    width: 93%;
+    color: white;
+}
+
+.emojiContainer {
+    position: absolute;
+    top: -48px;
+    right: 40px;
+    width: 244px;
+    height: 50px;
+    border: solid 1px black;
+
+    border-top-left-radius: 150px;
+    border-top-right-radius: 150px;
+    border-bottom-left-radius: 150px;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border: solid 2px #babfe9;
+    background-color: white;
+    display: none;
+}
+
+.myEmojiContainer {
+    position: absolute;
+    top: -36px;
+    left: 0px;
+    width: 244px;
+    height: 50px;
+    border: solid 1px black;
+    border-top-left-radius: 150px;
+    border-top-right-radius: 150px;
+    border-bottom-left-radius: 150px;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border: solid 2px #babfe9;
+    background-color: white;
+    display: none;
+}
+
+.approvedButton,
+.handsUpButton,
+.laughButton,
+.commentButton,
+.rocketButton,
+.nerdButton {
+    width: 26px !important;
+    height: 26px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.laugh {
+    width: 48px;
+    height: 48px;
+}
+
+
+
+.showEmojisOfAnswer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.smallEmojiContainer {
+    width: 90px;
+    height: 40px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border: 1px solid #8A86F6;
+    border-radius: 21px;
+    margin-right: 10px;
+}
+
+.nerdAnswer {
+    width: 20px;
+}
+
+.rocketAnswer {
+    width: 20px;
+}
+
+.laughAnswer {
+    width: 32px;
+    height: 32px;
+}
+
+.handsUpAnswer {
+    width: 20px;
+}
+
+.approvedAnswer {
+    width: 20px;
+}
+
+
+
+.inputPostContainerThread {
+    width: 85%;
+    height: 170px;
+    border-radius: 21px;
+    margin-top: 35px;
+    border: 1px solid;
+    //padding-bottom: 20px;
+    z-index: 1;
+    background-color: white;
+
+    position: absolute;
+    bottom: -140px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.inputPostThread {
+    width: 98.3%;
+    height: 132%;
+    border: solid 1px black;
+    border-radius: 21px;
+    outline: none;
+    border: none;
+}
+
+.iconsInputContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.allIcons {
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.send {
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.addPost {
+    margin-right: 16px;
+    cursor: pointer;
+}
+
+.postLine {
+    margin-right: 13px;
+}
+
+.answerCountContainer {
+    display: flex;
+    align-items: center;
+}
+
+.answerCount {
+    color: #797EF3;
+    margin-right: 15px;
+}
+
+.lineThread {
+    width: 60%;
+}
+
+.myDeleteTrash {
+    position: absolute;
+    right: 4px;
+    top: 7px;
+    width: 25px;
+    height: 25px;
+
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+
+    //transition: transform 0.1s ease-out;
+    //transform-origin: -10% 0%;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.1);
+    }
+}
+
+.myPostAnswerCountContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Date {
+    position: absolute;
+    height: 35px;
+    width: 124px;
+    border: 1px solid black;
+    border-radius: 19px;
+    background-color: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.emojiPost {
+    margin-right: 13px;
+    cursor: pointer;
+}
+
+.markSomeone {
+    cursor: pointer;
+}
+
+.emoji-mart {
+    background-color: black;
+    position: absolute;
+    bottom: 30px;
+    left: 143px;
+    z-index: 1;
+}
+

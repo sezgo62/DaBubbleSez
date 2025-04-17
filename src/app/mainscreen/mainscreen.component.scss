@@ -10,7 +10,6 @@
 .header {
     width: 97%;
     height: 150px;
-    border: 1px black solid;
 
     display: flex;
     align-items: center;
@@ -26,6 +25,61 @@
     width: 14px;
     height: 11px;
     margin-left: 24px;
+    cursor: pointer;
+}
+
+.logOutContainer {
+   
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.myProfile {
+    font-size: 30px;
+    cursor: pointer;
+    margin-top: 49px;
+    color: #8363a1;
+    border: 1px #a073c9 solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 20px;
+
+    &:hover {
+        filter: invert(34%) sepia(77%) saturate(2175%) hue-rotate(228deg) brightness(98%) contrast(95%);
+        cursor: pointer;
+    }
+}
+
+
+.logOut {
+    font-size: 30px;
+    cursor: pointer;
+    margin-top: 49px;
+    color: #8363a1;
+    border: 1px #a073c9 solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 20px;
+
+    &:hover {
+        filter: invert(34%) sepia(77%) saturate(2175%) hue-rotate(228deg) brightness(98%) contrast(95%);
+        cursor: pointer;
+    }
 }
 
 .logoContainer {
@@ -38,6 +92,10 @@
 .daBubbleLogo {
     width: 90px;
     z-index: 2;
+}
+
+.workSpaceLogoResponsive {
+    display: none;
 }
 
 .headerProfileText {
@@ -79,6 +137,13 @@
 
 .inputContainer {
     width: 40%;
+    height: 60px;
+
+    position: relative;
+}
+
+.inputContainerForParticipants {
+    width: 100%;
     height: 60px;
 
     position: relative;
@@ -156,6 +221,9 @@
 .mat-drawer-content {
     position: unset;
 }
+
+
+
 
 mat-drawer-container {
     display: unset;
@@ -509,7 +577,6 @@ body {
 .channelParticipantsAndAddUsers {
     display: flex;
     align-items: center;
-
     margin-right: 51px;
 }
 
@@ -580,6 +647,22 @@ body {
     flex-direction: column;
 }
 
+.results-dropdownForParticipants {
+    z-index: 99;
+    position: absolute;
+    background-color: white;
+    border-radius: 15px;
+    width: 100%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin: 0;
+    max-height: 200px;
+    overflow-y: auto;
+
+    display: flex;
+    flex-direction: column;
+}
+
 .result-item {
     padding-top: 10px;
     padding-bottom: 10px;
@@ -599,6 +682,37 @@ body {
 :host {
     background-color: blue;
 
+}
+
+.addParticipantButton {
+    background-color: white;
+    border-radius: 15px;
+    cursor: pointer;
+    border: solid 2px #b29fd3;
+
+    &:hover {
+        border: solid 3px #8e64d7;
+    }
+}
+
+.myDeleteTrash {
+    position: absolute;
+    right: 4px;
+    top: 7px;
+    width: 25px;
+    height: 25px;
+
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+
+    //transition: transform 0.1s ease-out;
+    //transform-origin: -10% 0%;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.1);
+    }
 }
 
 .inputPost {
@@ -954,6 +1068,11 @@ body {
     &:hover .myEmojiContainer {
         display: flex;
     }
+
+    &:hover .myDeleteTrash {
+        visibility: visible;
+        opacity: 1;
+    }
 }
 
 
@@ -974,8 +1093,6 @@ body {
     border-bottom-left-radius: 100px;
     border-bottom-right-radius: 100px;
     border-top-left-radius: 100px;
-
-
 }
 
 
@@ -1058,6 +1175,12 @@ body {
 .laugh {
     width: 48px;
     height: 48px;
+}
+
+.showEmojisOfAnswer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .showEmojisOfPost {
@@ -1147,6 +1270,17 @@ body {
     width: 20px;
 }
 
+
+.participantsMenu {
+    height: 600px;
+}
+
+.backMobileLogoContainer {
+    display: none;
+}
+
+
+
 @media(max-width: 1444px) {
     .middleContainer {
         justify-content: center;
@@ -1155,6 +1289,11 @@ body {
 
     .toggleContainer2 {
         display: none;
+    }
+
+    .backMobileLogoContainer {
+        display: flex;
+        align-items: center;
     }
 }
 
@@ -1209,6 +1348,103 @@ body {
     .channelScreen {
         position: relative;
         width: 450px;
+    }
+
+    .channelHeader {
+        position: unset;
+    }
+
+    mat-drawer-container.mat-drawer-container.example-container.ng-star-inserted {
+        display: none;
+    }
+}
+
+@media(max-width:740px) {
+    .middleContainer {
+        width: 510px;
+    }
+}
+
+@media(max-width: 600px) {
+
+    .workSpaceLogoResponsive {
+        display: inline;
+    }
+
+    .daBubbleLogo {
+        display: none;
+    }
+
+    .headerProfileText {
+        display: none;
+    }
+
+}
+
+
+@media(max-width: 530px) {
+
+    .channelScreen {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .middleContainer {
+        width: 100%;
+    }
+
+    .mat-drawer-container {
+        margin-left: 0;
+        margin-right: 0;
+
+    }
+
+    .text {
+        margin-top: 20px;
+
+    }
+
+
+    .logoContainer {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+
+@media(max-width: 450px) {
+    .channelHeader {
+        justify-content: center;
+    }
+
+
+
+}
+
+
+@media(max-width: 410px) {
+    .arrowDownChannelInfo {
+        margin-left: 5px;
+    }
+
+    .personAddContainer {
+        margin-left: 0;
+        position: relative;
+        right: 10px;
+    }
+
+    .bundleParticipantsAndCount {
+        width: 159px;
+    }
+}
+
+
+
+@media(max-width: 350px) {
+
+    .logoContainer {
+        padding-left: 0;
     }
 
 }

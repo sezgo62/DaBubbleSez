@@ -1,7 +1,14 @@
 <div class="mainscreenPool">
 
   <div class="header non-selectable">
-    <div (click)="blatest()" class="logoContainer">
+    <div class="logoContainer">
+      <div class="backMobileLogoContainer" (click)="channelFirebaseService.navigateToMainscreen()">
+
+        <img (click)="channelFirebaseService.goBackToNavigator()" src="assets/img/arrowBackMobile.png">
+
+        <img class="workSpaceLogoResponsive" src="assets/img/logos/workspaceLogo.png">
+      </div>
+
       <img class="daBubbleLogo" src="assets\img\logos\daBubble-logo.png">
       <span class="text">DABubble</span>
     </div>
@@ -9,7 +16,7 @@
 
     <div class="inputContainer">
       <div>
-        <input [formControl]="searchControl" class="inputSearch" type="text" placeholder="code learning durchsuchen">
+        <input [formControl]="searchControl" class="inputSearch" type="text" placeholder="code learning durchsuchen" #search>
         <img class="search" src="assets/img/search.png">
       </div>
 
@@ -23,11 +30,18 @@
 
     <div class="headerProfileContainer">
       <span class="headerProfileText">
-        Frederick Freddie
+        {{userFirebaseService.loggedInUser.firstLastName}}
       </span>
       <img class="profilePicture" src="assets/img/avatars/avatar1.png">
 
-      <img class="keyboardArrowDown" src="assets/img/keyboardArrowDown.png">
+      <img [matMenuTriggerFor]="matMenuLogout" class="keyboardArrowDown" src="assets/img/keyboardArrowDown.png">
+
+      <mat-menu [backdropClass]="'custom-backdrop-logOut'" #matMenuLogout="matMenu">
+        <div class="logOutContainer">
+        <span (click)="openDialogMyProfile('0ms', '0ms'); channelFirebaseService.getProfileInformations(userFirebaseService.loggedInUser)" class="myProfile">Mein Profil</span>
+        <span (click)="logOut()" class="logOut">Log Out</span>
+      </div>
+      </mat-menu>
 
     </div>
 
@@ -36,7 +50,7 @@
 
 
   <div class="middleContainer">
-    <ng-container *ngIf="isLargeScreen || channelFirebaseService.isVariableTrueForResponsive; else mobileContent">
+    <ng-container *ngIf="isLargeScreen || channelFirebaseService.showChannelResponsive; else mobileContent">
 
       <mat-drawer-container class="example-container" autosize>
         <mat-drawer #drawer mode="side" [(opened)]="isSidenavOpen" class="example-sidenav" mode="side">
@@ -98,9 +112,10 @@
 
 
             <div *ngIf="showMessages" class="allChannels">
-              <h2 (click)="channelFirebaseService.openMessageToUser(privateMessage.user2)" *ngFor="let privateMessage of userFirebaseService.filteredUsers; let i = index"
-                (click)="StyleSelectedChannel(i, channelFirebaseService.channels.length);"
-                class="channel" [id]="'channel' + i">
+              <h2 (click)="channelFirebaseService.openMessageToUser(privateMessage.user2)"
+                *ngFor="let privateMessage of userFirebaseService.filteredUsers; let i = index"
+                (click)="StyleSelectedChannel(i, channelFirebaseService.channels.length);" class="channel"
+                [id]="'channel' + i">
                 {{privateMessage.user2.firstLastName}}
               </h2>
 
@@ -154,23 +169,44 @@
         </div>
 
         <mat-menu [backdropClass]="'custom-backdrop'" #addUserToChannel="matMenu">
-          <div (click)="$event.stopPropagation()">
-            <div class="addPersonHeader">
-              <h2 class="addPersonText">
-                Hinzufügen
-              </h2>
-              <img class="close" src="assets/img/close.png">
-            </div>
+          <div class="participantsMenu">
+            <div (click)="$event.stopPropagation()">
+              <div class="addPersonHeader">
+                <h2 class="addPersonText">
+                  Hinzufügen
+                </h2>
+                <img class="close" src="assets/img/close.png">
+              </div>
 
-            <div class="allParticipants">
-              <h2 *ngFor="let participant of channelFirebaseService.currentChannelParticipants; let i = index"
-                class="channel" [id]="'channel' + i">
-                {{participant.firstLastName}}
-              </h2>
-            </div>
+              <div class="allParticipantsToAdd">
 
-            <input [formControl]="searchControl" class="inputSearchParticipants" type="text"
-              placeholder="code learning durchsuchen">
+              </div>
+
+              <div class="inputContainerForParticipants">
+                <div>
+                  <input [formControl]="searchControlForAddingParticipants" class="inputSearch" type="text"
+                    placeholder="code learning durchsuchen">
+                  <img class="search" src="assets/img/search.png">
+                </div>
+
+                <div *ngIf="filteredItemsForAddParticipants.length > 0" class="results-dropdownForParticipants">
+                  <span *ngFor="let item of filteredItemsForAddParticipants; let i = index"
+                    (click)="selectUserForChannelAdd(item)" class="result-item">{{item.nameOfChannel ||
+                    item.firstLastName }}
+                    <button class="addParticipantButton" [innerHTML]="channelFirebaseService.getText(i)"
+                      (click)="channelFirebaseService.addUserToChannel(item, i)">Hinzufügen</button>
+                  </span>
+                </div>
+
+              </div>
+
+              <!--
+              <div *ngFor="let user of allAddedUsers" class="allAddedUsers">
+                <span class="addedUser">{{user.firstLastName}}</span>
+              </div>
+              -->
+
+            </div>
           </div>
         </mat-menu>
 
@@ -202,42 +238,17 @@
         </mat-menu>
         <!--<div class="selectChannelDisclaimer" *ngIf="!channelFirebaseService.currentChannel && channelFirebaseService.allMessages >= 0 == false && !channelFirebaseService.messageChoosedPerson && channelFirebaseService.disclaimer">-->
 
-
         <div class="selectChannelDisclaimer"
           *ngIf="!channelFirebaseService.currentChannel && channelFirebaseService.allMessages.length == 0 && !channelFirebaseService.messageChoosedPerson && channelFirebaseService.disclaimer">
           <h1>Pls select a channel</h1>
         </div>
 
-        <app-channel
+        <app-channel id="scrollBehavior"
           *ngIf="channelFirebaseService.allPosts.length > 0 || channelFirebaseService.showErrorMessageForChannel"></app-channel>
 
 
 
         <app-private-chat *ngIf="channelFirebaseService.activatePrivateChatTemplate"></app-private-chat>
-
-        <!--<div class="inputPostContainer">
-          <input placeholder="Type a message" type="text" name="textarea" [(ngModel)]="textArea" #message
-            class="inputPost">
-
-          <div class="iconsInputContainer">
-            <div class="allIcons">
-              <button class="addPost" mat-icon-button><img class="addPost" src="assets/img/addPost.png"></button>
-              <img class="postLine" src="assets/img/postLine.png">
-
-              <emoji-mart class="emoji-mart" *ngIf="isEmojiPickerVisible" (emojiSelect)="addEmoji($event)"
-                title="Choose your emoji"></emoji-mart>
-
-
-              <button (click)="toggleEmojiPicker()" mat-icon-button><img class="emojiPost"
-                  src="assets/img/addEmojiPost.png"></button>
-              <button mat-icon-button><img class="markSomeone" src="assets/img/markSomeone.png"></button>
-            </div>
-
-            <button (click)="sendPost(message.value)" mat-icon-button><img class="send"
-                src="assets/img/send.png"></button>
-          </div>
-
-        </div>-->
 
       </div>
 
@@ -269,6 +280,9 @@
 
                 <div
                   [ngClass]="channelFirebaseService.threadPost.authorOfPost == userFirebaseService.uid ? 'myPostContentContainer' : 'postContentContainer'">
+
+
+
 
                   <div class="postimageContentBundle">
                     <img class="postImage" src="assets/img/avatars/avatar1.png">
@@ -373,6 +387,14 @@
               <div class="answerContainer" *ngFor="let answer of channelFirebaseService.allAnswersOfCurrentOpenedThread"
                 [ngClass]="answer.authorOfAnswer == userFirebaseService.uid ? 'myPostContentContainer' : 'postContentContainer'">
 
+                <img *ngIf="answer.authorOfAnswer == userFirebaseService.uid" class="myDeleteTrash"
+                  (click)="channelFirebaseService.deleteAnswer(answer)" src="assets/img/deleteTrash.png">
+
+                <div class="timestampContainer non-selectable">
+                  <img class="postLine" src="assets/img/line.png">
+                  <span class="Date">{{ getFormattedDateForAnswer(answer) }}</span>
+                </div>
+
                 <div class="postimageContentBundle">
                   <img class="postImage" src="assets/img/avatars/avatar1.png">
 
@@ -423,7 +445,7 @@
 
 
 
-                <div class="showEmojisOfPost">
+                <div class="showEmojisOfAnswer">
 
 
                   <div class="smallEmojiContainer"
@@ -441,7 +463,7 @@
                   <div class="smallEmojiContainer"
                     *ngIf="(answer.emojiInformations && answer.emojiInformations?.laugh.likeCount.length > 0)">
                     <img class="laughAnswer" class="laugh" src="assets/img/reactions/laugh.webp">
-                    {{answer.emojiInformations.laugh.likeCount.length}}
+                    <span>{{answer.emojiInformations.laugh.likeCount.length}}</span>
                   </div>
 
                   <div class="smallEmojiContainer"
@@ -505,7 +527,15 @@
       <ng-container *ngIf="!channelFirebaseService.isVariableTrueForResponsive">
         <app-responsive-mainscreen></app-responsive-mainscreen>
       </ng-container>
+
+      <ng-container *ngIf="channelFirebaseService.isVariableTrueForResponsiveOpenedThread">
+        <app-opened-thread></app-opened-thread>
+      </ng-container>
+
     </ng-template>
+
+
+
 
   </div>
 </div>

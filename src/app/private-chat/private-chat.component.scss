@@ -117,7 +117,7 @@
     z-index: 1;
     background-color: white;
 
-    
+
 
     display: flex;
     flex-direction: column;
@@ -354,7 +354,7 @@
     user-select: none;
     /* Non-prefixed version, currently supported by most browsers */
 
-    position:relative
+    position: relative
 }
 
 .postLine {
@@ -389,3 +389,69 @@
     padding-bottom: 257px;
     width: 100%;
 }
+
+
+@media(max-width:850px) {
+    .question {
+        width: 234px;
+    }
+
+    .questionContainer {
+        padding-left: 0;
+    }
+
+    .inputContainer {
+        width: 169% !important;
+    }
+}
+
+
+
+
+@media(max-width: 510px) {
+
+    .postLine {
+        width: 89%;
+    }
+
+    .myPostQuestionContainer {
+        padding-left: 0;
+        padding-right: 23px;
+    }
+
+    .question {
+        width: 189px;
+    }
+
+    .myQuestion {
+        width: 50%;
+    }
+}
+
+@media(max-width: 940px) {
+
+    .inputContainer {
+        width: 232%;
+    }
+
+}
+
+
+@media(max-width: 390px) {
+
+    .inputContainer {
+        width: 159% !important;
+        right: 40px;
+    }
+
+    .search {
+        
+        right: 16px;
+    }
+
+}
+
+
+
+
+

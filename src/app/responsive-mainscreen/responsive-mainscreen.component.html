@@ -11,86 +11,90 @@
   </div>
 
 </div>
-    
 
 
 
 
 
 
-    <div class="responsive-sidebar">
-    <div class="sidenavHeader">
-      <div class="logoAndName">
-        <img src="assets/img/logos/workspaceLogo.png">
-        <h1 class="HeaderChannelText">DevSpace</h1>
-      </div>
 
-      <button (click)="channelFirebaseService.createMessage()" class="createMessageButton" mat-icon-button>
-        <img src="assets/img/createChannelButton.png">
-      </button>
+<div class="responsive-sidebar">
+  <div class="sidenavHeader">
+    <div class="logoAndName">
+      <img src="assets/img/logos/workspaceLogo.png">
+      <h1 class="HeaderChannelText">DevSpace</h1>
     </div>
 
-    <div class="channelSelectionContainer">
-
-      <div class="channelsDropPool">
-
-        <div (click)="dropChannels()" class="channelsDropGroup non-selectable">
-          <img class="channelsNotDropped" src="assets/img/channelsNotDropped.png"
-            [src]="showChannels ? 'assets/img/channelsDropped.png' : 'assets/img/channelsNotDropped.png'">
-          <img class="channelIcon" src="assets/img/channelIcon.png">
-          <h2 class="channelsDropGroupName">Channels</h2>
-        </div>
-
-        <button (click)="openDialog('0ms', '0ms')" class="createChannelButtonParent"
-          class="createChannelCrossIconParent" mat-icon-button><img class="createChannelCrossIcon"
-            src="assets/img/createChannelCrossIcon.png"></button>
-      </div>
-
-
-      <div *ngIf="showChannels" class="allChannels">
-        <h2 *ngFor="let channel of channelFirebaseService.channels; let i = index"
-          (click)="StyleSelectedChannel(i, channelFirebaseService.channels.length); selectedChannel(channel); toggleMainscreen()"
-          class="channel" [id]="'channel' + i">
-          {{channel.nameOfChannel}}
-        </h2>
-
-        <!--<h2 (click)="selectChannel()" class="channel" id="channel"># Entwicklerteam</h2>
-      <h2 class="channel" id="channel"># Javascript</h2>
-      <h2 class="channel" id="channel"># CSS</h2>-->
-      </div>
-
-    </div>
-
-
-
-    <div class="messagesSelectionContainer">
-
-      <div class="messagesDropPool">
-
-        <div (click)="dropMessages()" class="messagesDropGroup non-selectable">
-          <img class="messagesNotDropped" src="assets/img/channelsNotDropped.png"
-            [src]="showMessages ? 'assets/img/channelsDropped.png' : 'assets/img/channelsNotDropped.png'">
-          <img class="messagesIcon" src="assets/img/accountCircle.png">
-          <h2 class="messagesDropGroupName">Messages</h2>
-        </div>
-      </div>
-
-
-      <div *ngIf="showMessages" class="allChannels">
-        <h2 (click)="channelFirebaseService.openMessageToUser(privateMessage.user2); toggleMainscreen()" *ngFor="let privateMessage of userFirebaseService.filteredUsers; let i = index"
-          (click)="StyleSelectedChannel(i, channelFirebaseService.channels.length);"
-          class="channel" [id]="'channel' + i">
-          {{privateMessage.user2.firstLastName}}
-        </h2>
-
-        <!--<h2 (click)="selectChannel()" class="channel" id="channel"># Entwicklerteam</h2>
-      <h2 class="channel" id="channel"># Javascript</h2>
-      <h2 class="channel" id="channel"># CSS</h2>-->
-      </div>
-
-    </div>
+    <button (click)="channelFirebaseService.createMessage()" class="createMessageButton" mat-icon-button>
+      <img src="assets/img/createChannelButton.png">
+    </button>
   </div>
- 
+
+  <div class="channelSelectionContainer">
+
+    <div class="channelsDropPool">
+
+      <div (click)="dropChannels()" class="channelsDropGroup non-selectable">
+        <img class="channelsNotDropped" src="assets/img/channelsNotDropped.png"
+          [src]="showChannels ? 'assets/img/channelsDropped.png' : 'assets/img/channelsNotDropped.png'">
+        <img class="channelIcon" src="assets/img/channelIcon.png">
+        <h2 class="channelsDropGroupName">Channels</h2>
+      </div>
+
+      <button (click)="openDialog('0ms', '0ms')" class="createChannelButtonParent" class="createChannelCrossIconParent"
+        mat-icon-button><img class="createChannelCrossIcon" src="assets/img/createChannelCrossIcon.png"></button>
+    </div>
+
+
+    <div *ngIf="showChannels" class="allChannels">
+      <h2 *ngFor="let channel of channelFirebaseService.channels; let i = index"
+        (click)="StyleSelectedChannel(i, channelFirebaseService.channels.length); selectedChannel(channel)"
+        class="channel" [id]="'channel' + i">
+        {{channel.nameOfChannel}}
+      </h2>
+
+      <!--<h2 (click)="selectChannel()" class="channel" id="channel"># Entwicklerteam</h2>
+      <h2 class="channel" id="channel"># Javascript</h2>
+      <h2 class="channel" id="channel"># CSS</h2>-->
+    </div>
+
+  </div>
+
+
+
+  <div class="messagesSelectionContainer">
+
+    <div class="messagesDropPool">
+
+      <div (click)="dropMessages()" class="messagesDropGroup non-selectable">
+        <img class="messagesNotDropped" src="assets/img/channelsNotDropped.png"
+          [src]="showMessages ? 'assets/img/channelsDropped.png' : 'assets/img/channelsNotDropped.png'">
+        <img class="messagesIcon" src="assets/img/accountCircle.png">
+        <h2 class="messagesDropGroupName">Messages</h2>
+      </div>
+    </div>
+
+
+    <div *ngIf="showMessages" class="allChannels">
+      <h2 (click)="channelFirebaseService.openMessageToUser(privateMessage.user2);"
+        *ngFor="let privateMessage of userFirebaseService.filteredUsers; let i = index"
+        (click)="StyleSelectedChannel(i, channelFirebaseService.channels.length);" class="channel" [id]="'channel' + i">
+        {{privateMessage.user2.firstLastName}}
+      </h2>
+
+      <!--<h2 (click)="selectChannel()" class="channel" id="channel"># Entwicklerteam</h2>
+      <h2 class="channel" id="channel"># Javascript</h2>
+      <h2 class="channel" id="channel"># CSS</h2>-->
+    </div>
+
+  </div>
+
+  <div (click)="channelFirebaseService.createMessage()" class="sendMessageContainer">
+    <img class="sendMessage" src="assets/img/sendMessage.png">
+  </div>
+
+</div>
+
 
 
 

@@ -37,10 +37,11 @@ import { ParticipantsEffects } from 'src/ngRx/participants.effects';
 import { PostsComponent } from './posts/posts.component';
 import { PickerModule } from "@ctrl/ngx-emoji-mart";
 //import { localStorageSync } from 'ngrx-store-localstorage'; // Import hinzugefügt
-import { DatePipe } from '@angular/common';
 import { ResponsiveMainscreenComponent } from './responsive-mainscreen/responsive-mainscreen.component';
 import { OpenProfileDialogComponent } from './open-profile-dialog/open-profile-dialog.component';
 import { PrivateChatComponent } from './private-chat/private-chat.component';
+import { OpenedThreadComponent } from './opened-thread/opened-thread.component';
+import { DatePipe } from '@angular/common';
 
 
 
@@ -60,7 +61,8 @@ import { PrivateChatComponent } from './private-chat/private-chat.component';
     PostsComponent,
     ResponsiveMainscreenComponent,
     OpenProfileDialogComponent,
-    PrivateChatComponent
+    PrivateChatComponent,
+    OpenedThreadComponent
   ],
   imports: [
     BrowserModule,
@@ -84,7 +86,7 @@ import { PrivateChatComponent } from './private-chat/private-chat.component';
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
   ],
-  providers: [AngularFireAuth, DatePipe  ],
+  providers: [DatePipe  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

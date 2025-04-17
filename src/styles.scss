@@ -84,3 +84,26 @@ app-responsive-mainscreen {
   width: 500px !important;
   height: 758px !important;
 }
+
+.cdk-overlay-pane {
+  height :300px;
+}
+
+.mat-mdc-menu-content {
+  height: 70%;
+}
+
+
+
+@media(max-width: 400px) {
+
+  .cdk-overlay-pane.custom-dialog-container {
+    width: 500px !important;
+    height: 610px !important;
+  }
+
+
+
+}
+
+
